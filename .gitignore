@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Lockfile from wrong package manager
+package-lock.json
+
+# AI internal docs (方案 / 设计稿 / 踩坑) — 不进版本控制
+.agents-docs/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+
+# Vite cache
+.vite/
