@@ -1,0 +1,22 @@
+{
+  "name": "mini-games",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A web collection of small games (Tetris, Sudoku). Pure frontend, no backend.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5",
+    "vite": "^5.2.11"
+  },
+  "packageManager": "pnpm@11.5.0",
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  }
+}

@@ -1,0 +1,5 @@
+# pnpm 11+ configuration
+# allowBuilds: explicitly allow (true) / disallow (false) install scripts
+# esbuild needs its postinstall script to download the platform-specific binary
+allowBuilds:
+  esbuild: true
