@@ -1,5 +1,7 @@
 # pnpm 11+ configuration
 # allowBuilds: explicitly allow (true) / disallow (false) install scripts
-# esbuild needs its postinstall script to download the platform-specific binary
+# esbuild: Vite 依赖，需要 postinstall 下载平台 binary
+# vue-demi: pinia 依赖，需要 postinstall
 allowBuilds:
   esbuild: true
+  vue-demi: true

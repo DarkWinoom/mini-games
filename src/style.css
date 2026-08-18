@@ -1,0 +1,224 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 锁源：rem 基准永远 16px */
+  html {
+    font-size: 16px;
+  }
+  body {
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "PingFang SC",
+      "Microsoft YaHei",
+      sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: #1f2937;
+    background: #e0e7ff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition:
+      background 0.3s,
+      color 0.3s;
+    min-height: 100vh;
+  }
+  :root[data-theme="dark"] body {
+    color: #f3f4f6;
+    background: #1e1b4b;
+  }
+
+  /* D 玻璃稿渐变背景（固定不滚动） */
+  body {
+    background-image:
+      radial-gradient(ellipse at top left, #fce7f3, transparent 50%),
+      radial-gradient(ellipse at bottom right, #dbeafe, transparent 50%);
+    background-attachment: fixed;
+  }
+  :root[data-theme="dark"] body {
+    background-image:
+      radial-gradient(ellipse at top left, #4c1d95, transparent 50%),
+      radial-gradient(ellipse at bottom right, #831843, transparent 50%);
+  }
+}
+
+@layer components {
+  /* === 自写 Button（不依赖 <button> 默认外观） === */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl border border-white/60 bg-white/60 backdrop-blur-[20px] text-sm font-semibold cursor-pointer transition-all duration-150 select-none;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+  }
+  .btn:hover {
+    @apply -translate-y-px bg-white/80;
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  }
+  .btn:active {
+    transform: translateY(0);
+  }
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    transform: none;
+  }
+  :root[data-theme="dark"] .btn {
+    @apply bg-white/[0.08] border-white/[0.15] text-white;
+  }
+  :root[data-theme="dark"] .btn:hover {
+    @apply bg-white/[0.12];
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    @apply text-white border-none;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    box-shadow: 0 12px 28px rgba(99, 102, 241, 0.4);
+    @apply text-white;
+  }
+
+  .btn-ghost {
+    @apply bg-transparent;
+  }
+  .btn-ghost:hover {
+    @apply bg-white/60;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+  }
+  :root[data-theme="dark"] .btn-ghost:hover {
+    @apply bg-white/[0.08];
+  }
+
+  /* === 自写 Select / Dropdown（不依赖 <select>） === */
+  .select {
+    @apply relative inline-block;
+  }
+  .select-trigger {
+    @apply relative cursor-pointer;
+    padding: 12px 40px 12px 24px;
+    font-size: 16px;
+  }
+  .select-trigger::after {
+    content: "";
+    @apply absolute;
+    right: 18px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translate(0, -50%) rotate(45deg);
+    transform-origin: center;
+    transition: transform 0.15s;
+  }
+  .select-trigger.open::after {
+    transform: translate(0, -50%) rotate(-135deg);
+  }
+
+  .select-panel {
+    @apply absolute z-50 min-w-[160px] rounded-2xl border border-white/60 bg-white/80 backdrop-blur-[30px] p-1.5;
+    top: calc(100% + 6px);
+    right: 0;
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  }
+  :root[data-theme="dark"] .select-panel {
+    @apply bg-white/[0.12] border-white/[0.15];
+  }
+  .select-item {
+    @apply flex items-center gap-2 px-3 py-2 text-sm rounded-md cursor-pointer select-none;
+  }
+  .select-item:hover {
+    @apply bg-white/60;
+  }
+  :root[data-theme="dark"] .select-item:hover {
+    @apply bg-white/[0.08];
+  }
+  .select-item.active {
+    @apply bg-indigo-500 text-white;
+  }
+  .select-item.active:hover {
+    @apply bg-indigo-500;
+  }
+
+  /* === 自写 Modal（不依赖 <dialog>） === */
+  .modal-backdrop {
+    @apply fixed inset-0 z-[200] flex items-center justify-center p-6;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .modal-panel {
+    @apply w-full max-w-[600px] max-h-[calc(100vh-48px)] overflow-auto rounded-3xl border border-white/60 bg-white/80 backdrop-blur-[30px] p-8;
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  }
+  :root[data-theme="dark"] .modal-panel {
+    @apply bg-white/[0.12] border-white/[0.15];
+  }
+  .modal-title {
+    @apply text-2xl font-bold mb-3;
+  }
+  .modal-body {
+    @apply text-sm mb-6 leading-relaxed;
+    color: #6b7280;
+  }
+  :root[data-theme="dark"] .modal-body {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .modal-actions {
+    @apply flex gap-3 justify-end;
+  }
+
+  /* === 自写 Textarea === */
+  .textarea {
+    @apply w-full rounded-2xl border border-white/60 bg-white/60 p-3 outline-none transition-all duration-150 resize-y;
+    font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    min-height: 200px;
+  }
+  :root[data-theme="dark"] .textarea {
+    @apply bg-white/[0.08] border-white/[0.15] text-white;
+  }
+  .textarea:focus {
+    @apply border-indigo-500;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  /* Alert（modal 内反馈用） */
+  .alert {
+    @apply text-sm p-2.5 rounded-2xl mb-4;
+  }
+  .alert-error {
+    @apply bg-red-500/10 border border-red-500/30 text-red-500;
+  }
+  .alert-success {
+    @apply bg-emerald-500/10 border border-emerald-500/30 text-emerald-500;
+  }
+
+  /* === 卡片（游戏卡片） === */
+  .card {
+    @apply rounded-3xl border border-white/60 bg-white/60 backdrop-blur-[30px] p-10 text-left transition-all duration-200;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+  }
+  .card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  }
+  :root[data-theme="dark"] .card {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  .card-icon {
+    @apply w-16 h-16 rounded-2xl mb-5 flex items-center justify-center text-3xl text-white;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+  }
+}
+
+@layer utilities {
+  .container-x {
+    @apply max-w-[1200px] mx-auto w-full px-8;
+  }
+}

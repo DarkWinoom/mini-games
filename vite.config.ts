@@ -1,11 +1,18 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
-  // GitHub Pages 部署兼容：相对路径 base
-  base: './',
+  base: "./",
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+    },
+  },
   build: {
-    target: 'es2022',
-    outDir: 'dist',
+    target: "es2022",
+    outDir: "dist",
     sourcemap: true,
   },
   server: {

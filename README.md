@@ -1,6 +1,7 @@
 # 小游戏合集
 
-休闲益智类小游戏合集，打开浏览器随时开玩
+休闲益智类小游戏合集，打开浏览器随时开玩。
+无后端、无追踪、纯静态。
 
 [For English readers](./README.en.md)
 
@@ -15,20 +16,33 @@ pnpm dev
 
 浏览器访问 `http://localhost:5173` 即可开始。
 
-### 打包发布
+### 常用脚本
 
 ```bash
-pnpm build
+pnpm dev         # 启动开发服务器
+pnpm build       # 类型检查 + 打包到 dist/
+pnpm preview     # 本地预览构建产物
+pnpm typecheck   # 仅类型检查（vue-tsc）
 ```
 
-产物在 `dist/`，可直接部署到任何静态托管（GitHub Pages / Cloudflare Pages / Vercel 等）。
+构建产物在 `dist/`，可直接部署到任何静态托管（GitHub Pages / Cloudflare Pages / Vercel 等）。
+
+## 技术栈
+
+- **框架**: [Vue 3](https://vuejs.org/) 3.5
+- **路由**: [vue-router](https://router.vuejs.org/) 4
+- **状态**: [Pinia](https://pinia.vuejs.org/) 2
+- **样式**: [Tailwindcss](https://tailwindcss.com/) 3
+- **构建**: [Vite](https://vitejs.dev/) 5
+- **类型**: [TypeScript](https://www.typescriptlang.org/) 5
+- **包管理**: [pnpm](https://pnpm.io/) 10
 
 ## 游戏清单
 
 | 游戏 | 状态 | 简介 |
 | ---- | ---- | ---- |
-| 俄罗斯方块 | ✅ 已发布 | 经典 10×20 网格，SRS 旋转，7-bag 随机，Hold / Next 3 |
-| 数独 | ✅ 已发布 | 9×9 网格，3 难度，错误限制，笔记模式 |
+| 俄罗斯方块 | 🚧 实施中 | 经典 10×20 网格，SRS 旋转，7-bag 随机，Hold / Next 3 |
+| 数独 | 🚧 实施中 | 9×9 网格，3 难度，错误限制，笔记模式 |
 | 更多 | 🚧 计划中 | — |
 
 ## 自定义语言包
@@ -41,8 +55,6 @@ pnpm build
 2. 在弹窗中粘贴 JSON（结构与内置语言包一致）
 3. 保存后立即生效，显示在语言列表
 
-完整 key 列表和 JSON 示例见语言包源代码。
-
 ## 主题
 
 三种主题模式：
@@ -51,7 +63,7 @@ pnpm build
 - 深色
 - 跟随系统
 
-header 右上角图标循环切换，选择持久化在浏览器本地。
+header 右上角图标循环切换（☀️ / 🌙 / 🌗），选择持久化在浏览器本地。
 
 ## 贡献
 
