@@ -1,22 +1,28 @@
-import './styles/base.css';
-
 /**
- * mini-games 入口
+ * mini-games 入口（Vue 3 版本）
  *
- * 当前阶段：脚手架（v0.1.0）
- * - 路由 / i18n / theme / 视图 等在下一阶段实现
- * - 此文件只验证 Vite + TS + base.css 基础链路
+ * 启动顺序：
+ * 1. 创建 Vue app
+ * 2. 安装 pinia（状态管理）
+ * 3. 安装 router（路由）
+ * 4. 初始化 stores（i18n 恢复自定义 + theme 应用 data-theme）
+ * 5. 挂载
  */
 
-const app = document.querySelector<HTMLDivElement>('#app');
-if (app) {
-  app.innerHTML = `
-    <main style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 48px;">
-      <h1 style="font-size: 64px; font-weight: 800; letter-spacing: -0.04em; margin: 0;">mini-games</h1>
-      <p style="font-size: 16px; color: var(--fg-muted); margin: 0;">scaffold ready · v0.1.0</p>
-      <p style="font-size: 14px; color: var(--fg-muted); margin: 0;">
-        Next: router / i18n / theme / shared components
-      </p>
-    </main>
-  `;
-}
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+import { router } from "./router";
+import { useI18nStore } from "./stores/i18n";
+import { useThemeStore } from "./stores/theme";
+import "./style.css";
+
+const app = createApp(App);
+app.use(createPinia());
+app.use(router);
+
+// 初始化 stores（必须在 mount 之前）
+useI18nStore().init();
+useThemeStore().init();
+
+app.mount("#app");

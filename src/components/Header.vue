@@ -1,0 +1,28 @@
+<script setup lang="ts">
+import { useI18n } from '@/composables/useI18n';
+import { useThemeStore } from '@/stores/theme';
+import BaseSelect from './BaseSelect.vue';
+import BaseButton from './BaseButton.vue';
+
+const { t, locales, locale, setLang } = useI18n();
+const theme = useThemeStore();
+
+function onLangChange(value: string) {
+  setLang(value);
+}
+</script>
+
+<template>
+  <header class="flex items-center justify-between py-8">
+    <div class="text-[22px] font-extrabold tracking-tight">
+      {{ t('common.appName') }}
+    </div>
+    <div class="flex items-center gap-2">
+      <BaseSelect :value="locale" :options="locales.map((l) => ({ value: l.code, label: l.name }))"
+        :aria-label="t('header.language')" @change="onLangChange" />
+      <BaseButton variant="ghost" :aria-label="t('header.theme')" @click="theme.cycleTheme()">
+        {{ theme.icon }}
+      </BaseButton>
+    </div>
+  </header>
+</template>
