@@ -76,10 +76,22 @@ export const locale: LocaleDict = {
   "sudoku.difficulty.easy": "简单",
   "sudoku.difficulty.medium": "中等",
   "sudoku.difficulty.hard": "困难",
+  "sudoku.difficulty.expert": "专家",
   "sudoku.errors": "错误",
   "sudoku.time": "时间",
   "sudoku.notes": "笔记",
   "sudoku.newGame": "新游戏",
   "sudoku.completed": "完成！",
   "sudoku.failed": "失败",
+  "sudoku.best": "最佳",
+  "sudoku.newBest": "新纪录！",
+  "sudoku.paused": "已暂停",
+  "sudoku.erase": "擦除",
+  "sudoku.rules.title": "规则与玩法",
+  "sudoku.rules.goal":
+    "目标：填满 9×9 网格，使每行、每列、每个 3×3 宫内数字 1-9 各只出现一次。",
+  "sudoku.rules.play":
+    "玩法：点击格子选中，按 1-9 填入数字；按 N 切换笔注模式记录候选数字；按 Backspace 擦除。",
+  "sudoku.rules.win": "胜利：所有格子填满且无冲突、错误次数 < 3 次时自动判胜，记录用时。",
+  "sudoku.failed.message": "错误次数已达上限（3 次），游戏结束。",
 };

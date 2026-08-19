@@ -82,12 +82,22 @@ export interface LocaleDict {
   "sudoku.difficulty.easy": string;
   "sudoku.difficulty.medium": string;
   "sudoku.difficulty.hard": string;
+  "sudoku.difficulty.expert": string;
   "sudoku.errors": string;
   "sudoku.time": string;
   "sudoku.notes": string;
   "sudoku.newGame": string;
   "sudoku.completed": string;
   "sudoku.failed": string;
+  "sudoku.best": string;
+  "sudoku.newBest": string;
+  "sudoku.paused": string;
+  "sudoku.erase": string;
+  "sudoku.rules.title": string;
+  "sudoku.rules.goal": string;
+  "sudoku.rules.play": string;
+  "sudoku.rules.win": string;
+  "sudoku.failed.message": string;
 }
 
 export interface LocaleInfo {
