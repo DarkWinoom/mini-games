@@ -3,11 +3,13 @@
 A small collection of casual browser games.
 No backend, no tracking, no install — just static files.
 
+[play now](https://dw-mini-games.netlify.app/)
+
 [中文介绍](./README.md)
 
 ## Quick Start
 
-Requires [Node.js](https://nodejs.org/) 20+ and [pnpm](https://pnpm.io/) 10+.
+Requires [Node.js](https://nodejs.org/) 20+ and [pnpm](https://pnpm.io/) 11+.
 
 ```bash
 pnpm install
@@ -36,14 +38,14 @@ Output goes to `dist/` and can be deployed to any static host
 - **Styling**: [Tailwindcss](https://tailwindcss.com/) 3
 - **Build**: [Vite](https://vitejs.dev/) 5
 - **Types**: [TypeScript](https://www.typescriptlang.org/) 5
-- **Package Manager**: [pnpm](https://pnpm.io/) 10
+- **Package Manager**: [pnpm](https://pnpm.io/) 11
 
 ## Games
 
 | Game | Status | Description |
 | ---- | ------ | ----------- |
-| Tetris | 🚧 In progress | Classic 10×20 grid, SRS rotation, 7-bag randomizer, Hold / Next 3 |
-| Sudoku | 🚧 In progress | 9×9 grid, 3 difficulty levels, error limit, notes mode |
+| Tetris | ✅ Done | Classic 10×20 grid, SRS rotation, 7-bag randomizer, Hold / Next 3, T-Spin / Back-to-Back / Combo / SFX |
+| Sudoku | ✅ Done | 9×9 grid, 3 difficulty levels, 3-error fail, notes mode, per-difficulty best times |
 | More | 🚧 Planned | — |
 
 ## Custom Language Packs

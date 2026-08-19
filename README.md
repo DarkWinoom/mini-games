@@ -3,11 +3,13 @@
 休闲益智类小游戏合集，打开浏览器随时开玩。
 无后端、无追踪、纯静态。
 
+[在线试玩](https://dw-mini-games.netlify.app/)
+
 [For English readers](./README.en.md)
 
 ## 快速开始
 
-需要 [Node.js](https://nodejs.org/) 20+ 和 [pnpm](https://pnpm.io/) 10+。
+需要 [Node.js](https://nodejs.org/) 20+ 和 [pnpm](https://pnpm.io/) 11+。
 
 ```bash
 pnpm install
@@ -35,14 +37,14 @@ pnpm typecheck   # 仅类型检查（vue-tsc）
 - **样式**: [Tailwindcss](https://tailwindcss.com/) 3
 - **构建**: [Vite](https://vitejs.dev/) 5
 - **类型**: [TypeScript](https://www.typescriptlang.org/) 5
-- **包管理**: [pnpm](https://pnpm.io/) 10
+- **包管理**: [pnpm](https://pnpm.io/) 11
 
 ## 游戏清单
 
 | 游戏 | 状态 | 简介 |
 | ---- | ---- | ---- |
-| 俄罗斯方块 | 🚧 实施中 | 经典 10×20 网格，SRS 旋转，7-bag 随机，Hold / Next 3 |
-| 数独 | 🚧 实施中 | 9×9 网格，3 难度，错误限制，笔记模式 |
+| 俄罗斯方块 | ✅ 已完成 | 经典 10×20 网格，SRS 旋转，7-bag 随机，Hold / Next 3，T-Spin / Back-to-Back / Combo / SFX |
+| 数独 | ✅ 已完成 | 9×9 网格，3 难度，3 错失败机制，笔注模式，分难度最佳记录 |
 | 更多 | 🚧 计划中 | — |
 
 ## 自定义语言包
