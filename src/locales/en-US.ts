@@ -78,10 +78,23 @@ export const locale: LocaleDict = {
   "sudoku.difficulty.easy": "Easy",
   "sudoku.difficulty.medium": "Medium",
   "sudoku.difficulty.hard": "Hard",
+  "sudoku.difficulty.expert": "Expert",
   "sudoku.errors": "Errors",
   "sudoku.time": "Time",
   "sudoku.notes": "Notes",
   "sudoku.newGame": "New Game",
   "sudoku.completed": "Completed!",
   "sudoku.failed": "Failed",
+  "sudoku.best": "Best",
+  "sudoku.newBest": "New Best!",
+  "sudoku.paused": "Paused",
+  "sudoku.erase": "Erase",
+  "sudoku.rules.title": "Rules & How to Play",
+  "sudoku.rules.goal":
+    "Goal: fill the 9×9 grid so each row, column, and 3×3 box contains the digits 1-9 exactly once.",
+  "sudoku.rules.play":
+    "How: click a cell to select, press 1-9 to fill, press N to toggle Notes mode, press Backspace to erase.",
+  "sudoku.rules.win":
+    "Win: when all cells are filled without conflicts and errors < 3, the game records your time.",
+  "sudoku.failed.message": "Too many errors (limit is 3). Game over.",
 };
