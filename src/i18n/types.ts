@@ -58,7 +58,23 @@ export interface LocaleDict {
   "tetris.hold": string;
   "tetris.next": string;
   "tetris.paused": string;
+  "tetris.resume": string;
   "tetris.gameOver": string;
+  "tetris.b2b": string;
+  "tetris.combo": string;
+  "tetris.mute": string;
+  "tetris.unmute": string;
+  "tetris.best": string;
+  "tetris.newBest": string;
+  "tetris.controls.title": string;
+  "tetris.controls.move": string;
+  "tetris.controls.soft": string;
+  "tetris.controls.hard": string;
+  "tetris.controls.rotate": string;
+  "tetris.controls.hold": string;
+  "tetris.controls.pause": string;
+  "tetris.controls.restart": string;
+  "tetris.controls.resumeHint": string;
 
   // 数独
   "sudoku.title": string;

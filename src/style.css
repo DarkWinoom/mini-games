@@ -27,7 +27,7 @@
       color 0.3s;
     min-height: 100vh;
   }
-  :root[data-theme="dark"] body {
+  :where(:root[data-theme="dark"]) body {
     color: #f3f4f6;
     background: #1e1b4b;
   }
@@ -39,7 +39,7 @@
       radial-gradient(ellipse at bottom right, #dbeafe, transparent 50%);
     background-attachment: fixed;
   }
-  :root[data-theme="dark"] body {
+  :where(:root[data-theme="dark"]) body {
     background-image:
       radial-gradient(ellipse at top left, #4c1d95, transparent 50%),
       radial-gradient(ellipse at bottom right, #831843, transparent 50%);
@@ -63,10 +63,10 @@
     @apply opacity-50 cursor-not-allowed;
     transform: none;
   }
-  :root[data-theme="dark"] .btn {
+  :where(:root[data-theme="dark"]) .btn {
     @apply bg-white/[0.08] border-white/[0.15] text-white;
   }
-  :root[data-theme="dark"] .btn:hover {
+  :where(:root[data-theme="dark"]) .btn:hover {
     @apply bg-white/[0.12];
   }
 
@@ -88,7 +88,7 @@
     @apply bg-white/60;
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
   }
-  :root[data-theme="dark"] .btn-ghost:hover {
+  :where(:root[data-theme="dark"]) .btn-ghost:hover {
     @apply bg-white/[0.08];
   }
 
@@ -124,7 +124,7 @@
     right: 0;
     box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
   }
-  :root[data-theme="dark"] .select-panel {
+  :where(:root[data-theme="dark"]) .select-panel {
     @apply bg-white/[0.12] border-white/[0.15];
   }
   .select-item {
@@ -133,7 +133,7 @@
   .select-item:hover {
     @apply bg-white/60;
   }
-  :root[data-theme="dark"] .select-item:hover {
+  :where(:root[data-theme="dark"]) .select-item:hover {
     @apply bg-white/[0.08];
   }
   .select-item.active {
@@ -154,7 +154,7 @@
     @apply w-full max-w-[600px] max-h-[calc(100vh-48px)] overflow-auto rounded-3xl border border-white/60 bg-white/80 backdrop-blur-[30px] p-8;
     box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
   }
-  :root[data-theme="dark"] .modal-panel {
+  :where(:root[data-theme="dark"]) .modal-panel {
     @apply bg-white/[0.12] border-white/[0.15];
   }
   .modal-title {
@@ -164,7 +164,7 @@
     @apply text-sm mb-6 leading-relaxed;
     color: #6b7280;
   }
-  :root[data-theme="dark"] .modal-body {
+  :where(:root[data-theme="dark"]) .modal-body {
     color: rgba(255, 255, 255, 0.7);
   }
   .modal-actions {
@@ -179,7 +179,7 @@
     line-height: 1.5;
     min-height: 200px;
   }
-  :root[data-theme="dark"] .textarea {
+  :where(:root[data-theme="dark"]) .textarea {
     @apply bg-white/[0.08] border-white/[0.15] text-white;
   }
   .textarea:focus {
@@ -207,7 +207,7 @@
     transform: translateY(-6px) scale(1.01);
     box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
   }
-  :root[data-theme="dark"] .card {
+  :where(:root[data-theme="dark"]) .card {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .card-icon {
@@ -220,5 +220,245 @@
 @layer utilities {
   .container-x {
     @apply max-w-[1200px] mx-auto w-full px-8;
+  }
+}
+
+@layer components {
+  /* === Tetris 主网格（10×20） === */
+  .tetris-board {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(20, 28px);
+    gap: 1px;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1px;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+  }
+  :where(:root[data-theme='dark']) .tetris-board {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .tetris-cell {
+    width: 28px;
+    height: 28px;
+    background: var(--grid-empty, rgba(255, 255, 255, 0.3));
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 3px;
+  }
+  :where(:root[data-theme='dark']) .tetris-cell {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+  /* piece 颜色（主网格 + 预览共用同一组渐变，避免双套定义） */
+  .tetris-cell.I,
+  .tetris-preview-cell.I { background: linear-gradient(135deg, #00a8ec, #0084b8); }
+  .tetris-cell.O,
+  .tetris-preview-cell.O { background: linear-gradient(135deg, #fcd000, #d8a800); }
+  .tetris-cell.T,
+  .tetris-preview-cell.T { background: linear-gradient(135deg, #a020f0, #8000c0); }
+  .tetris-cell.S,
+  .tetris-preview-cell.S { background: linear-gradient(135deg, #44ec00, #2cb800); }
+  .tetris-cell.Z,
+  .tetris-preview-cell.Z { background: linear-gradient(135deg, #ec1c24, #c01418); }
+  .tetris-cell.J,
+  .tetris-preview-cell.J { background: linear-gradient(135deg, #4040e0, #2828b0); }
+  .tetris-cell.L,
+  .tetris-preview-cell.L { background: linear-gradient(135deg, #f08000, #c06800); }
+  .tetris-cell.ghost {
+    background: transparent !important;
+    box-shadow: inset 0 0 0 1px currentColor;
+    opacity: 0.4;
+  }
+
+  /* === Tetris 预览网格（统一 4×2，Hold / Next 区域尺寸一致） === */
+  .tetris-preview {
+    display: grid;
+    grid-template-columns: repeat(4, 14px);
+    grid-template-rows: repeat(2, 14px);
+    gap: 1px;
+    padding: 1px;
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  :where(:root[data-theme='dark']) .tetris-preview {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .tetris-preview-cell {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 2px;
+  }
+  :where(:root[data-theme='dark']) .tetris-preview-cell {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  /* === Tetris HUD 数字 === */
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* === Tetris v2: Event Flash Overlay（消除/T-Spin/B2B/Combo 闪动） === */
+  .tetris-event-overlay {
+    @apply absolute inset-0 z-10 flex items-center justify-center pointer-events-none;
+  }
+  .tetris-event {
+    @apply flex flex-col items-center gap-2 px-6 py-3 rounded-2xl backdrop-blur-md;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 12px 36px rgba(99, 102, 241, 0.35);
+  }
+  :where(:root[data-theme='dark']) .tetris-event {
+    background: rgba(30, 27, 75, 0.7);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .tetris-event-main {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  .tetris-event.event-tspin .tetris-event-main { color: #a020f0; }
+  .tetris-event.event-tspin-mini .tetris-event-main { color: #8000c0; opacity: 0.85; }
+  .tetris-event.event-tetris .tetris-event-main { color: #fcd000; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
+  .tetris-event.event-clear .tetris-event-main { color: #44ec00; }
+
+  .tetris-event-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .tetris-event-tag-b2b {
+    background: linear-gradient(135deg, #ec1c24, #c01418);
+    color: white;
+  }
+  .tetris-event-tag-combo {
+    background: linear-gradient(135deg, #00a8ec, #0084b8);
+    color: white;
+  }
+
+  /* Event flash 入场 / 退场动画（300ms） */
+  .event-flash-enter-active {
+    animation: event-flash-in 0.18s ease-out;
+  }
+  .event-flash-leave-active {
+    animation: event-flash-out 0.12s ease-in forwards;
+  }
+  @keyframes event-flash-in {
+    0% { transform: scale(0.6); opacity: 0; }
+    60% { transform: scale(1.15); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  @keyframes event-flash-out {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+
+  /* === Tetris v2: HUD Badges（B2B / Combo 指示器） === */
+  .tetris-hud-badge {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .tetris-hud-badge-b2b {
+    background: linear-gradient(135deg, #ec1c24, #c01418);
+    color: white;
+  }
+  .tetris-hud-badge-combo {
+    background: linear-gradient(135deg, #00a8ec, #0084b8);
+    color: white;
+  }
+
+  /* === Tetris v2: 通用 icon 按钮（暂停 / 静音 等） === */
+  .icon-btn {
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-full border border-white/60 bg-white/60 backdrop-blur-[20px] cursor-pointer transition-all duration-150;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    font-size: 16px;
+    line-height: 1;
+  }
+  .icon-btn:hover {
+    @apply bg-white/80 -translate-y-px;
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.25);
+  }
+  .icon-btn:active {
+    transform: translateY(0);
+  }
+  :where(:root[data-theme='dark']) .icon-btn {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  :where(:root[data-theme='dark']) .icon-btn:hover {
+    @apply bg-white/[0.12];
+  }
+
+  /* === Tetris v2: Best 副标（在 Score 卡内） === */
+  .tetris-best-row {
+    @apply flex items-center gap-2 mt-1;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tetris-best-label {
+    @apply text-gray-500 dark:text-white/60 uppercase tracking-wider;
+    font-size: 10px;
+  }
+  .tetris-best-value {
+    font-variant-numeric: tabular-nums;
+    @apply text-gray-700 dark:text-white/80;
+  }
+
+  /* === Tetris v2: 按键说明（页面下方，玻璃稿 chip） === */
+  .tetris-controls {
+    @apply mt-4 mb-2 px-6 py-4 rounded-3xl border border-white/60 bg-white/50 backdrop-blur-[20px];
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12);
+  }
+  :where(:root[data-theme='dark']) .tetris-controls {
+    @apply bg-white/[0.06] border-white/[0.15];
+  }
+  .tetris-controls-title {
+    @apply text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-white/60 mb-3;
+  }
+  .tetris-controls-grid {
+    @apply flex flex-wrap gap-x-6 gap-y-3 justify-center;
+  }
+  .tetris-controls-item {
+    @apply inline-flex items-center gap-2;
+    font-size: 12px;
+  }
+  .kbd {
+    @apply inline-flex items-center justify-center min-w-[28px] h-7 px-1.5 rounded-md border border-gray-300 bg-white text-gray-700;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+    font-family: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  :where(:root[data-theme='dark']) .kbd {
+    @apply bg-white/10 border-white/20 text-white;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  }
+  .kbd-row {
+    @apply inline-flex items-center gap-1;
+  }
+  .kbd-label {
+    @apply text-gray-600 dark:text-white/70;
+    font-size: 12px;
+  }
+
+  /* === Tetris v2: 新纪录提示（gameover 弹窗） === */
+  .tetris-newbest-msg {
+    @apply text-base font-semibold;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
