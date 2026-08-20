@@ -30,6 +30,8 @@ export const locale: LocaleDict = {
   "home.sudoku.description": "Numbers. Logic. Three difficulty levels.",
   "home.twenty48.title": "2048",
   "home.twenty48.description": "Slide. Merge. Beat your best.",
+  "home.snake.title": "Snake",
+  "home.snake.description": "Classic. Eat. Grow. Don't crash.",
 
   // Footer
   "footer.copyright": "© 2026 Mini Games Collection",
@@ -127,4 +129,29 @@ export const locale: LocaleDict = {
   "twenty48.modal.leave.confirm": "Leave",
   "twenty48.modal.leave.cancel": "Keep Playing",
   "twenty48.backHome": "Back to Home",
+
+  // Snake
+  "snake.newGame": "New Game",
+  "snake.pause": "Pause",
+  "snake.resume": "Resume",
+  "snake.score": "Score",
+  "snake.best": "Best",
+  "snake.length": "Length",
+  "snake.startHint": "Press arrow key to start",
+  "snake.rules.title": "Rules & How to Play",
+  "snake.rules.goalTitle": "Goal",
+  "snake.rules.goalBody": "Eat food to grow your snake. Avoid hitting walls or yourself.",
+  "snake.rules.playTitle": "How to Play",
+  "snake.rules.playBody": "Use arrow keys / WASD to turn. Each food gives 1 point and grows the snake. The snake moves forward every 200ms.",
+  "snake.rules.dieTitle": "Game Over",
+  "snake.rules.dieBody": "Hitting a wall or your own body ends the game. 180° turns (e.g. pressing left while moving right) are ignored to prevent instant suicide.",
+  "snake.rules.cautionTitle": "Avoid Mistakes",
+  "snake.rules.cautionBody": "Pressing F5 or the browser back button will lose your current progress. Use the Back to Home button below to leave safely.",
+  "snake.modal.over.title": "Game Over",
+  "snake.modal.over.body": "Your snake hit a wall or itself.",
+  "snake.modal.leave.title": "Leave and lose progress?",
+  "snake.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score and length.",
+  "snake.modal.leave.confirm": "Leave",
+  "snake.modal.leave.cancel": "Keep Playing",
+  "snake.backHome": "Back to Home",
 };

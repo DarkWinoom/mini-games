@@ -68,6 +68,8 @@ function importLang() {
           @play="router.push('/sudoku')" />
         <GameCard icon="🔲" :title="t('home.twenty48.title')" :description="t('home.twenty48.description')"
           @play="router.push('/twenty48')" />
+        <GameCard icon="🐍" :title="t('home.snake.title')" :description="t('home.snake.description')"
+          @play="router.push('/snake')" />
       </div>
     </main>
 

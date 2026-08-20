@@ -36,6 +36,8 @@ export interface LocaleDict {
   "home.sudoku.description": string;
   "home.twenty48.title": string;
   "home.twenty48.description": string;
+  "home.snake.title": string;
+  "home.snake.description": string;
 
   // Footer
   "footer.copyright": string;
@@ -128,6 +130,31 @@ export interface LocaleDict {
   "twenty48.modal.leave.confirm": string;
   "twenty48.modal.leave.cancel": string;
   "twenty48.backHome": string;
+
+  // 贪吃蛇
+  "snake.newGame": string;
+  "snake.pause": string;
+  "snake.resume": string;
+  "snake.score": string;
+  "snake.best": string;
+  "snake.length": string;
+  "snake.startHint": string;
+  "snake.rules.title": string;
+  "snake.rules.goalTitle": string;
+  "snake.rules.goalBody": string;
+  "snake.rules.playTitle": string;
+  "snake.rules.playBody": string;
+  "snake.rules.dieTitle": string;
+  "snake.rules.dieBody": string;
+  "snake.rules.cautionTitle": string;
+  "snake.rules.cautionBody": string;
+  "snake.modal.over.title": string;
+  "snake.modal.over.body": string;
+  "snake.modal.leave.title": string;
+  "snake.modal.leave.body": string;
+  "snake.modal.leave.confirm": string;
+  "snake.modal.leave.cancel": string;
+  "snake.backHome": string;
 }
 
 export interface LocaleInfo {

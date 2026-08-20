@@ -29,6 +29,8 @@ export const locale: LocaleDict = {
   "home.sudoku.description": "数字与逻辑，三种难度。",
   "home.twenty48.title": "2048",
   "home.twenty48.description": "滑块合并，挑战高分。",
+  "home.snake.title": "贪吃蛇",
+  "home.snake.description": "经典方向控制，吃食物长大。",
 
   // Footer
   "footer.copyright": "© 2026 小游戏合集",
@@ -124,4 +126,29 @@ export const locale: LocaleDict = {
   "twenty48.modal.leave.confirm": "确认返回",
   "twenty48.modal.leave.cancel": "继续游戏",
   "twenty48.backHome": "返回主页",
+
+  // 贪吃蛇
+  "snake.newGame": "新游戏",
+  "snake.pause": "暂停",
+  "snake.resume": "继续",
+  "snake.score": "分数",
+  "snake.best": "最高",
+  "snake.length": "长度",
+  "snake.startHint": "按方向键开始",
+  "snake.rules.title": "规则与玩法",
+  "snake.rules.goalTitle": "目标",
+  "snake.rules.goalBody": "控制蛇头吃到食物，让蛇越长越好，但不能撞墙或撞自己。",
+  "snake.rules.playTitle": "玩法",
+  "snake.rules.playBody": "使用方向键 / WASD 转向。每吃一个食物得 1 分，蛇身会变长。蛇每 200ms 自动前进一格。",
+  "snake.rules.dieTitle": "死亡",
+  "snake.rules.dieBody": "撞墙或撞到自己的身体即游戏结束。注意：180° 反向（如当前向右时直接按左）会被忽略，防止自杀。",
+  "snake.rules.cautionTitle": "防误操作",
+  "snake.rules.cautionBody": "按 F5 刷新或浏览器后退键会丢失当前进度，请善用页面下方的「返回主页」按钮安全退出。",
+  "snake.modal.over.title": "游戏结束",
+  "snake.modal.over.body": "蛇撞墙或撞到自己了。",
+  "snake.modal.leave.title": "放弃当前进度？",
+  "snake.modal.leave.body": "当前游戏还在进行中，返回主页将丢失当前分数与长度。",
+  "snake.modal.leave.confirm": "确认返回",
+  "snake.modal.leave.cancel": "继续游戏",
+  "snake.backHome": "返回主页",
 };

@@ -26,6 +26,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import("@/views/Twenty48View.vue"),
   },
   {
+    path: "/snake",
+    name: "snake",
+    component: () => import("@/views/SnakeView.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     redirect: "/",
   },
