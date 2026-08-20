@@ -28,6 +28,8 @@ export const locale: LocaleDict = {
   "home.tetris.description": "Classic blocks. Clear lines, beat the score.",
   "home.sudoku.title": "Sudoku",
   "home.sudoku.description": "Numbers. Logic. Three difficulty levels.",
+  "home.twenty48.title": "2048",
+  "home.twenty48.description": "Slide. Merge. Beat your best.",
 
   // Footer
   "footer.copyright": "© 2026 Mini Games Collection",
@@ -97,4 +99,32 @@ export const locale: LocaleDict = {
   "sudoku.rules.win":
     "Win: when all cells are filled without conflicts and errors < 3, the game records your time.",
   "sudoku.failed.message": "Too many errors (limit is 3). Game over.",
+
+  // 2048
+  "twenty48.newGame": "New Game",
+  "twenty48.undo": "Undo",
+  "twenty48.score": "Score",
+  "twenty48.best": "Best",
+  "twenty48.moves": "Moves",
+  "twenty48.maxTile": "Max tile",
+  "twenty48.rules.title": "Rules & How to Play",
+  "twenty48.rules.goalTitle": "Goal",
+  "twenty48.rules.goalBody": "Merge tiles with the same number. Reach 2048 (or keep going for higher).",
+  "twenty48.rules.playTitle": "How to Play",
+  "twenty48.rules.playBody": "Use arrow keys / WASD to slide. Tiles with the same value merge into one. Each move spawns a new tile (2 or 4).",
+  "twenty48.rules.winTitle": "Win & Lose",
+  "twenty48.rules.winBody": "Reach 2048 to win, then keep going for higher. Game over when the board is full with no merges possible.",
+  "twenty48.rules.cautionTitle": "Avoid Mistakes",
+  "twenty48.rules.cautionBody": "Pressing F5 or the browser back button will lose your current progress. Use the Back to Home button below to leave safely.",
+  "twenty48.modal.win.title": "You reached 2048!",
+  "twenty48.modal.win.body": "Congrats on hitting 2048! Want to keep going for higher?",
+  "twenty48.modal.win.continue": "Keep Going",
+  "twenty48.modal.win.newBest": "🎉 New Best!",
+  "twenty48.modal.over.title": "Game Over",
+  "twenty48.modal.over.body": "The board is full and no more moves are possible.",
+  "twenty48.modal.leave.title": "Leave and lose progress?",
+  "twenty48.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score and moves.",
+  "twenty48.modal.leave.confirm": "Leave",
+  "twenty48.modal.leave.cancel": "Keep Playing",
+  "twenty48.backHome": "Back to Home",
 };

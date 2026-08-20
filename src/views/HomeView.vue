@@ -61,11 +61,13 @@ function importLang() {
         {{ t('home.subtitle') }}
       </p>
 
-      <div class="grid w-full gap-6" style="grid-template-columns: 1fr 1fr; max-width: 900px;">
+      <div class="grid w-full gap-6" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); max-width: 1200px;">
         <GameCard icon="🧱" :title="t('home.tetris.title')" :description="t('home.tetris.description')"
           @play="router.push('/tetris')" />
         <GameCard icon="🔢" :title="t('home.sudoku.title')" :description="t('home.sudoku.description')"
           @play="router.push('/sudoku')" />
+        <GameCard icon="🔲" :title="t('home.twenty48.title')" :description="t('home.twenty48.description')"
+          @play="router.push('/twenty48')" />
       </div>
     </main>
 

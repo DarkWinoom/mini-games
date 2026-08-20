@@ -34,6 +34,8 @@ export interface LocaleDict {
   "home.tetris.description": string;
   "home.sudoku.title": string;
   "home.sudoku.description": string;
+  "home.twenty48.title": string;
+  "home.twenty48.description": string;
 
   // Footer
   "footer.copyright": string;
@@ -98,6 +100,34 @@ export interface LocaleDict {
   "sudoku.rules.play": string;
   "sudoku.rules.win": string;
   "sudoku.failed.message": string;
+
+  // 2048
+  "twenty48.newGame": string;
+  "twenty48.undo": string;
+  "twenty48.score": string;
+  "twenty48.best": string;
+  "twenty48.moves": string;
+  "twenty48.maxTile": string;
+  "twenty48.rules.title": string;
+  "twenty48.rules.goalTitle": string;
+  "twenty48.rules.goalBody": string;
+  "twenty48.rules.playTitle": string;
+  "twenty48.rules.playBody": string;
+  "twenty48.rules.winTitle": string;
+  "twenty48.rules.winBody": string;
+  "twenty48.rules.cautionTitle": string;
+  "twenty48.rules.cautionBody": string;
+  "twenty48.modal.win.title": string;
+  "twenty48.modal.win.body": string;
+  "twenty48.modal.win.continue": string;
+  "twenty48.modal.win.newBest": string;
+  "twenty48.modal.over.title": string;
+  "twenty48.modal.over.body": string;
+  "twenty48.modal.leave.title": string;
+  "twenty48.modal.leave.body": string;
+  "twenty48.modal.leave.confirm": string;
+  "twenty48.modal.leave.cancel": string;
+  "twenty48.backHome": string;
 }
 
 export interface LocaleInfo {
