@@ -854,6 +854,147 @@
     @apply w-full justify-center text-sm;
   }
 
+  /* === 贪吃蛇棋盘 + sidebar + 蛇身配色（v0.7） === */
+  .snake-game {
+    @apply flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center;
+  }
+  .snake-board-wrap {
+    @apply inline-block p-3 rounded-2xl border border-white/60 bg-white/40;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+  }
+  :where(:root[data-theme='dark']) .snake-board-wrap {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  .snake-board {
+    display: grid;
+    grid-template-rows: repeat(20, 22px);
+    gap: 2px;
+  }
+  .snake-row {
+    display: grid;
+    grid-template-columns: repeat(20, 22px);
+    gap: 2px;
+  }
+  .snake-cell {
+    @apply rounded-md border border-white/30 bg-white/20;
+    backdrop-filter: blur(4px);
+    transition: background 80ms ease-out;
+  }
+  :where(:root[data-theme='dark']) .snake-cell {
+    @apply bg-white/[0.04] border-white/[0.08];
+  }
+  /* 蛇头：紫蓝渐变 + 加白边 + 微阴影 */
+  .snake-cell.is-snake-head {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  }
+  :where(:root[data-theme='dark']) .snake-cell.is-snake-head {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  /* 蛇身：浅紫渐变 */
+  .snake-cell.is-snake-body {
+    background: linear-gradient(135deg, #c4b5fd, #a78bfa);
+  }
+  :where(:root[data-theme='dark']) .snake-cell.is-snake-body {
+    background: linear-gradient(135deg, #6d28d9, #5b21b6);
+  }
+  /* 食物：暖色对比（玫红/金黄）吸引注意 */
+  .snake-cell.is-food {
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    box-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
+    animation: snake-food-pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes snake-food-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* v0.7.2: waiting 状态开始提示（棋盘中央 overlay，闪烁） */
+  .snake-start-hint {
+    @apply absolute inset-0 flex items-center justify-center pointer-events-none;
+  }
+  .snake-start-hint-text {
+    @apply px-4 py-2 rounded-xl text-base font-semibold;
+    background: rgba(255, 255, 255, 0.85);
+    color: #6366f1;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+    animation: snake-start-hint-pulse 1.4s ease-in-out infinite;
+  }
+  :where(:root[data-theme='dark']) .snake-start-hint-text {
+    background: rgba(30, 27, 75, 0.85);
+    color: #c7d2fe;
+  }
+  @keyframes snake-start-hint-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  /* === 贪吃蛇 sidebar === */
+  .snake-sidebar {
+    @apply flex flex-col gap-4;
+    width: 280px;
+  }
+  .snake-actions {
+    @apply flex gap-3;
+  }
+  .snake-stats {
+    @apply flex flex-col gap-3;
+  }
+  .snake-stat-card {
+    @apply rounded-2xl border border-white/60 bg-white/60 p-4;
+    backdrop-filter: blur(20px);
+  }
+  :where(:root[data-theme='dark']) .snake-stat-card {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  .snake-stat-label {
+    @apply text-xs font-semibold uppercase tracking-wider;
+    color: #6b7280;
+  }
+  :where(:root[data-theme='dark']) .snake-stat-label {
+    color: #9ca3af;
+  }
+  .snake-stat-value {
+    @apply font-extrabold text-gray-800;
+    font-size: 32px;
+    line-height: 1.2;
+    margin-top: 4px;
+  }
+  :where(:root[data-theme='dark']) .snake-stat-value {
+    @apply text-white;
+  }
+  .snake-stat-value-primary {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .snake-back-home {
+    @apply w-full justify-center text-sm;
+  }
+
+  /* === 贪吃蛇规则：复用 .tetris-controls 容器（页面下方居中卡片） === */
+  .snake-rules-section {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .snake-rules-body {
+    @apply text-gray-600 dark:text-white/70 text-sm;
+    line-height: 1.6;
+  }
+  .snake-rules-body h4 {
+    @apply mt-3 mb-1 text-sm font-semibold text-gray-800 dark:text-white;
+  }
+  .snake-rules-body h4:first-child {
+    @apply mt-0;
+  }
+  .snake-rules-body p {
+    @apply m-0;
+  }
+
   /* === 2048 规则：复用 .tetris-controls 容器（页面下方居中卡片） === */
   .twenty48-rules-section {
     /* 继承 .tetris-controls 玻璃稿 + 居中布局 */
