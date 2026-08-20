@@ -710,4 +710,183 @@
     max-width: 640px;
     margin: 0 auto;
   }
+
+  /* === 2048 棋盘 + sidebar + tile 配色 === */
+  .twenty48-game {
+    @apply flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center;
+  }
+  .twenty48-board-wrap {
+    @apply inline-block p-3 rounded-2xl border border-white/60 bg-white/40;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+  }
+  :where(:root[data-theme='dark']) .twenty48-board-wrap {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  .twenty48-board {
+    display: grid;
+    grid-template-rows: repeat(4, 72px);
+    gap: 8px;
+  }
+  .twenty48-row {
+    display: grid;
+    grid-template-columns: repeat(4, 72px);
+    gap: 8px;
+  }
+  .twenty48-cell {
+    @apply rounded-xl border border-white/40 bg-white/30;
+    backdrop-filter: blur(10px);
+    @apply flex items-center justify-center;
+  }
+  :where(:root[data-theme='dark']) .twenty48-cell {
+    @apply bg-white/[0.05] border-white/[0.1];
+  }
+
+  /* === 2048 tile 11 档配色（紫蓝渐变色阶） === */
+  .twenty48-tile {
+    @apply w-full h-full rounded-xl flex items-center justify-center font-extrabold;
+    font-size: 28px;
+    line-height: 1;
+    transition: transform 80ms ease-out;
+  }
+  .twenty48-tile-2 { background: #ede9fe; color: #6366f1; }
+  .twenty48-tile-4 { background: #ddd6fe; color: #5b21b6; }
+  .twenty48-tile-8 { background: #c4b5fd; color: #4c1d95; }
+  .twenty48-tile-16 { background: #a78bfa; color: #ffffff; }
+  .twenty48-tile-32 { background: #8b5cf6; color: #ffffff; }
+  .twenty48-tile-64 { background: #7c3aed; color: #ffffff; }
+  .twenty48-tile-128 { background: #6d28d9; color: #ffffff; font-size: 24px; }
+  .twenty48-tile-256 { background: #5b21b6; color: #ffffff; font-size: 24px; }
+  .twenty48-tile-512 { background: #4c1d95; color: #ffffff; font-size: 24px; box-shadow: 0 0 24px rgba(168, 85, 247, 0.4); }
+  .twenty48-tile-1024 { background: #312e81; color: #fde047; font-size: 20px; box-shadow: 0 0 24px rgba(99, 102, 241, 0.5); }
+  .twenty48-tile-2048 {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: #ffffff;
+    font-size: 20px;
+    box-shadow: 0 0 32px rgba(168, 85, 247, 0.6);
+  }
+  .twenty48-tile-plus {
+    background: linear-gradient(135deg, #f59e0b, #ec4899);
+    color: #ffffff;
+    font-size: 20px;
+    box-shadow: 0 0 40px rgba(236, 72, 153, 0.7);
+  }
+  /* 暗色：把 2/4 浅色背景改为半透明深紫，保持对比度 */
+  :where(:root[data-theme='dark']) .twenty48-tile-2 { background: rgba(99, 102, 241, 0.25); color: #c7d2fe; }
+  :where(:root[data-theme='dark']) .twenty48-tile-4 { background: rgba(99, 102, 241, 0.35); color: #c7d2fe; }
+  :where(:root[data-theme='dark']) .twenty48-tile-8 { background: rgba(124, 58, 237, 0.55); color: #ede9fe; }
+  :where(:root[data-theme='dark']) .twenty48-tile-16 { background: rgba(124, 58, 237, 0.7); color: #ffffff; }
+  :where(:root[data-theme='dark']) .twenty48-tile-32 { background: rgba(109, 40, 217, 0.8); color: #ffffff; }
+  :where(:root[data-theme='dark']) .twenty48-tile-64 { background: rgba(91, 33, 182, 0.9); color: #ffffff; }
+
+  /* === tile 出现/合并动画 === */
+  @keyframes twenty48-pop-in {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+  .twenty48-cell.is-new .twenty48-tile {
+    animation: twenty48-pop-in 120ms ease-out;
+  }
+  @keyframes twenty48-merge {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+  .twenty48-cell.is-merged .twenty48-tile {
+    animation: twenty48-merge 200ms ease-out;
+  }
+
+  /* === 2048 sidebar === */
+  .twenty48-sidebar {
+    @apply flex flex-col gap-4;
+    width: 280px;
+  }
+  .twenty48-actions {
+    @apply flex gap-3;
+  }
+  .twenty48-stats {
+    @apply flex flex-col gap-3;
+  }
+  .twenty48-stat-card {
+    @apply rounded-2xl border border-white/60 bg-white/60 p-4;
+    backdrop-filter: blur(20px);
+  }
+  :where(:root[data-theme='dark']) .twenty48-stat-card {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  .twenty48-stat-card-full {
+    @apply flex flex-col;
+  }
+  .twenty48-stat-label {
+    @apply text-xs font-semibold uppercase tracking-wider;
+    color: #6b7280;
+  }
+  :where(:root[data-theme='dark']) .twenty48-stat-label {
+    color: #9ca3af;
+  }
+  .twenty48-stat-value {
+    @apply font-extrabold text-gray-800;
+    font-size: 32px;
+    line-height: 1.2;
+    margin-top: 4px;
+  }
+  :where(:root[data-theme='dark']) .twenty48-stat-value {
+    @apply text-white;
+  }
+  .twenty48-stat-value-small {
+    font-size: 24px;
+  }
+  .twenty48-stat-value-primary {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .twenty48-stat-meta {
+    @apply mt-2 text-sm text-gray-500;
+  }
+  :where(:root[data-theme='dark']) .twenty48-stat-meta {
+    @apply text-white/60;
+  }
+
+  /* === 2048 sidebar 内的"返回主页"按钮（v0.6.2 防误操作引导） === */
+  .twenty48-back-home {
+    @apply w-full justify-center text-sm;
+  }
+
+  /* === 2048 规则：复用 .tetris-controls 容器（页面下方居中卡片） === */
+  .twenty48-rules-section {
+    /* 继承 .tetris-controls 玻璃稿 + 居中布局 */
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .twenty48-rules-body {
+    @apply text-gray-600 dark:text-white/70 text-sm;
+    line-height: 1.6;
+  }
+  .twenty48-rules-body h4 {
+    @apply mt-3 mb-1 text-sm font-semibold text-gray-800 dark:text-white;
+  }
+  .twenty48-rules-body h4:first-child {
+    @apply mt-0;
+  }
+  .twenty48-rules-body p {
+    @apply m-0;
+  }
+
+  /* === 2048 模态摘要 === */
+  .twenty48-modal-meta {
+    @apply mt-3 text-sm text-gray-500;
+  }
+  :where(:root[data-theme='dark']) .twenty48-modal-meta {
+    @apply text-white/60;
+  }
+  .twenty48-newbest-msg {
+    @apply text-base font-semibold;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
