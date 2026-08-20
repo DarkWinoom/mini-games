@@ -46,7 +46,8 @@ Output goes to `dist/` and can be deployed to any static host
 | ---- | ------ | ----------- |
 | Tetris | ✅ Done | Classic 10×20 grid, SRS rotation, 7-bag randomizer, Hold / Next 3, T-Spin / Back-to-Back / Combo / SFX |
 | Sudoku | ✅ Done | 9×9 grid, 3 difficulty levels, 3-error fail, notes mode, per-difficulty best times |
-| More | 🚧 Planned | — |
+| 2048 | ✅ Done | 4×4 sliding merge, 1-step undo, challenge 2048 / 4096+ |
+| Snake | ✅ Done | 20×20 classic direction control, eat food to grow, 180° reverse prevention |
 
 ## Custom Language Packs
 
