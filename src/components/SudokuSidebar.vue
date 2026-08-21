@@ -1,10 +1,26 @@
 <script setup lang="ts">
 import { computed, ref, watch, onUnmounted } from "vue";
+import BaseButton from "@/components/BaseButton.vue";
 import { useI18n } from "@/composables/useI18n";
 import { formatTime } from "@/games/sudoku/engine";
 import { MAX_ERRORS } from "@/games/sudoku/types";
 import type { Difficulty, BestTimes } from "@/games/sudoku/types";
 
+/**
+ * 数独右侧 Sidebar
+ *
+ * 标准布局（与 Gomoku / N-Puzzle / 2048 / 俄罗斯方块 一致）：
+ *  1. 状态（顶部）
+ *  2. 难度选择（最上面）
+ *  3. 统计：时间 / 错误 / Best
+ *  4. 行动按钮：新游戏 / 暂停（底部）
+ *  5. 返回主页（最底部 ghost 按钮）
+ *
+ * 设计原则（plan §2.3 UI 改动）：
+ *  - 不用图标按钮（统一 BaseButton 文字）
+ *  - "返回主页"放最底（与其它游戏统一）
+ *  - 难度放最上面（用户首屏就能切换）
+ */
 const props = defineProps<{
   difficulty: Difficulty;
   difficulties: readonly Difficulty[];
@@ -18,6 +34,7 @@ const emit = defineEmits<{
   setDifficulty: [d: Difficulty];
   newGame: [];
   togglePause: [];
+  backHome: [];
 }>();
 
 const { t } = useI18n();
@@ -39,6 +56,10 @@ const bestLabel = computed<string>(() => {
 const bestCardLabel = computed<string>(() => {
   return `${t("sudoku.best")} · ${t(`sudoku.difficulty.${props.difficulty}`)}`;
 });
+
+const isOver = computed(
+  () => props.status === "won" || props.status === "failed",
+);
 
 /* === 错误反馈动画（v0.5.4） === */
 /** errors 增额时触发 500ms shake + flash，给玩家"出错"的明确视觉信号 */
@@ -70,71 +91,66 @@ onUnmounted(() => {
 
 <template>
   <div class="sudoku-sidebar">
-    <!-- 难度 + 新游戏 + 暂停 -->
-    <div class="card !p-4">
-      <h3 class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider mb-3">
-        {{ t("sudoku.difficulty") }}
-      </h3>
-      <!-- 难度按钮：调大 + 与下方按钮增加间隙 -->
-      <div class="flex gap-2 flex-wrap mb-5">
+    <!-- 1. 难度选择（最上面） -->
+    <div class="sudoku-section">
+      <div class="sudoku-section-label">{{ t("sudoku.difficulty") }}</div>
+      <div class="sudoku-difficulty">
         <button
           v-for="d in difficulties"
           :key="d"
           type="button"
-          :class="['sudoku-diff-btn', difficulty === d && 'is-active']"
+          :class="['sudoku-diff-btn', { 'is-active': difficulty === d }]"
           @click="emit('setDifficulty', d)"
         >{{ t(`sudoku.difficulty.${d}`) }}</button>
       </div>
-      <button
-        type="button"
-        class="btn btn-primary w-full"
-        @click="emit('newGame')"
-      >{{ t("sudoku.newGame") }}</button>
-      <button
-        type="button"
-        class="btn btn-ghost w-full mt-2"
-        @click="emit('togglePause')"
-      >
-        <span v-if="status === 'paused'">▶ {{ t("common.resume") }}</span>
-        <span v-else>⏸ {{ t("common.pause") }}</span>
-      </button>
     </div>
 
-    <!-- 统计：时间 / 错误（X/3） / Best（右扩占大头） -->
-    <div class="card !p-4">
-      <div class="space-y-3">
+    <!-- 3. 统计：时间 / 错误（X/3） / Best（右扩占大头） -->
+    <div class="sudoku-section sudoku-stats">
+      <div>
+        <div class="sudoku-stat-label">{{ t("sudoku.time") }}</div>
+        <div class="sudoku-stat-value">{{ formatTime(time) }}</div>
+      </div>
+      <div class="flex items-stretch gap-4">
         <div>
-          <div class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider">
-            {{ t("sudoku.time") }}
+          <div class="sudoku-stat-label">{{ t("sudoku.errors") }}</div>
+          <div
+            :class="[
+              'sudoku-stat-value',
+              'text-2xl',
+              'tabular-nums',
+              errors > 0 && 'has-error',
+              isShaking && 'is-shaking',
+            ]"
+          >
+            {{ errors }} / {{ MAX_ERRORS }}
           </div>
-          <div class="sudoku-stat-value">{{ formatTime(time) }}</div>
         </div>
-        <!-- Errors (auto 宽) + Best (flex-1 占大头) -->
-        <div class="flex items-stretch gap-4">
-          <div>
-            <div class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider">
-              {{ t("sudoku.errors") }}
-            </div>
-            <div
-              :class="[
-                'sudoku-stat-value',
-                'text-2xl',
-                'tabular-nums',
-                errors > 0 && 'has-error',
-                isShaking && 'is-shaking',
-              ]"
-            >
-              {{ errors }} / {{ MAX_ERRORS }}
-            </div>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider">
-              {{ bestCardLabel }}
-            </div>
-            <div class="sudoku-stat-value text-2xl tabular-nums">{{ bestLabel }}</div>
-          </div>
+        <div class="flex-1 min-w-0">
+          <div class="sudoku-stat-label">{{ bestCardLabel }}</div>
+          <div class="sudoku-stat-value text-2xl tabular-nums">{{ bestLabel }}</div>
         </div>
       </div>
     </div>
+
+    <!-- 4. 行动按钮 -->
+    <div class="sudoku-section sudoku-actions">
+      <BaseButton variant="primary" class="flex-1" @click="emit('newGame')">
+        {{ t("sudoku.newGame") }}
+      </BaseButton>
+      <BaseButton
+        variant="ghost"
+        class="flex-1"
+        :disabled="isOver"
+        @click="emit('togglePause')"
+      >
+        {{ status === "paused" ? t("common.resume") : t("common.pause") }}
+      </BaseButton>
+    </div>
+
+    <!-- 5. 返回主页（防误操作：F5 / 后退会丢进度，引导走这里） -->
+    <BaseButton variant="ghost" class="sudoku-back-home" @click="emit('backHome')">
+      {{ t("sudoku.backHome") }}
+    </BaseButton>
   </div>
 </template>
