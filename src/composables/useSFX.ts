@@ -64,7 +64,7 @@ function ensureCtx(): AudioContext | null {
 function tone(
   freq: number,
   duration = 0.08,
-  volume = 0.15,
+  volume = 0.1,
   type: OscillatorType = "sine",
   attack = 0.005,
 ): void {
@@ -131,6 +131,8 @@ export type SfxName =
   | "move"
   | "rotate"
   | "lock"
+  | "place"
+  | "slide"
   | "hold"
   | "clear1"
   | "clear2"
@@ -145,48 +147,57 @@ export type SfxName =
 export function playSfx(name: SfxName): void {
   switch (name) {
     case "move":
-      tone(180, 0.03, 0.08, "square");
+      tone(180, 0.03, 0.05, "square");
       break;
     case "rotate":
-      tone(440, 0.05, 0.1, "sine");
+      tone(440, 0.05, 0.07, "sine");
       break;
     case "hold":
-      tone(330, 0.06, 0.12, "triangle");
+      tone(330, 0.06, 0.08, "triangle");
       break;
     case "lock":
-      tone(120, 0.07, 0.15, "square");
+      tone(120, 0.07, 0.09, "square");
+      break;
+    case "place":
+      // 五子棋落子：220Hz sine（柔和"嗒"），跟 AI clear1 (523Hz) 区分
+      tone(220, 0.06, 0.09, "sine");
+      break;
+    case "slide":
+      // 数字华容道滑块：180Hz sine + 短时长（0.035s）+ 低音量（0.05）
+      // 比 lock (120Hz square 0.09) 柔和很多 — 短促"嗒"声，不刺耳
+      tone(180, 0.035, 0.05, "sine");
       break;
     case "clear1":
-      tone(523, 0.1, 0.18, "sine");
+      tone(523, 0.1, 0.1, "sine");
       break;
     case "clear2":
-      tone(659, 0.1, 0.18, "sine");
+      tone(659, 0.1, 0.1, "sine");
       break;
     case "clear3":
-      tone(784, 0.1, 0.18, "sine");
+      tone(784, 0.1, 0.1, "sine");
       break;
     case "clear4":
-      // Tetris — 4 音上行琶音
-      tone(523, 0.08, 0.18, "square");
-      window.setTimeout(() => tone(659, 0.08, 0.18, "square"), 50);
-      window.setTimeout(() => tone(784, 0.08, 0.18, "square"), 100);
-      window.setTimeout(() => tone(1047, 0.12, 0.2, "square"), 150);
+      // Tetris — 4 音上行琶音（胜利感）
+      tone(523, 0.08, 0.1, "square");
+      window.setTimeout(() => tone(659, 0.08, 0.1, "square"), 50);
+      window.setTimeout(() => tone(784, 0.08, 0.1, "square"), 100);
+      window.setTimeout(() => tone(1047, 0.12, 0.11, "square"), 150);
       break;
     case "tspin":
-      sweep(600, 1200, 0.18, 0.18, "sine");
+      sweep(600, 1200, 0.18, 0.12, "sine");
       break;
     case "tspin-mini":
-      sweep(400, 800, 0.14, 0.15, "sine");
+      sweep(400, 800, 0.14, 0.1, "sine");
       break;
     case "combo":
       // Combo 加成音（叠加在 clear 音上）
-      tone(880, 0.12, 0.12, "triangle");
+      tone(880, 0.12, 0.07, "triangle");
       break;
     case "gameover":
-      sweep(400, 80, 0.7, 0.22, "sawtooth");
+      sweep(400, 80, 0.7, 0.13, "sawtooth");
       break;
     case "pause":
-      tone(300, 0.06, 0.1, "sine");
+      tone(300, 0.06, 0.06, "sine");
       break;
   }
 }

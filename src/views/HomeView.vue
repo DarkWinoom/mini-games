@@ -70,6 +70,10 @@ function importLang() {
           @play="router.push('/twenty48')" />
         <GameCard icon="🐍" :title="t('home.snake.title')" :description="t('home.snake.description')"
           @play="router.push('/snake')" />
+        <GameCard icon="⚫" :title="t('home.gomoku.title')" :description="t('home.gomoku.description')"
+          @play="router.push('/gomoku')" />
+        <GameCard icon="🧩" :title="t('home.npuzzle.title')" :description="t('home.npuzzle.description')"
+          @play="router.push('/npuzzle')" />
       </div>
     </main>
 

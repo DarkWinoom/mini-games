@@ -1031,3 +1031,468 @@
     color: transparent;
   }
 }
+
+/* === 五子棋 (Gomoku) 棋盘 + 棋子 + sidebar === */
+.gomoku-game {
+  @apply flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center;
+}
+.gomoku-board-wrap {
+  @apply inline-block p-3 rounded-2xl border border-white/60 bg-white/40;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+:where(:root[data-theme='dark']) .gomoku-board-wrap {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+.gomoku-board {
+  --cell-size: 36px;
+  --grid-padding: 12px;
+  position: relative;
+  padding: var(--grid-padding);
+  /* 浅木色背景（gomoku 经典） */
+  background: linear-gradient(135deg, #f4d49c 0%, #e8b878 100%);
+  border-radius: 12px;
+  width: calc(var(--cell-size) * 15 + var(--grid-padding) * 2);
+  height: calc(var(--cell-size) * 15 + var(--grid-padding) * 2);
+}
+:where(:root[data-theme='dark']) .gomoku-board {
+  background: linear-gradient(135deg, #8b6f3e 0%, #6b5530 100%);
+}
+.gomoku-grid {
+  display: grid;
+  grid-template-columns: repeat(15, var(--cell-size));
+  grid-template-rows: repeat(15, var(--cell-size));
+  position: relative;
+}
+.gomoku-row {
+  display: contents;
+}
+.gomoku-cell {
+  position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+.gomoku-cell:disabled {
+  cursor: default;
+}
+/* 4 段防线加粗（col=0,3,7,11 + row=0,3,7,11） */
+/* 注：现在网格线在 SVG 中，不在 cell 上 */
+.gomoku-cell.is-edge-right,
+.gomoku-cell.is-edge-bottom {
+  /* 保留 class 标识，但实际不画线（SVG 负责） */
+}
+/* SVG 网格线层（504×504，居中在 board content 540×540 内，左右各 18px 浅木色边距） */
+.gomoku-grid-svg {
+  position: absolute;
+  top: calc(var(--grid-padding) + 18px);
+  left: calc(var(--grid-padding) + 18px);
+  pointer-events: none;
+  z-index: 0;
+}
+.gomoku-grid-line {
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.gomoku-grid-line.is-bold {
+  stroke: rgba(0, 0, 0, 0.75);
+  stroke-width: 2;
+}
+:where(:root[data-theme='dark']) .gomoku-grid-line {
+  stroke: rgba(255, 255, 255, 0.45);
+}
+:where(:root[data-theme='dark']) .gomoku-grid-line.is-bold {
+  stroke: rgba(255, 255, 255, 0.8);
+}
+.gomoku-star-point {
+  fill: rgba(0, 0, 0, 0.7);
+}
+:where(:root[data-theme='dark']) .gomoku-star-point {
+  fill: rgba(255, 255, 255, 0.85);
+}
+/* 15x15 cell 网格（点击区，铺在 SVG 之上） */
+.gomoku-grid {
+  display: grid;
+  grid-template-columns: repeat(15, var(--cell-size));
+  grid-template-rows: repeat(15, var(--cell-size));
+  position: relative;
+  z-index: 1;
+}
+
+/* 棋子 */
+.gomoku-stone {
+  position: absolute;
+  width: calc(var(--cell-size) * 0.82);
+  height: calc(var(--cell-size) * 0.82);
+  border-radius: 50%;
+  z-index: 1;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.gomoku-cell:not(:disabled):hover .gomoku-stone {
+  transform: scale(1.1);
+}
+.gomoku-stone-black {
+  background: radial-gradient(circle at 35% 35%, #4a4a4a 0%, #1a1a1a 70%, #000 100%);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
+}
+.gomoku-stone-white {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f0f0f0 70%, #d8d8d8 100%);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  border: 1px solid #b0b0b0;
+}
+
+/* 最后一手标记 */
+.gomoku-last-marker {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  animation: gomoku-marker-pulse 1.5s ease-in-out infinite;
+}
+@keyframes gomoku-marker-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+/* 5 连线高亮 cell */
+.gomoku-cell.is-winning::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px #fbbf24, 0 0 12px rgba(251, 191, 36, 0.7);
+  pointer-events: none;
+  z-index: 3;
+  animation: gomoku-win-glow 1s ease-in-out infinite alternate;
+}
+@keyframes gomoku-win-glow {
+  from { box-shadow: 0 0 0 3px #fbbf24, 0 0 8px rgba(251, 191, 36, 0.5); }
+  to { box-shadow: 0 0 0 4px #fde047, 0 0 16px rgba(253, 224, 71, 0.8); }
+}
+
+/* === 五子棋 Sidebar === */
+.gomoku-sidebar {
+  @apply flex flex-col gap-4 w-full max-w-xs;
+}
+.gomoku-status {
+  @apply p-4 rounded-2xl border border-white/60 bg-white/50;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
+}
+:where(:root[data-theme='dark']) .gomoku-status {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+.gomoku-status-label {
+  @apply text-xs uppercase tracking-wider opacity-60 mb-1;
+}
+.gomoku-status-text {
+  @apply text-xl font-bold;
+}
+.gomoku-status.is-win .gomoku-status-text { color: #10b981; }
+.gomoku-status.is-lose .gomoku-status-text { color: #ef4444; }
+.gomoku-status.is-draw .gomoku-status-text { color: #6b7280; }
+.gomoku-status.is-thinking .gomoku-status-text {
+  color: #6366f1;
+  animation: gomoku-thinking-pulse 1.2s ease-in-out infinite;
+}
+@keyframes gomoku-thinking-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.gomoku-section {
+  @apply flex flex-col gap-2;
+}
+.gomoku-section-label {
+  @apply text-xs uppercase tracking-wider opacity-60;
+}
+.gomoku-difficulty {
+  @apply flex gap-2;
+}
+.gomoku-diff-btn {
+  @apply flex-1 px-3 py-2 rounded-lg border border-white/60 bg-white/40 text-sm font-medium transition;
+  backdrop-filter: blur(10px);
+}
+.gomoku-diff-btn:hover {
+  @apply bg-white/60;
+}
+.gomoku-diff-btn.is-active {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+:where(:root[data-theme='dark']) .gomoku-diff-btn {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+:where(:root[data-theme='dark']) .gomoku-diff-btn:hover {
+  @apply bg-white/[0.15];
+}
+
+.gomoku-record-grid {
+  @apply grid grid-cols-2 gap-2;
+}
+.gomoku-record-card {
+  @apply p-3 rounded-xl border border-white/40 bg-white/30 text-center;
+  backdrop-filter: blur(10px);
+}
+.gomoku-record-card-full {
+  @apply col-span-2;
+}
+:where(:root[data-theme='dark']) .gomoku-record-card {
+  @apply bg-white/[0.06] border-white/[0.12];
+}
+.gomoku-record-label {
+  @apply text-xs opacity-60;
+}
+.gomoku-record-value {
+  @apply text-2xl font-bold;
+}
+.gomoku-record-value-win { color: #10b981; }
+.gomoku-record-value-lose { color: #ef4444; }
+.gomoku-record-value-draw { color: #6b7280; }
+
+.gomoku-actions {
+  @apply flex;
+}
+.gomoku-back-home {
+  @apply w-full;
+}
+
+/* 规则区（页面下方） */
+.gomoku-rules-section {
+  max-width: 720px;
+  margin: 2rem auto 0;
+}
+.gomoku-rules-body {
+  @apply text-sm leading-relaxed;
+}
+.gomoku-rules-body h4 {
+  @apply font-bold mt-3 mb-1;
+}
+.gomoku-rules-body h4:first-child {
+  @apply mt-0;
+}
+.gomoku-rules-body p {
+  @apply m-0 opacity-80;
+}
+
+.gomoku-modal-meta {
+  @apply mt-2 text-sm opacity-70;
+}
+
+/* === 数字华容道 (N-Puzzle) 棋盘 + 方块 + sidebar === */
+.npuzzle-game {
+  @apply flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center;
+}
+.npuzzle-board-wrap {
+  @apply inline-block p-3 rounded-2xl border border-white/60 bg-white/40;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+:where(:root[data-theme='dark']) .npuzzle-board-wrap {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+.npuzzle-board {
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  background: linear-gradient(135deg, #f4d49c 0%, #e8b878 100%);
+  border-radius: 12px;
+}
+:where(:root[data-theme='dark']) .npuzzle-board {
+  background: linear-gradient(135deg, #8b6f3e 0%, #6b5530 100%);
+}
+.npuzzle-board.is-size-3 {
+  grid-template-columns: repeat(3, 96px);
+  grid-template-rows: repeat(3, 96px);
+}
+.npuzzle-board.is-size-4 {
+  grid-template-columns: repeat(4, 72px);
+  grid-template-rows: repeat(4, 72px);
+}
+.npuzzle-row {
+  display: contents;
+}
+.npuzzle-cell {
+  position: relative;
+  width: 100%;
+  height: var(--cell-size);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 28px;
+  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.npuzzle-cell:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+.npuzzle-cell:disabled {
+  cursor: default;
+}
+.npuzzle-cell.is-empty {
+  background: transparent !important;
+  box-shadow: none !important;
+  cursor: default;
+}
+.npuzzle-tile-text.is-light {
+  color: #4c1d95;
+}
+.npuzzle-tile-text.is-dark {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+.npuzzle-cell.is-winning {
+  animation: npuzzle-win-pulse 1s ease-in-out infinite alternate;
+}
+@keyframes npuzzle-win-pulse {
+  from {
+    box-shadow: 0 0 0 2px #fbbf24, 0 4px 12px rgba(251, 191, 36, 0.6);
+  }
+  to {
+    box-shadow: 0 0 0 4px #fde047, 0 4px 16px rgba(253, 224, 71, 0.8);
+  }
+}
+
+/* === 数字华容道 Sidebar === */
+.npuzzle-sidebar {
+  @apply flex flex-col gap-4 w-full max-w-xs;
+}
+.npuzzle-status {
+  @apply p-4 rounded-2xl border border-white/60 bg-white/50;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
+}
+:where(:root[data-theme='dark']) .npuzzle-status {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+.npuzzle-status.is-over {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-color: transparent;
+}
+:where(:root[data-theme='dark']) .npuzzle-status.is-over {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+.npuzzle-status-label {
+  @apply text-xs uppercase tracking-wider opacity-60;
+}
+.npuzzle-status.is-over .npuzzle-status-label {
+  @apply text-2xl font-bold opacity-100;
+}
+.npuzzle-section {
+  @apply flex flex-col gap-2;
+}
+.npuzzle-section-label {
+  @apply text-xs uppercase tracking-wider opacity-60;
+}
+.npuzzle-difficulty {
+  @apply flex gap-2;
+}
+.npuzzle-diff-btn {
+  @apply flex-1 px-3 py-2 rounded-lg border border-white/60 bg-white/40 text-sm font-medium transition;
+  backdrop-filter: blur(10px);
+}
+.npuzzle-diff-btn:hover {
+  @apply bg-white/60;
+}
+.npuzzle-diff-btn.is-active {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+:where(:root[data-theme='dark']) .npuzzle-diff-btn {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+:where(:root[data-theme='dark']) .npuzzle-diff-btn:hover {
+  @apply bg-white/[0.15];
+}
+.npuzzle-stats {
+  @apply grid grid-cols-2 gap-2;
+}
+.npuzzle-stat-card {
+  @apply p-3 rounded-xl border border-white/40 bg-white/30 text-center;
+  backdrop-filter: blur(10px);
+}
+:where(:root[data-theme='dark']) .npuzzle-stat-card {
+  @apply bg-white/[0.06] border-white/[0.12];
+}
+.npuzzle-stat-label {
+  @apply text-xs opacity-60;
+}
+.npuzzle-stat-value {
+  @apply text-2xl font-bold tabular-nums;
+}
+.npuzzle-stat-time {
+  font-variant-numeric: tabular-nums;
+}
+.npuzzle-best {
+  @apply grid grid-cols-2 gap-2;
+}
+.npuzzle-best-card {
+  @apply p-3 rounded-xl border border-white/40 bg-white/30 text-center;
+  backdrop-filter: blur(10px);
+}
+:where(:root[data-theme='dark']) .npuzzle-best-card {
+  @apply bg-white/[0.06] border-white/[0.12];
+}
+.npuzzle-best-label {
+  @apply text-xs opacity-60;
+}
+.npuzzle-best-value {
+  @apply text-xl font-bold tabular-nums;
+}
+.npuzzle-actions {
+  @apply flex gap-2;
+}
+.npuzzle-back-home {
+  @apply w-full;
+}
+.npuzzle-rules-section {
+  max-width: 720px;
+  margin: 2rem auto 0;
+}
+.npuzzle-rules-body {
+  @apply text-sm leading-relaxed;
+}
+.npuzzle-rules-body h4 {
+  @apply font-bold mt-3 mb-1;
+}
+.npuzzle-rules-body h4:first-child {
+  @apply mt-0;
+}
+.npuzzle-rules-body p {
+  @apply m-0 opacity-80;
+}
+.npuzzle-modal-meta {
+  @apply mt-2 text-sm opacity-70;
+}

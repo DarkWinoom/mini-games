@@ -38,6 +38,10 @@ export interface LocaleDict {
   "home.twenty48.description": string;
   "home.snake.title": string;
   "home.snake.description": string;
+  "home.gomoku.title": string;
+  "home.gomoku.description": string;
+  "home.npuzzle.title": string;
+  "home.npuzzle.description": string;
 
   // Footer
   "footer.copyright": string;
@@ -155,6 +159,67 @@ export interface LocaleDict {
   "snake.modal.leave.confirm": string;
   "snake.modal.leave.cancel": string;
   "snake.backHome": string;
+
+  // 五子棋
+  "gomoku.newGame": string;
+  "gomoku.difficulty": string;
+  "gomoku.difficulty.easy": string;
+  "gomoku.difficulty.medium": string;
+  "gomoku.difficulty.hard": string;
+  "gomoku.status": string;
+  "gomoku.turn.your": string;
+  "gomoku.turn.ai": string;
+  "gomoku.thinking": string;
+  "gomoku.won": string;
+  "gomoku.lost": string;
+  "gomoku.draw": string;
+  "gomoku.you": string;
+  "gomoku.ai": string;
+  "gomoku.rules.title": string;
+  "gomoku.rules.goalTitle": string;
+  "gomoku.rules.goalBody": string;
+  "gomoku.rules.playTitle": string;
+  "gomoku.rules.playBody": string;
+  "gomoku.rules.winTitle": string;
+  "gomoku.rules.winBody": string;
+  "gomoku.rules.cautionTitle": string;
+  "gomoku.rules.cautionBody": string;
+  "gomoku.modal.over.title": string;
+  "gomoku.modal.over.body": string;
+  "gomoku.modal.leave.title": string;
+  "gomoku.modal.leave.body": string;
+  "gomoku.modal.leave.confirm": string;
+  "gomoku.modal.leave.cancel": string;
+  "gomoku.backHome": string;
+
+  // 数字华容道
+  "npuzzle.newGame": string;
+  "npuzzle.undo": string;
+  "npuzzle.difficulty": string;
+  "npuzzle.moves": string;
+  "npuzzle.time": string;
+  "npuzzle.best": string;
+  "npuzzle.bestMoves": string;
+  "npuzzle.bestTime": string;
+  "npuzzle.playing": string;
+  "npuzzle.solved": string;
+  "npuzzle.rules.title": string;
+  "npuzzle.rules.goalTitle": string;
+  "npuzzle.rules.goalBody": string;
+  "npuzzle.rules.playTitle": string;
+  "npuzzle.rules.playBody": string;
+  "npuzzle.rules.winTitle": string;
+  "npuzzle.rules.winBody": string;
+  "npuzzle.rules.cautionTitle": string;
+  "npuzzle.rules.cautionBody": string;
+  "npuzzle.modal.over.title": string;
+  "npuzzle.modal.over.body": string;
+  "npuzzle.modal.newBest": string;
+  "npuzzle.modal.leave.title": string;
+  "npuzzle.modal.leave.body": string;
+  "npuzzle.modal.leave.confirm": string;
+  "npuzzle.modal.leave.cancel": string;
+  "npuzzle.backHome": string;
 }
 
 export interface LocaleInfo {

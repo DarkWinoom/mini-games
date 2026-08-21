@@ -1,9 +1,9 @@
 {
   "name": "mini-games",
-  "version": "0.7.2",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
-  "description": "A web collection of small games (Tetris, Sudoku). Vue 3 + Vite + TypeScript.",
+  "description": "A web collection of small games (Tetris, Sudoku, N-Puzzle). Vue 3 + Vite + TypeScript.",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
