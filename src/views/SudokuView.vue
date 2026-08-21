@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRouter, onBeforeRouteLeave } from "vue-router";
+import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import BaseModal from "@/components/BaseModal.vue";
@@ -12,7 +13,6 @@ import { useSudokuStore } from "@/stores/sudoku";
 import { useI18n } from "@/composables/useI18n";
 import { unlockAudioOnFirstInteraction } from "@/composables/useSFX";
 import { isGivenCell, formatTime } from "@/games/sudoku/engine";
-import { storeToRefs } from "pinia";
 import type { CellPosition, Difficulty } from "@/games/sudoku/types";
 
 const router = useRouter();
@@ -28,6 +28,10 @@ const isPaused = computed(() => state.value.status === "paused");
 const isWon = computed(() => state.value.status === "won");
 const isFailed = computed(() => state.value.status === "failed");
 const isGameOver = computed(() => isWon.value || isFailed.value);
+const isPlaying = computed(() => state.value.status === "playing");
+
+const showLeaveModal = ref(false);
+let pendingLeave: (() => void) | null = null;
 
 /** 选中 cell 是否可编辑（用户 cell + 未 won/paused/failed） */
 const canEdit = computed(() => {
@@ -60,9 +64,6 @@ function onTogglePause() {
     sudoku.pause();
   }
 }
-function backHome() {
-  router.push("/");
-}
 
 function moveSelection(dr: number, dc: number) {
   const sel = state.value.selectedCell ?? { row: 0, col: 0 };
@@ -70,6 +71,38 @@ function moveSelection(dr: number, dc: number) {
   const newCol = Math.max(0, Math.min(8, sel.col + dc));
   sudoku.selectCell({ row: newRow, col: newCol });
 }
+
+/* === 返回主页（防误操作：playing 状态弹模态） === */
+function tryBackHome() {
+  if (isPlaying.value) {
+    showLeaveModal.value = true;
+  } else {
+    router.push("/");
+  }
+}
+function confirmLeave() {
+  showLeaveModal.value = false;
+  if (pendingLeave) {
+    pendingLeave();
+    pendingLeave = null;
+  } else {
+    router.push("/");
+  }
+}
+function cancelLeave() {
+  showLeaveModal.value = false;
+  pendingLeave = null;
+}
+
+/* === 路由拦截（与其它游戏统一：F5 / 后退 / vue-router 跳转） === */
+onBeforeRouteLeave((to, _from, next) => {
+  if (isPlaying.value && to.path === "/") {
+    showLeaveModal.value = true;
+    pendingLeave = () => next();
+  } else {
+    next();
+  }
+});
 
 /* === 键盘 === */
 function onKeyDown(e: KeyboardEvent) {
@@ -161,7 +194,7 @@ onUnmounted(() => {
   <div class="container-x min-h-screen flex flex-col">
     <Header />
 
-    <main class="flex-1 flex items-center justify-center gap-8 py-8">
+    <main class="sudoku-game">
       <!-- 左侧：棋盘 + 输入 -->
       <div class="flex flex-col gap-4 items-center">
         <SudokuBoard
@@ -183,7 +216,7 @@ onUnmounted(() => {
         />
       </div>
 
-      <!-- 右侧：sidebar -->
+      <!-- 右侧：sidebar（标准布局：状态/难度/统计/操作/返回主页） -->
       <SudokuSidebar
         :difficulty="state.difficulty"
         :difficulties="sudoku.difficulties"
@@ -194,6 +227,7 @@ onUnmounted(() => {
         @set-difficulty="onSetDifficulty"
         @new-game="onNewGame"
         @toggle-pause="onTogglePause"
+        @back-home="tryBackHome"
       />
     </main>
 
@@ -218,8 +252,8 @@ onUnmounted(() => {
     >
       <p>{{ t("sudoku.paused") }} — P 继续 / R 新题 / Esc 返回</p>
       <template #actions>
-        <BaseButton variant="ghost" @click="backHome">
-          ← {{ t("common.back") }}
+        <BaseButton variant="ghost" @click="tryBackHome">
+          {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">
           {{ t("sudoku.newGame") }}
@@ -247,8 +281,8 @@ onUnmounted(() => {
         {{ t("sudoku.errors") }}：{{ state.errors }}
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="backHome">
-          ← {{ t("common.back") }}
+        <BaseButton variant="ghost" @click="tryBackHome">
+          {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">
           {{ t("sudoku.newGame") }}
@@ -268,11 +302,28 @@ onUnmounted(() => {
         {{ t("sudoku.time") }}：{{ formatTime(state.time) }}
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="backHome">
-          ← {{ t("common.back") }}
+        <BaseButton variant="ghost" @click="tryBackHome">
+          {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">
           {{ t("sudoku.newGame") }}
+        </BaseButton>
+      </template>
+    </BaseModal>
+
+    <!-- 离开确认模态（与 Gomoku / N-Puzzle / 2048 / 贪吃蛇 / 俄罗斯方块 一致） -->
+    <BaseModal
+      v-if="showLeaveModal"
+      :title="t('sudoku.modal.leave.title')"
+      @close="cancelLeave"
+    >
+      <p>{{ t("sudoku.modal.leave.body") }}</p>
+      <template #actions>
+        <BaseButton variant="ghost" @click="cancelLeave">
+          {{ t("sudoku.modal.leave.cancel") }}
+        </BaseButton>
+        <BaseButton variant="primary" @click="confirmLeave">
+          {{ t("sudoku.modal.leave.confirm") }}
         </BaseButton>
       </template>
     </BaseModal>

@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRouter, onBeforeRouteLeave } from "vue-router";
+import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import TetrisBoard from "@/components/TetrisBoard.vue";
-import TetrisPreview from "@/components/TetrisPreview.vue";
+import TetrisSidebar from "@/components/TetrisSidebar.vue";
 import { useTetrisStore } from "@/stores/tetris";
 import { useTetrisKeys } from "@/composables/useTetrisKeys";
 import { useI18n } from "@/composables/useI18n";
-import { sfxMuted, toggleMute } from "@/composables/useSFX";
-import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const tetris = useTetrisStore();
@@ -20,10 +19,16 @@ const { t } = useI18n();
 
 useTetrisKeys();
 
+const isPaused = computed(() => state.value.status === "paused");
+const isGameOver = computed(() => state.value.status === "gameover");
+const isPlaying = computed(() => state.value.status === "playing");
+
+const showLeaveModal = ref(false);
+let pendingLeave: (() => void) | null = null;
+
 onMounted(() => {
   tetris.startLoop();
   // 自动暂停：浏览器失焦 / 切到后台 / 最小化时暂停游戏
-  // （仅 playing 状态触发；paused / gameover / idle 不重复触发）
   document.addEventListener("visibilitychange", onVisibilityChange);
   // 浏览器刷新 / 关闭 / 跨页导航时弹出确认（仅 playing 状态）
   window.addEventListener("beforeunload", onBeforeUnload);
@@ -49,10 +54,6 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
     e.returnValue = "";
   }
 }
-
-const isPaused = computed(() => state.value.status === "paused");
-const isGameOver = computed(() => state.value.status === "gameover");
-const isPlaying = computed(() => state.value.status === "playing");
 
 /** 当前 event flash 文本（null = 无） */
 const eventText = computed(() => {
@@ -99,28 +100,55 @@ const eventText = computed(() => {
   return null;
 });
 
-function resume() {
-  if (isPaused.value) tetris.pause();
-}
-function restart() {
+/* === 操作 === */
+function onNewGame() {
   tetris.reset();
-}
-function backHome() {
-  router.push("/");
-}
-function onToggleMute() {
-  toggleMute();
 }
 function onTogglePause() {
   if (isPlaying.value || isPaused.value) tetris.pause();
 }
+function onResume() {
+  if (isPaused.value) tetris.pause();
+}
+
+/* === 返回主页 === */
+function tryBackHome() {
+  if (isPlaying.value) {
+    showLeaveModal.value = true;
+  } else {
+    router.push("/");
+  }
+}
+function confirmLeave() {
+  showLeaveModal.value = false;
+  if (pendingLeave) {
+    pendingLeave();
+    pendingLeave = null;
+  } else {
+    router.push("/");
+  }
+}
+function cancelLeave() {
+  showLeaveModal.value = false;
+  pendingLeave = null;
+}
+
+/* === 路由拦截 === */
+onBeforeRouteLeave((to, _from, next) => {
+  if (isPlaying.value && to.path === "/") {
+    showLeaveModal.value = true;
+    pendingLeave = () => next();
+  } else {
+    next();
+  }
+});
 </script>
 
 <template>
   <div class="container-x min-h-screen flex flex-col">
     <Header />
 
-    <main class="flex-1 flex items-center justify-center gap-8 py-8">
+    <main class="tetris-game">
       <!-- 左侧：游戏板 + event flash -->
       <div class="relative">
         <TetrisBoard :grid="grid" :ghost-cells="ghostCells" />
@@ -145,104 +173,16 @@ function onTogglePause() {
         </Transition>
       </div>
 
-      <!-- 右侧：HUD -->
-      <div class="flex flex-col gap-4 w-[200px]">
-        <!-- Pause / Mute toggle row -->
-        <div class="flex justify-end gap-2">
-          <button
-            type="button"
-            class="icon-btn"
-            :aria-label="isPaused ? t('tetris.resume') : t('common.pause')"
-            :title="isPaused ? t('tetris.resume') : t('common.pause')"
-            @click="onTogglePause"
-          >
-            <span v-if="isPaused">▶</span>
-            <span v-else>⏸</span>
-          </button>
-          <button
-            type="button"
-            class="icon-btn"
-            :aria-label="sfxMuted ? t('tetris.unmute') : t('tetris.mute')"
-            :title="sfxMuted ? t('tetris.unmute') : t('tetris.mute')"
-            @click="onToggleMute"
-          >
-            <span v-if="sfxMuted">🔇</span>
-            <span v-else>🔊</span>
-          </button>
-        </div>
-
-        <!-- Hold -->
-        <div class="card !p-4">
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider mb-2">
-            {{ t("tetris.hold") }}
-          </h3>
-          <div class="flex justify-end">
-            <!-- Hold 内部右对齐：piece 贴右，列 0 空（用户反馈：右侧内容不应空） -->
-            <TetrisPreview :type="state.hold" align="right" />
-          </div>
-        </div>
-
-        <!-- Next -->
-        <div class="card !p-4">
-          <h3 class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider mb-2">
-            {{ t("tetris.next") }}
-          </h3>
-          <div class="flex flex-col gap-2 items-start">
-            <!-- Next 内部左对齐：piece 贴左，列 3 空（用户反馈：左侧区域不应空） -->
-            <TetrisPreview :type="state.next[0]" align="left" />
-            <TetrisPreview :type="state.next[1]" align="left" />
-            <TetrisPreview :type="state.next[2]" align="left" />
-          </div>
-        </div>
-
-        <!-- Score / Level / Lines / Best / B2B / Combo -->
-        <div class="card !p-4">
-          <div class="space-y-2">
-            <div>
-              <div class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider">
-                {{ t("tetris.score") }}
-              </div>
-              <div class="stat-value">{{ state.score.toLocaleString() }}</div>
-              <!-- Best 副标：始终显示，0 时隐藏 -->
-              <div
-                v-if="bestScore > 0"
-                class="tetris-best-row"
-                :title="t('tetris.best')"
-              >
-                <span class="tetris-best-label">{{ t("tetris.best") }}</span>
-                <span class="tetris-best-value">{{ bestScore.toLocaleString() }}</span>
-              </div>
-            </div>
-            <div class="flex gap-4">
-              <div>
-                <div class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider">
-                  {{ t("tetris.level") }}
-                </div>
-                <div class="stat-value text-2xl">{{ state.level }}</div>
-              </div>
-              <div>
-                <div class="text-xs font-semibold text-gray-500 dark:text-white/70 uppercase tracking-wider">
-                  {{ t("tetris.lines") }}
-                </div>
-                <div class="stat-value text-2xl">{{ state.lines }}</div>
-              </div>
-            </div>
-            <!-- v2: B2B / Combo 指示器 -->
-            <div class="flex gap-2 pt-1">
-              <span
-                v-if="state.b2b"
-                class="tetris-hud-badge tetris-hud-badge-b2b"
-                :title="t('tetris.b2b')"
-              >{{ t("tetris.b2b") }}</span>
-              <span
-                v-if="state.combo >= 1"
-                class="tetris-hud-badge tetris-hud-badge-combo"
-                :title="t('tetris.combo')"
-              >{{ t("tetris.combo") }} ×{{ state.combo }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- 右侧：HUD（标准 sidebar 布局，与 Gomoku / N-Puzzle / 2048 一致） -->
+      <TetrisSidebar
+        :state="state"
+        :best-score="bestScore"
+        :is-paused="isPaused"
+        :is-game-over="isGameOver"
+        @new-game="onNewGame"
+        @toggle-pause="onTogglePause"
+        @back-home="tryBackHome"
+      />
     </main>
 
     <!-- 按键说明 -->
@@ -287,17 +227,17 @@ function onTogglePause() {
       v-if="isPaused"
       :title="t('tetris.paused')"
       :close-on-backdrop="false"
-      @close="resume"
+      @close="onResume"
     >
       <p>{{ t("tetris.paused") }} — {{ t("tetris.controls.resumeHint") }}</p>
       <template #actions>
-        <BaseButton variant="ghost" @click="backHome">
-          ← {{ t("common.back") }}
+        <BaseButton variant="ghost" @click="tryBackHome">
+          {{ t("common.back") }}
         </BaseButton>
-        <BaseButton variant="primary" @click="restart">
-          {{ t("common.restart") }}
+        <BaseButton variant="primary" @click="onNewGame">
+          {{ t("tetris.controls.restart") }}
         </BaseButton>
-        <BaseButton variant="primary" @click="resume">
+        <BaseButton variant="primary" @click="onResume">
           {{ t("tetris.resume") }}
         </BaseButton>
       </template>
@@ -308,7 +248,7 @@ function onTogglePause() {
       v-if="isGameOver"
       :title="isNewBest ? t('tetris.newBest') : t('tetris.gameOver')"
       :close-on-backdrop="false"
-      @close="restart"
+      @close="onNewGame"
     >
       <p v-if="isNewBest" class="tetris-newbest-msg">
         🎉 {{ t("tetris.newBest") }} — {{ state.score.toLocaleString() }}
@@ -320,11 +260,28 @@ function onTogglePause() {
         {{ t("tetris.best") }}：{{ bestScore.toLocaleString() }}
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="backHome">
-          ← {{ t("common.back") }}
+        <BaseButton variant="ghost" @click="tryBackHome">
+          {{ t("common.back") }}
         </BaseButton>
-        <BaseButton variant="primary" @click="restart">
-          {{ t("common.restart") }}
+        <BaseButton variant="primary" @click="onNewGame">
+          {{ t("tetris.controls.restart") }}
+        </BaseButton>
+      </template>
+    </BaseModal>
+
+    <!-- 离开确认模态（与 Gomoku / N-Puzzle / 2048 / 贪吃蛇 一致） -->
+    <BaseModal
+      v-if="showLeaveModal"
+      :title="t('tetris.modal.leave.title')"
+      @close="cancelLeave"
+    >
+      <p>{{ t("tetris.modal.leave.body") }}</p>
+      <template #actions>
+        <BaseButton variant="ghost" @click="cancelLeave">
+          {{ t("tetris.modal.leave.cancel") }}
+        </BaseButton>
+        <BaseButton variant="primary" @click="confirmLeave">
+          {{ t("tetris.modal.leave.confirm") }}
         </BaseButton>
       </template>
     </BaseModal>

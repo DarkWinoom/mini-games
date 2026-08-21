@@ -66,8 +66,6 @@ export const locale: LocaleDict = {
   "tetris.gameOver": "Game Over",
   "tetris.b2b": "B2B",
   "tetris.combo": "Combo",
-  "tetris.mute": "Mute",
-  "tetris.unmute": "Unmute",
   "tetris.best": "Best",
   "tetris.newBest": "New Best!",
   "tetris.controls.title": "Controls",
@@ -79,6 +77,11 @@ export const locale: LocaleDict = {
   "tetris.controls.pause": "Pause",
   "tetris.controls.restart": "Restart",
   "tetris.controls.resumeHint": "Press P or click below to resume",
+  "tetris.backHome": "Back to Home",
+  "tetris.modal.leave.title": "Leave and lose progress?",
+  "tetris.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score.",
+  "tetris.modal.leave.confirm": "Leave",
+  "tetris.modal.leave.cancel": "Keep Playing",
 
   // Sudoku
   "sudoku.title": "Sudoku",
@@ -105,6 +108,11 @@ export const locale: LocaleDict = {
   "sudoku.rules.win":
     "Win: when all cells are filled without conflicts and errors < 3, the game records your time.",
   "sudoku.failed.message": "Too many errors (limit is 3). Game over.",
+  "sudoku.backHome": "Back to Home",
+  "sudoku.modal.leave.title": "Leave and lose progress?",
+  "sudoku.modal.leave.body": "Your current game is in progress. Going back to home will lose your current progress and time.",
+  "sudoku.modal.leave.confirm": "Leave",
+  "sudoku.modal.leave.cancel": "Keep Playing",
 
   // 2048
   "twenty48.newGame": "New Game",

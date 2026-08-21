@@ -70,8 +70,6 @@ export interface LocaleDict {
   "tetris.gameOver": string;
   "tetris.b2b": string;
   "tetris.combo": string;
-  "tetris.mute": string;
-  "tetris.unmute": string;
   "tetris.best": string;
   "tetris.newBest": string;
   "tetris.controls.title": string;
@@ -83,6 +81,11 @@ export interface LocaleDict {
   "tetris.controls.pause": string;
   "tetris.controls.restart": string;
   "tetris.controls.resumeHint": string;
+  "tetris.backHome": string;
+  "tetris.modal.leave.title": string;
+  "tetris.modal.leave.body": string;
+  "tetris.modal.leave.confirm": string;
+  "tetris.modal.leave.cancel": string;
 
   // 数独
   "sudoku.title": string;
@@ -106,6 +109,11 @@ export interface LocaleDict {
   "sudoku.rules.play": string;
   "sudoku.rules.win": string;
   "sudoku.failed.message": string;
+  "sudoku.backHome": string;
+  "sudoku.modal.leave.title": string;
+  "sudoku.modal.leave.body": string;
+  "sudoku.modal.leave.confirm": string;
+  "sudoku.modal.leave.cancel": string;
 
   // 2048
   "twenty48.newGame": string;

@@ -64,8 +64,6 @@ export const locale: LocaleDict = {
   "tetris.gameOver": "游戏结束",
   "tetris.b2b": "连击",
   "tetris.combo": "连消",
-  "tetris.mute": "静音",
-  "tetris.unmute": "取消静音",
   "tetris.best": "最高",
   "tetris.newBest": "新纪录！",
   "tetris.controls.title": "按键说明",
@@ -77,6 +75,11 @@ export const locale: LocaleDict = {
   "tetris.controls.pause": "暂停",
   "tetris.controls.restart": "重开",
   "tetris.controls.resumeHint": "按 P 继续 / 点击下方按钮",
+  "tetris.backHome": "返回主页",
+  "tetris.modal.leave.title": "放弃当前进度？",
+  "tetris.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局分数。",
+  "tetris.modal.leave.confirm": "确认返回",
+  "tetris.modal.leave.cancel": "继续游戏",
 
   // 数独
   "sudoku.title": "数独",
@@ -102,6 +105,11 @@ export const locale: LocaleDict = {
     "玩法：点击格子选中，按 1-9 填入数字；按 N 切换笔注模式记录候选数字；按 Backspace 擦除。",
   "sudoku.rules.win": "胜利：所有格子填满且无冲突、错误次数 < 3 次时自动判胜，记录用时。",
   "sudoku.failed.message": "错误次数已达上限（3 次），游戏结束。",
+  "sudoku.backHome": "返回主页",
+  "sudoku.modal.leave.title": "放弃当前进度？",
+  "sudoku.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局步数与用时。",
+  "sudoku.modal.leave.confirm": "确认返回",
+  "sudoku.modal.leave.cancel": "继续游戏",
 
   // 2048
   "twenty48.newGame": "新游戏",
