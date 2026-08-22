@@ -208,18 +208,32 @@ function onTouchEnd(e: TouchEvent) {
       </div>
     </main>
 
-    <!-- 规则与玩法（页面下方，参考 Tetris / Sudoku 风格） -->
-    <section class="tetris-controls twenty48-rules-section" :aria-label="t('twenty48.rules.title')">
-      <div class="tetris-controls-title">{{ t('twenty48.rules.title') }}</div>
-      <div class="twenty48-rules-body">
-        <h4>{{ t('twenty48.rules.goalTitle') }}</h4>
-        <p>{{ t('twenty48.rules.goalBody') }}</p>
-        <h4>{{ t('twenty48.rules.playTitle') }}</h4>
-        <p>{{ t('twenty48.rules.playBody') }}</p>
-        <h4>{{ t('twenty48.rules.winTitle') }}</h4>
-        <p>{{ t('twenty48.rules.winBody') }}</p>
-        <h4>{{ t('twenty48.rules.cautionTitle') }}</h4>
-        <p>{{ t('twenty48.rules.cautionBody') }}</p>
+    <!-- 按键说明（v0.9.5：与俄罗斯方块 / 数独统一为键位说明样式） -->
+    <section class="tetris-controls twenty48-rules-section" :aria-label="t('twenty48.controls.title')">
+      <div class="tetris-controls-title">{{ t("twenty48.controls.title") }}</div>
+      <div class="tetris-controls-grid">
+        <div class="tetris-controls-item">
+          <span class="kbd-row">
+            <kbd class="kbd">←</kbd><kbd class="kbd">A</kbd><kbd class="kbd">→</kbd><kbd class="kbd">D</kbd>
+          </span>
+          <span class="kbd-label">{{ t("twenty48.controls.moveLR") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row"><kbd class="kbd">↑</kbd><kbd class="kbd">W</kbd></span>
+          <span class="kbd-label">{{ t("twenty48.controls.moveUp") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row"><kbd class="kbd">↓</kbd><kbd class="kbd">S</kbd></span>
+          <span class="kbd-label">{{ t("twenty48.controls.moveDown") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row"><kbd class="kbd">U</kbd><kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">Z</kbd></span>
+          <span class="kbd-label">{{ t("twenty48.controls.undo") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <kbd class="kbd">R</kbd>
+          <span class="kbd-label">{{ t("twenty48.controls.restart") }}</span>
+        </div>
       </div>
     </section>
 

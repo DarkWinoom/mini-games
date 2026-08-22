@@ -1115,6 +1115,22 @@
     background: rgba(30, 27, 75, 0.92);
     color: #c7d2fe;
   }
+  /* v0.9.5: 倒计时大数字（贪吃蛇暂停恢复 3-2-1-0） */
+  .game-overlay-countdown {
+    @apply rounded-full flex items-center justify-center font-extrabold;
+    width: 96px;
+    height: 96px;
+    font-size: 56px;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.95);
+    color: #6366f1;
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+    animation: game-overlay-pulse 1s ease-in-out infinite;
+  }
+  :where(:root[data-theme='dark']) .game-overlay-countdown {
+    background: rgba(30, 27, 75, 0.95);
+    color: #c7d2fe;
+  }
   .game-overlay-hint {
     @apply text-xs opacity-70;
     background: rgba(255, 255, 255, 0.6);
@@ -1480,17 +1496,9 @@
   max-width: 720px;
   margin: 2rem auto 0;
 }
-.gomoku-rules-body {
-  @apply text-sm leading-relaxed;
-}
-.gomoku-rules-body h4 {
-  @apply font-bold mt-3 mb-1;
-}
-.gomoku-rules-body h4:first-child {
-  @apply mt-0;
-}
-.gomoku-rules-body p {
-  @apply m-0 opacity-80;
+/* v0.9.5: 一句话规则样式 */
+.gomoku-rule-oneliner {
+  @apply text-sm leading-relaxed opacity-80 m-0 text-center;
 }
 
 .gomoku-modal-meta {
@@ -1584,28 +1592,7 @@
 .npuzzle-sidebar {
   @apply flex flex-col gap-4 w-full max-w-xs;
 }
-.npuzzle-status {
-  @apply p-4 rounded-2xl border border-white/60 bg-white/50;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
-}
-:where(:root[data-theme='dark']) .npuzzle-status {
-  @apply bg-white/[0.08] border-white/[0.15];
-}
-.npuzzle-status.is-over {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
-  border-color: transparent;
-}
-:where(:root[data-theme='dark']) .npuzzle-status.is-over {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-.npuzzle-status-label {
-  @apply text-xs uppercase tracking-wider opacity-60;
-}
-.npuzzle-status.is-over .npuzzle-status-label {
-  @apply text-2xl font-bold opacity-100;
-}
+/* v0.9.5: 移除顶部"进行中"状态区块 → 删 .npuzzle-status 系列样式 */
 .npuzzle-section {
   @apply flex flex-col gap-2;
 }
@@ -1679,17 +1666,9 @@
   max-width: 720px;
   margin: 2rem auto 0;
 }
-.npuzzle-rules-body {
-  @apply text-sm leading-relaxed;
-}
-.npuzzle-rules-body h4 {
-  @apply font-bold mt-3 mb-1;
-}
-.npuzzle-rules-body h4:first-child {
-  @apply mt-0;
-}
-.npuzzle-rules-body p {
-  @apply m-0 opacity-80;
+/* v0.9.5: 一句话规则样式（与 Gomoku 统一） */
+.npuzzle-rule-oneliner {
+  @apply text-sm leading-relaxed opacity-80 m-0 text-center;
 }
 .npuzzle-modal-meta {
   @apply mt-2 text-sm opacity-70;

@@ -21,7 +21,7 @@ export type Difficulty = "easy" | "medium" | "hard" | "expert";
 /** 支持的难度（i18n 已配 easy/medium/hard，expert 暂留扩展） */
 export const DIFFICULTIES: Difficulty[] = ["easy", "medium", "hard"];
 
-export type Status = "playing" | "paused" | "won" | "failed";
+export type Status = "playing" | "won" | "failed";
 
 export interface CellPosition {
   row: number;

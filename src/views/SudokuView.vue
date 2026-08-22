@@ -24,7 +24,6 @@ const { state, bestTimes, conflicts } = storeToRefs(sudoku);
 // 直接用 sudoku.difficulties 访问即可（不是响应式需要）
 const { t } = useI18n();
 
-const isPaused = computed(() => state.value.status === "paused");
 const isWon = computed(() => state.value.status === "won");
 const isFailed = computed(() => state.value.status === "failed");
 const isGameOver = computed(() => isWon.value || isFailed.value);
@@ -58,11 +57,6 @@ function onSetDifficulty(d: Difficulty) {
 }
 function onNewGame() {
   sudoku.newGame();
-}
-function onTogglePause() {
-  if (state.value.status === "playing" || state.value.status === "paused") {
-    sudoku.pause();
-  }
 }
 
 function moveSelection(dr: number, dc: number) {
@@ -117,14 +111,6 @@ function onKeyDown(e: KeyboardEvent) {
     }
     return;
   }
-  // 暂停时仅响应 P
-  if (state.value.status === "paused") {
-    if (e.key === "p" || e.key === "P") {
-      e.preventDefault();
-      onTogglePause();
-    }
-    return;
-  }
 
   // 数字 1-9 → place
   if (/^[1-9]$/.test(e.key)) {
@@ -144,12 +130,6 @@ function onKeyDown(e: KeyboardEvent) {
     onToggleNotes();
     return;
   }
-  // p → pause
-  if (e.key === "p" || e.key === "P") {
-    e.preventDefault();
-    onTogglePause();
-    return;
-  }
   // r → new game
   if (e.key === "r" || e.key === "R") {
     e.preventDefault();
@@ -163,12 +143,7 @@ function onKeyDown(e: KeyboardEvent) {
   if (e.key === "ArrowRight") { e.preventDefault(); moveSelection(0, 1); return; }
 }
 
-/* === 自动暂停 / 离开提示 === */
-function onVisibilityChange() {
-  if (document.hidden && state.value.status === "playing") {
-    sudoku.pause();
-  }
-}
+/* === 离开提示 === */
 function onBeforeUnload(e: BeforeUnloadEvent) {
   if (state.value.status === "playing") {
     e.preventDefault();
@@ -179,13 +154,11 @@ function onBeforeUnload(e: BeforeUnloadEvent) {
 onMounted(() => {
   sudoku.startTimer();
   window.addEventListener("keydown", onKeyDown);
-  document.addEventListener("visibilitychange", onVisibilityChange);
   window.addEventListener("beforeunload", onBeforeUnload);
 });
 onUnmounted(() => {
   sudoku.stopTimer();
   window.removeEventListener("keydown", onKeyDown);
-  document.removeEventListener("visibilitychange", onVisibilityChange);
   window.removeEventListener("beforeunload", onBeforeUnload);
 });
 </script>
@@ -197,22 +170,15 @@ onUnmounted(() => {
     <main class="sudoku-game">
       <!-- 左侧：棋盘 + 输入 -->
       <div class="flex flex-col gap-4 items-center">
-        <div class="relative">
-          <SudokuBoard
-            :board="state.board"
-            :puzzle="state.puzzle"
-            :notes="state.notes"
-            :selected-cell="state.selectedCell"
-            :conflicts="conflicts"
-            :notes-mode="state.notesMode"
-            @select="onSelectCell"
-          />
-          <!-- v0.9.4: 暂停状态蒙版（替代 BaseModal 暂停弹窗） -->
-          <div v-if="isPaused" class="game-overlay">
-            <div class="game-overlay-text">{{ t("sudoku.paused") }}</div>
-            <div class="game-overlay-hint">{{ t("sudoku.pauseHint") }}</div>
-          </div>
-        </div>
+        <SudokuBoard
+          :board="state.board"
+          :puzzle="state.puzzle"
+          :notes="state.notes"
+          :selected-cell="state.selectedCell"
+          :conflicts="conflicts"
+          :notes-mode="state.notesMode"
+          @select="onSelectCell"
+        />
         <SudokuNumberPad
           :notes-mode="state.notesMode"
           :can-use-notes="canEdit"
@@ -233,18 +199,38 @@ onUnmounted(() => {
         :status="state.status"
         @set-difficulty="onSetDifficulty"
         @new-game="onNewGame"
-        @toggle-pause="onTogglePause"
         @back-home="tryBackHome"
       />
     </main>
 
-    <!-- 规则与玩法（常驻显示，参考 Tetris 按键说明样式） -->
-    <section class="tetris-controls sudoku-rules-section" :aria-label="t('sudoku.rules.title')">
-      <div class="tetris-controls-title">{{ t("sudoku.rules.title") }}</div>
-      <div class="sudoku-rules-body">
-        <p class="text-sm leading-relaxed">{{ t("sudoku.rules.goal") }}</p>
-        <p class="text-sm leading-relaxed mt-2">{{ t("sudoku.rules.play") }}</p>
-        <p class="text-sm leading-relaxed mt-2">{{ t("sudoku.rules.win") }}</p>
+    <!-- 按键说明（v0.9.5：与俄罗斯方块统一只用键位，不写规则详情） -->
+    <section class="tetris-controls sudoku-rules-section" :aria-label="t('tetris.controls.title')">
+      <div class="tetris-controls-title">{{ t("tetris.controls.title") }}</div>
+      <div class="tetris-controls-grid">
+        <div class="tetris-controls-item">
+          <span class="kbd-row"><kbd class="kbd">1-9</kbd></span>
+          <span class="kbd-label">{{ t("sudoku.controls.place") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row">
+            <kbd class="kbd">←</kbd><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd><kbd class="kbd">→</kbd>
+          </span>
+          <span class="kbd-label">{{ t("sudoku.controls.move") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <kbd class="kbd">N</kbd>
+          <span class="kbd-label">{{ t("sudoku.controls.notes") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row">
+            <kbd class="kbd">⌫</kbd><kbd class="kbd">0</kbd>
+          </span>
+          <span class="kbd-label">{{ t("sudoku.controls.erase") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <kbd class="kbd">R</kbd>
+          <span class="kbd-label">{{ t("sudoku.controls.restart") }}</span>
+        </div>
       </div>
     </section>
 

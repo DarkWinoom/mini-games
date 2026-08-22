@@ -189,6 +189,16 @@ export const useTetrisStore = defineStore("tetris", () => {
     startLoop();
   }
 
+  /**
+   * v0.9.5：paused → playing + 启 tick loop
+   * 玩家在 paused 状态按任意游戏键时调用（不与 start() 混淆——start 只处理 waiting）
+   */
+  function resume(): void {
+    if (state.value.status !== "paused") return;
+    state.value = { ...state.value, status: "playing" };
+    startLoop();
+  }
+
   /** v0.9.4：waiting 状态下先 start 再执行 action（贪吃蛇 v0.7.2 同模式） */
   function ensureStarted(): void {
     if (state.value.status === "waiting") start();
@@ -243,6 +253,7 @@ export const useTetrisStore = defineStore("tetris", () => {
     stopLoop,
     reset,
     start,
+    resume,
     left,
     right,
     cw,

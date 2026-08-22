@@ -1,18 +1,19 @@
 /**
  * 俄罗斯方块键盘输入 composable（v2 — DAS/ARR 支持）
  *
- * 键盘映射（plan.md § 8.4）：
- * - ← →       移动（DAS 167ms / ARR 33ms）
- * - ↓         软降（DAS 50ms / ARR 33ms，软降节奏更紧凑）
- * - ↑         顺时针旋转
- * - Z         逆时针旋转
- * - Space     硬降
- * - C / Shift Hold
- * - P         暂停
- * - R         重开
- * - Esc       返回主页（不归此 composable 管，组件自己处理）
+ * 键盘映射（plan.md § 8.4 + v0.9.5 WASD 扩展）：
+ * - ← / A →       移动（DAS 167ms / ARR 33ms）
+ * - ↓ / S         软降（DAS 50ms / ARR 33ms，软降节奏更紧凑）
+ * - ↑ / W         顺时针旋转
+ * - Z             逆时针旋转
+ * - Space         硬降
+ * - C / Shift     Hold
+ * - P             暂停（v0.9.5：暂停或开始时按任意游戏键也可，详见 onKeyDown）
+ * - R             重开
+ * - Esc           返回主页（不归此 composable 管，组件自己处理）
  *
  * v2：水平移动 / 软降都支持 DAS-ARR 自动重复。
+ * v0.9.5：WASD 方向控制；waiting / paused 状态下按任意游戏键会触发 start / resume。
  */
 
 import { onMounted, onUnmounted } from "vue";
@@ -28,8 +29,19 @@ const SOFT_ARR = 33;
 
 type Store = ReturnType<typeof useTetrisStore>;
 
+/**
+ * v0.9.5：单次按下的非方向键 / 非软降 action（不需要 DAS-ARR 重复）
+ * - ↑ / W: 顺时针旋转
+ * - Z    : 逆时针旋转
+ * - Space: 硬降
+ * - C/Shift: Hold
+ * - P    : 暂停（toggle）
+ * - R    : 重开
+ */
 const KEY_MAP: Record<string, (store: Store) => void> = {
   ArrowUp: (s) => s.cw(),
+  w: (s) => s.cw(),
+  W: (s) => s.cw(),
   z: (s) => s.ccw(),
   Z: (s) => s.ccw(),
   " ": (s) => s.hard(),
@@ -41,6 +53,20 @@ const KEY_MAP: Record<string, (store: Store) => void> = {
   r: (s) => s.reset(),
   R: (s) => s.reset(),
 };
+
+/** v0.9.5：检测是否是"游戏操作键"（用于 paused/waiting 状态任意键触发） */
+function isGameActionKey(key: string): boolean {
+  return (
+    key in KEY_MAP ||
+    key === "ArrowLeft" ||
+    key === "ArrowRight" ||
+    key === "ArrowDown" ||
+    key === "a" ||
+    key === "A" ||
+    key === "s" ||
+    key === "S"
+  );
+}
 
 export function useTetrisKeys() {
   const store = useTetrisStore();
@@ -97,6 +123,14 @@ export function useTetrisKeys() {
     // 先做 audio unlock（首次任意按键触发）
     unlockAudioOnFirstInteraction();
 
+    // v0.9.5：paused 状态按任意游戏键 → resume 并继续执行该动作
+    // 注：Pinia setup store 的 state 字段会自动 unwrap，store.state 直接是 GameState
+    if (store.state.status === "paused" && isGameActionKey(e.key)) {
+      e.preventDefault();
+      store.resume();
+      // 不 return：让原 action 继续执行（resume 后立即生效玩家这次的输入）
+    }
+
     const action = KEY_MAP[e.key];
     if (action) {
       e.preventDefault();
@@ -105,7 +139,7 @@ export function useTetrisKeys() {
     }
 
     // 水平 / 软降：DAS-ARR
-    if (e.key === "ArrowLeft") {
+    if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
       e.preventDefault();
       if (!repeatState.left.held) {
         store.left(); // 立即移动一格
@@ -113,7 +147,7 @@ export function useTetrisKeys() {
       }
       return;
     }
-    if (e.key === "ArrowRight") {
+    if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
       e.preventDefault();
       if (!repeatState.right.held) {
         store.right();
@@ -121,7 +155,7 @@ export function useTetrisKeys() {
       }
       return;
     }
-    if (e.key === "ArrowDown") {
+    if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
       e.preventDefault();
       if (!repeatState.down.held) {
         store.soft();
@@ -132,9 +166,14 @@ export function useTetrisKeys() {
   }
 
   function onKeyUp(e: KeyboardEvent) {
-    if (e.key === "ArrowLeft") clearRepeat("left");
-    else if (e.key === "ArrowRight") clearRepeat("right");
-    else if (e.key === "ArrowDown") clearRepeat("down");
+    // v0.9.5：WASD 跟方向键等价 → 共享 repeat 状态
+    if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") {
+      clearRepeat("left");
+    } else if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") {
+      clearRepeat("right");
+    } else if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") {
+      clearRepeat("down");
+    }
   }
 
   onMounted(() => {

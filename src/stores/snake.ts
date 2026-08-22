@@ -61,7 +61,14 @@ export const useSnakeStore = defineStore("snake", () => {
   const bestScore = ref<number>(readBest());
   const isNewBest = ref<boolean>(false);
 
+  /**
+   * v0.9.5: 恢复倒计时（秒）。>0 = 倒计时中，status=playing 但 tick 暂停；0 = 不在倒计时
+   * 显示在 board 蒙版中央（3, 2, 1, 0 后自动 resume）
+   */
+  const resumeCountdown = ref<number>(0);
+
   let tickHandle: number | null = null;
+  let countdownHandle: number | null = null;
 
   /* === Computed === */
   const score = computed(() => state.value.score);
@@ -79,9 +86,11 @@ export const useSnakeStore = defineStore("snake", () => {
   /**
    * 新游戏（清空所有状态，不自动 tick）
    * v0.7.2 fix：玩家必须按方向键才开始（status=waiting）
+   * v0.9.5: 同时清掉恢复倒计时
    */
   function newGame(): void {
     stopTick();
+    stopResumeCountdown();
     state.value = newGameState();
     isNewBest.value = false;
     // 注意：startTick() 移到玩家按方向键时由 setDirection 触发
@@ -117,17 +126,50 @@ export const useSnakeStore = defineStore("snake", () => {
   }
 
   /**
-   * 暂停/恢复（playing ↔ paused）
-   * - over 状态不响应
+   * 暂停/恢复（v0.9.5: 带 3 秒恢复倒计时）
+   * - playing → paused (stopTick)
+   * - paused → 倒计时 3 → 2 → 1 → 0 → playing (startTick)
+   * - over / waiting 不响应
    */
   function togglePause(): void {
     if (state.value.status === "playing") {
       state.value = { ...state.value, status: "paused" };
       stopTick();
     } else if (state.value.status === "paused") {
-      state.value = { ...state.value, status: "playing" };
-      startTick();
+      // v0.9.5: 启动恢复倒计时（3, 2, 1, 0）
+      startResumeCountdown();
     }
+  }
+
+  /**
+   * v0.9.5: 启动恢复倒计时（3 → 0）
+   * 倒计时期间状态保持 paused（tick 已停），蒙版显示数字
+   */
+  function startResumeCountdown(): void {
+    stopResumeCountdown();
+    resumeCountdown.value = 3;
+    const tick = (): void => {
+      if (resumeCountdown.value <= 0) {
+        stopResumeCountdown();
+        // 倒计时归零 → 真正恢复
+        if (state.value.status === "paused") {
+          state.value = { ...state.value, status: "playing" };
+          startTick();
+        }
+        return;
+      }
+      resumeCountdown.value -= 1;
+      countdownHandle = window.setTimeout(tick, 1000);
+    };
+    countdownHandle = window.setTimeout(tick, 1000);
+  }
+
+  function stopResumeCountdown(): void {
+    if (countdownHandle !== null) {
+      window.clearTimeout(countdownHandle);
+      countdownHandle = null;
+    }
+    resumeCountdown.value = 0;
   }
 
   /**
@@ -207,6 +249,7 @@ export const useSnakeStore = defineStore("snake", () => {
     state,
     bestScore,
     isNewBest,
+    resumeCountdown,  // v0.9.5: 恢复倒计时
     // computed
     score,
     snakeLength,

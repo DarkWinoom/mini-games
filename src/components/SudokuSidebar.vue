@@ -27,13 +27,12 @@ const props = defineProps<{
   time: number;
   errors: number;
   bestTimes: BestTimes;
-  status: "playing" | "paused" | "won" | "failed";
+  status: "playing" | "won" | "failed";
 }>();
 
 const emit = defineEmits<{
   setDifficulty: [d: Difficulty];
   newGame: [];
-  togglePause: [];
   backHome: [];
 }>();
 
@@ -56,10 +55,6 @@ const bestLabel = computed<string>(() => {
 const bestCardLabel = computed<string>(() => {
   return `${t("sudoku.best")} · ${t(`sudoku.difficulty.${props.difficulty}`)}`;
 });
-
-const isOver = computed(
-  () => props.status === "won" || props.status === "failed",
-);
 
 /* === 错误反馈动画（v0.5.4） === */
 /** errors 增额时触发 500ms shake + flash，给玩家"出错"的明确视觉信号 */
@@ -133,18 +128,10 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <!-- 4. 行动按钮 -->
+    <!-- 4. 行动按钮（v0.9.5：移除暂停按钮） -->
     <div class="sudoku-section sudoku-actions">
       <BaseButton variant="primary" class="flex-1" @click="emit('newGame')">
         {{ t("sudoku.newGame") }}
-      </BaseButton>
-      <BaseButton
-        variant="ghost"
-        class="flex-1"
-        :disabled="isOver"
-        @click="emit('togglePause')"
-      >
-        {{ status === "paused" ? t("common.resume") : t("common.pause") }}
       </BaseButton>
     </div>
 

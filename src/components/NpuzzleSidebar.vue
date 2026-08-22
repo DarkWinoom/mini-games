@@ -40,21 +40,11 @@ const bestTimeText = computed(() => {
   const s = props.bestTime % 60;
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 });
-
-const statusText = computed(() => {
-  if (props.isOver) return t("npuzzle.solved");
-  return t("npuzzle.playing");
-});
 </script>
 
 <template>
   <div class="npuzzle-sidebar">
-    <!-- 1. 状态 -->
-    <div :class="['npuzzle-status', { 'is-over': isOver }]">
-      <div class="npuzzle-status-label">{{ statusText }}</div>
-    </div>
-
-    <!-- 2. 难度（尺寸）选择 -->
+    <!-- 1. 难度（尺寸）选择 — v0.9.5：移除顶部"进行中"状态区块（信息冗余） -->
     <div class="npuzzle-section">
       <div class="npuzzle-section-label">{{ t("npuzzle.difficulty") }}</div>
       <div class="npuzzle-difficulty">

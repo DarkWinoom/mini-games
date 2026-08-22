@@ -202,16 +202,18 @@ onBeforeRouteLeave((to, _from, next) => {
       />
     </main>
 
-    <!-- 按键说明 -->
+    <!-- 按键说明（v0.9.5：WASD 跟方向键等价） -->
     <section class="tetris-controls" :aria-label="t('tetris.controls.title')">
       <div class="tetris-controls-title">{{ t("tetris.controls.title") }}</div>
       <div class="tetris-controls-grid">
         <div class="tetris-controls-item">
-          <span class="kbd-row"><kbd class="kbd">←</kbd><kbd class="kbd">→</kbd></span>
+          <span class="kbd-row">
+            <kbd class="kbd">←</kbd><kbd class="kbd">A</kbd><kbd class="kbd">→</kbd><kbd class="kbd">D</kbd>
+          </span>
           <span class="kbd-label">{{ t("tetris.controls.move") }}</span>
         </div>
         <div class="tetris-controls-item">
-          <kbd class="kbd">↓</kbd>
+          <span class="kbd-row"><kbd class="kbd">↓</kbd><kbd class="kbd">S</kbd></span>
           <span class="kbd-label">{{ t("tetris.controls.soft") }}</span>
         </div>
         <div class="tetris-controls-item">
@@ -219,7 +221,9 @@ onBeforeRouteLeave((to, _from, next) => {
           <span class="kbd-label">{{ t("tetris.controls.hard") }}</span>
         </div>
         <div class="tetris-controls-item">
-          <span class="kbd-row"><kbd class="kbd">↑</kbd><kbd class="kbd">Z</kbd></span>
+          <span class="kbd-row">
+            <kbd class="kbd">↑</kbd><kbd class="kbd">W</kbd><kbd class="kbd">Z</kbd>
+          </span>
           <span class="kbd-label">{{ t("tetris.controls.rotate") }}</span>
         </div>
         <div class="tetris-controls-item">

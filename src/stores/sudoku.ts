@@ -241,13 +241,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
   }
 
   function pause(): void {
-    if (state.value.status === "playing") {
-      state.value = { ...state.value, status: "paused" };
-      playSfx("pause");
-    } else if (state.value.status === "paused") {
-      state.value = { ...state.value, status: "playing" };
-      playSfx("pause");
-    }
+    // v0.9.5: 数独移除暂停功能 —— pause() 保留为 noop 兼容老调用方
   }
 
   /** 暴露难度列表（用于 sidebar 选项） */
