@@ -84,6 +84,7 @@ export const locale: LocaleDict = {
   "tetris.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score.",
   "tetris.modal.leave.confirm": "Leave",
   "tetris.modal.leave.cancel": "Keep Playing",
+  "tetris.startHint": "Press arrow keys / rotate / hard drop to start",
 
   // Sudoku
   "sudoku.title": "Sudoku",
@@ -115,6 +116,7 @@ export const locale: LocaleDict = {
   "sudoku.modal.leave.body": "Your current game is in progress. Going back to home will lose your current progress and time.",
   "sudoku.modal.leave.confirm": "Leave",
   "sudoku.modal.leave.cancel": "Keep Playing",
+  "sudoku.pauseHint": "Press P to resume",
 
   // 2048
   "twenty48.newGame": "New Game",
@@ -168,6 +170,8 @@ export const locale: LocaleDict = {
   "snake.modal.leave.confirm": "Leave",
   "snake.modal.leave.cancel": "Keep Playing",
   "snake.backHome": "Back to Home",
+  "snake.paused": "Paused",
+  "snake.pauseHint": "Press P to resume",
 
   // Gomoku
   "gomoku.newGame": "New Game",

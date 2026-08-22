@@ -178,28 +178,52 @@ export const useTetrisStore = defineStore("tetris", () => {
     }
   }
 
+  /**
+   * v0.9.4：waiting → playing + 启 tick loop
+   * 玩家按方向键 / 旋转 / 硬降时由各 action 内部调用
+   * 跟 Snake v0.7.2 的 start() 一致
+   */
+  function start(): void {
+    if (state.value.status !== "waiting") return;
+    state.value = { ...state.value, status: "playing" };
+    startLoop();
+  }
+
+  /** v0.9.4：waiting 状态下先 start 再执行 action（贪吃蛇 v0.7.2 同模式） */
+  function ensureStarted(): void {
+    if (state.value.status === "waiting") start();
+  }
+
   function left(): void {
+    ensureStarted();
     applyAction(moveLeft, "move");
   }
   function right(): void {
+    ensureStarted();
     applyAction(moveRight, "move");
   }
   function cw(): void {
+    ensureStarted();
     applyAction(rotateCW, "rotate");
   }
   function ccw(): void {
+    ensureStarted();
     applyAction(rotateCCW, "rotate");
   }
   function soft(): void {
+    ensureStarted();
     applyAction(softDrop, null);
   }
   function hard(): void {
+    ensureStarted();
     applyAction(hardDrop, null);
   }
   function doHold(): void {
+    ensureStarted();
     applyAction(hold, "hold");
   }
   function pause(): void {
+    // v0.9.4：waiting 状态下按 P 也能直接暂停（不开始游戏）
     const prev = state.value;
     const next = togglePause(prev);
     if (next !== prev) {
@@ -218,6 +242,7 @@ export const useTetrisStore = defineStore("tetris", () => {
     startLoop,
     stopLoop,
     reset,
+    start,
     left,
     right,
     cw,

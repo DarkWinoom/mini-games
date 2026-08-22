@@ -337,7 +337,7 @@ export function newGame(): GameState {
     score: 0,
     level: 1,
     lines: 0,
-    status: "playing",
+    status: "waiting",
 
     // v2
     tSpin: "",
@@ -563,10 +563,14 @@ export function togglePause(state: GameState): GameState {
 /** 用于 view 渲染：合并 board + current piece 到一个二维数组 */
 export function renderGrid(state: GameState): Cell[][] {
   const grid = state.board.map((row) => row.slice());
-  if (state.current && state.status === "playing") {
+  // v0.9.4：waiting 状态也合并 piece（让玩家在"按方向键开始"时能看到下一块在 board 顶部预览）
+  // waiting 时把 piece 视觉下推 HIDDEN_ROWS，让 piece 顶部出现在 visible 区域
+  // （不修改 state.current.y，保持 SRS 兼容；start() 后 playing 分支按原 y=0 渲染）
+  if (state.current && (state.status === "playing" || state.status === "waiting")) {
+    const yOffset = state.status === "waiting" ? HIDDEN_ROWS : 0;
     for (const [dx, dy] of pieceCells(state.current)) {
       const x = state.current.x + dx;
-      const y = state.current.y + dy;
+      const y = state.current.y + dy + yOffset;
       if (y >= 0 && y < grid.length && x >= 0 && x < COLS) {
         grid[y][x] = state.current.type;
       }
@@ -577,7 +581,7 @@ export function renderGrid(state: GameState): Cell[][] {
 
 /** 渲染 ghost piece（硬降预览） */
 export function renderGhost(state: GameState): Piece | null {
-  if (!state.current || state.status !== "playing") return null;
+  if (!state.current || (state.status !== "playing" && state.status !== "waiting")) return null;
   const dist = hardDropDistance(state.board, state.current);
   if (dist === 0) return null;
   return { ...state.current, y: state.current.y + dist };

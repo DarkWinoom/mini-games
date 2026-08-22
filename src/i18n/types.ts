@@ -88,6 +88,7 @@ export interface LocaleDict {
   "tetris.modal.leave.body": string;
   "tetris.modal.leave.confirm": string;
   "tetris.modal.leave.cancel": string;
+  "tetris.startHint": string;
 
   // 数独
   "sudoku.title": string;
@@ -116,6 +117,7 @@ export interface LocaleDict {
   "sudoku.modal.leave.body": string;
   "sudoku.modal.leave.confirm": string;
   "sudoku.modal.leave.cancel": string;
+  "sudoku.pauseHint": string;
 
   // 2048
   "twenty48.newGame": string;
@@ -169,6 +171,8 @@ export interface LocaleDict {
   "snake.modal.leave.confirm": string;
   "snake.modal.leave.cancel": string;
   "snake.backHome": string;
+  "snake.paused": string;
+  "snake.pauseHint": string;
 
   // 五子棋
   "gomoku.newGame": string;

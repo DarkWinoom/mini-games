@@ -17,7 +17,7 @@ export const PREVIEW_SIZE = 3; // Next 预览数量
 export type PieceType = "I" | "O" | "T" | "S" | "Z" | "J" | "L";
 export type Rotation = 0 | 1 | 2 | 3; // 0=spawn, 1=R(90°), 2=180°, 3=L(270°)
 export type Cell = 0 | PieceType; // 0 = empty
-export type Status = "idle" | "playing" | "paused" | "gameover";
+export type Status = "waiting" | "playing" | "paused" | "gameover";
 
 /** T-Spin 类型（v2） */
 export type TSpinType = "" | "tspin" | "tspin-mini";

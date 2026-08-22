@@ -22,12 +22,16 @@ useTetrisKeys();
 const isPaused = computed(() => state.value.status === "paused");
 const isGameOver = computed(() => state.value.status === "gameover");
 const isPlaying = computed(() => state.value.status === "playing");
+const isWaiting = computed(() => state.value.status === "waiting");
 
 const showLeaveModal = ref(false);
 let pendingLeave: (() => void) | null = null;
 
 onMounted(() => {
-  tetris.startLoop();
+  // v0.9.4：waiting 状态下不 startLoop（等玩家按方向键 / 旋转 / 硬降时由 start() 内部启动）
+  if (tetris.state.status === "playing") {
+    tetris.startLoop();
+  }
   // 自动暂停：浏览器失焦 / 切到后台 / 最小化时暂停游戏
   document.addEventListener("visibilitychange", onVisibilityChange);
   // 浏览器刷新 / 关闭 / 跨页导航时弹出确认（仅 playing 状态）
@@ -105,10 +109,12 @@ function onNewGame() {
   tetris.reset();
 }
 function onTogglePause() {
+  // v0.9.4: waiting 状态点按钮 = 触发开始（而不是暂停）
+  if (isWaiting.value) {
+    tetris.start();
+    return;
+  }
   if (isPlaying.value || isPaused.value) tetris.pause();
-}
-function onResume() {
-  if (isPaused.value) tetris.pause();
 }
 
 /* === 返回主页 === */
@@ -149,7 +155,7 @@ onBeforeRouteLeave((to, _from, next) => {
     <Header />
 
     <main class="tetris-game">
-      <!-- 左侧：游戏板 + event flash -->
+      <!-- 左侧：游戏板 + event flash + overlay 蒙版 -->
       <div class="relative">
         <TetrisBoard :grid="grid" :ghost-cells="ghostCells" />
 
@@ -171,6 +177,16 @@ onBeforeRouteLeave((to, _from, next) => {
             </div>
           </div>
         </Transition>
+
+        <!-- v0.9.4: waiting 状态蒙版（按方向键 / 旋转 / 硬降 开始） -->
+        <div v-if="isWaiting" class="game-overlay">
+          <div class="game-overlay-text">{{ t("tetris.startHint") }}</div>
+        </div>
+        <!-- v0.9.4: 暂停状态蒙版（替代 BaseModal 暂停弹窗） -->
+        <div v-if="isPaused" class="game-overlay">
+          <div class="game-overlay-text">{{ t("tetris.paused") }}</div>
+          <div class="game-overlay-hint">{{ t("tetris.controls.resumeHint") }}</div>
+        </div>
       </div>
 
       <!-- 右侧：HUD（标准 sidebar 布局，与 Gomoku / N-Puzzle / 2048 一致） -->
@@ -179,6 +195,7 @@ onBeforeRouteLeave((to, _from, next) => {
         :best-score="bestScore"
         :is-paused="isPaused"
         :is-game-over="isGameOver"
+        :is-waiting="isWaiting"
         @new-game="onNewGame"
         @toggle-pause="onTogglePause"
         @back-home="tryBackHome"
@@ -221,27 +238,6 @@ onBeforeRouteLeave((to, _from, next) => {
     </section>
 
     <Footer :on-custom-lang-click="() => {}" />
-
-    <!-- 暂停弹窗 -->
-    <BaseModal
-      v-if="isPaused"
-      :title="t('tetris.paused')"
-      :close-on-backdrop="false"
-      @close="onResume"
-    >
-      <p>{{ t("tetris.paused") }} — {{ t("tetris.controls.resumeHint") }}</p>
-      <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
-          {{ t("common.back") }}
-        </BaseButton>
-        <BaseButton variant="primary" @click="onNewGame">
-          {{ t("tetris.controls.restart") }}
-        </BaseButton>
-        <BaseButton variant="primary" @click="onResume">
-          {{ t("tetris.resume") }}
-        </BaseButton>
-      </template>
-    </BaseModal>
 
     <!-- 游戏结束弹窗 -->
     <BaseModal

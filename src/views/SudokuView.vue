@@ -197,15 +197,22 @@ onUnmounted(() => {
     <main class="sudoku-game">
       <!-- 左侧：棋盘 + 输入 -->
       <div class="flex flex-col gap-4 items-center">
-        <SudokuBoard
-          :board="state.board"
-          :puzzle="state.puzzle"
-          :notes="state.notes"
-          :selected-cell="state.selectedCell"
-          :conflicts="conflicts"
-          :notes-mode="state.notesMode"
-          @select="onSelectCell"
-        />
+        <div class="relative">
+          <SudokuBoard
+            :board="state.board"
+            :puzzle="state.puzzle"
+            :notes="state.notes"
+            :selected-cell="state.selectedCell"
+            :conflicts="conflicts"
+            :notes-mode="state.notesMode"
+            @select="onSelectCell"
+          />
+          <!-- v0.9.4: 暂停状态蒙版（替代 BaseModal 暂停弹窗） -->
+          <div v-if="isPaused" class="game-overlay">
+            <div class="game-overlay-text">{{ t("sudoku.paused") }}</div>
+            <div class="game-overlay-hint">{{ t("sudoku.pauseHint") }}</div>
+          </div>
+        </div>
         <SudokuNumberPad
           :notes-mode="state.notesMode"
           :can-use-notes="canEdit"
@@ -242,27 +249,6 @@ onUnmounted(() => {
     </section>
 
     <Footer :on-custom-lang-click="() => {}" />
-
-    <!-- 暂停弹窗 -->
-    <BaseModal
-      v-if="isPaused"
-      :title="t('sudoku.paused')"
-      :close-on-backdrop="false"
-      @close="onTogglePause"
-    >
-      <p>{{ t("sudoku.paused") }} — P 继续 / R 新题 / Esc 返回</p>
-      <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
-          {{ t("common.back") }}
-        </BaseButton>
-        <BaseButton variant="primary" @click="onNewGame">
-          {{ t("sudoku.newGame") }}
-        </BaseButton>
-        <BaseButton variant="primary" @click="onTogglePause">
-          {{ t("common.resume") }}
-        </BaseButton>
-      </template>
-    </BaseModal>
 
     <!-- 胜利弹窗 -->
     <BaseModal

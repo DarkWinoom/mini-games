@@ -82,6 +82,7 @@ export const locale: LocaleDict = {
   "tetris.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局分数。",
   "tetris.modal.leave.confirm": "确认返回",
   "tetris.modal.leave.cancel": "继续游戏",
+  "tetris.startHint": "按方向键 / 旋转 / 硬降 开始",
 
   // 数独
   "sudoku.title": "数独",
@@ -112,6 +113,7 @@ export const locale: LocaleDict = {
   "sudoku.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局步数与用时。",
   "sudoku.modal.leave.confirm": "确认返回",
   "sudoku.modal.leave.cancel": "继续游戏",
+  "sudoku.pauseHint": "按 P 继续",
 
   // 2048
   "twenty48.newGame": "新游戏",
@@ -165,6 +167,8 @@ export const locale: LocaleDict = {
   "snake.modal.leave.confirm": "确认返回",
   "snake.modal.leave.cancel": "继续游戏",
   "snake.backHome": "返回主页",
+  "snake.paused": "已暂停",
+  "snake.pauseHint": "按 P 继续",
 
   // 五子棋
   "gomoku.newGame": "新游戏",
