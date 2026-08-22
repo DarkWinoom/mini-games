@@ -80,8 +80,9 @@ export const locale: LocaleDict = {
   "tetris.controls.restart": "Restart",
   "tetris.controls.resumeHint": "Press any key or click below to resume",
   "tetris.backHome": "Back to Home",
-  "tetris.modal.leave.title": "Leave and lose progress?",
-  "tetris.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score.",
+  "tetris.modal.leave.title": "Clear progress and leave?",
+  "tetris.modal.leave.body":
+    "Going back to home will clear all current progress. The next visit will start a new game.",
   "tetris.modal.leave.confirm": "Leave",
   "tetris.modal.leave.cancel": "Keep Playing",
   "tetris.startHint": "Press any key to start",
@@ -117,12 +118,14 @@ export const locale: LocaleDict = {
     "Win: when all cells are filled without conflicts and errors < 3, the game records your time.",
   "sudoku.failed.message": "Too many errors (limit is 3). Game over.",
   "sudoku.backHome": "Back to Home",
-  "sudoku.modal.leave.title": "Leave and lose progress?",
-  "sudoku.modal.leave.body": "Your current game is in progress. Going back to home will lose your current progress and time.",
+  "sudoku.modal.leave.title": "Clear progress and leave?",
+  "sudoku.modal.leave.body":
+    "Going back to home will clear your current moves and time. The next visit will start a new game.",
   "sudoku.modal.leave.confirm": "Leave",
   "sudoku.modal.leave.cancel": "Keep Playing",
 
   // 2048
+  "twenty48.title": "2048",
   "twenty48.newGame": "New Game",
   "twenty48.undo": "Undo",
   "twenty48.score": "Score",
@@ -141,13 +144,15 @@ export const locale: LocaleDict = {
   "twenty48.modal.win.newBest": "🎉 New Best!",
   "twenty48.modal.over.title": "Game Over",
   "twenty48.modal.over.body": "The board is full and no more moves are possible.",
-  "twenty48.modal.leave.title": "Leave and lose progress?",
-  "twenty48.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score and moves.",
+  "twenty48.modal.leave.title": "Clear progress and leave?",
+  "twenty48.modal.leave.body":
+    "Going back to home will clear your current score and moves. The next visit will start a new game.",
   "twenty48.modal.leave.confirm": "Leave",
   "twenty48.modal.leave.cancel": "Keep Playing",
   "twenty48.backHome": "Back to Home",
 
   // Snake
+  "snake.title": "Snake",
   "snake.newGame": "New Game",
   "snake.pause": "Pause",
   "snake.resume": "Resume",
@@ -163,8 +168,9 @@ export const locale: LocaleDict = {
   "snake.controls.restart": "Restart",
   "snake.modal.over.title": "Game Over",
   "snake.modal.over.body": "Your snake hit a wall or itself.",
-  "snake.modal.leave.title": "Leave and lose progress?",
-  "snake.modal.leave.body": "Your current game is in progress. Going back to home will lose your current score and length.",
+  "snake.modal.leave.title": "Clear progress and leave?",
+  "snake.modal.leave.body":
+    "Going back to home will clear your current score and length. The next visit will start a new game.",
   "snake.modal.leave.confirm": "Leave",
   "snake.modal.leave.cancel": "Keep Playing",
   "snake.backHome": "Back to Home",
@@ -172,6 +178,7 @@ export const locale: LocaleDict = {
   "snake.pauseHint": "Press Space to resume",
 
   // Gomoku
+  "gomoku.title": "Gomoku",
   "gomoku.newGame": "New Game",
   "gomoku.difficulty": "AI Difficulty",
   "gomoku.difficulty.easy": "Easy",
@@ -191,13 +198,15 @@ export const locale: LocaleDict = {
     "On a 15×15 board, be the first to align 5 of your stones horizontally, vertically, or diagonally. You play first.",
   "gomoku.modal.over.title": "Game Over",
   "gomoku.modal.over.body": "The game has ended. Click New Game to play again.",
-  "gomoku.modal.leave.title": "Leave and lose progress?",
-  "gomoku.modal.leave.body": "Your current game is in progress. Going back to home will lose the current board.",
+  "gomoku.modal.leave.title": "Clear progress and leave?",
+  "gomoku.modal.leave.body":
+    "Going back to home will clear the current board. The next visit will start a new game.",
   "gomoku.modal.leave.confirm": "Leave",
   "gomoku.modal.leave.cancel": "Keep Playing",
   "gomoku.backHome": "Back to Home",
 
   // N-Puzzle
+  "npuzzle.title": "N-Puzzle",
   "npuzzle.newGame": "New Game",
   "npuzzle.undo": "Undo",
   "npuzzle.difficulty": "Board Size",
@@ -213,8 +222,9 @@ export const locale: LocaleDict = {
   "npuzzle.modal.over.title": "You Solved It!",
   "npuzzle.modal.over.body": "You successfully restored the board.",
   "npuzzle.modal.newBest": "🎉 New Best!",
-  "npuzzle.modal.leave.title": "Leave and lose progress?",
-  "npuzzle.modal.leave.body": "Your current game is in progress. Going back to home will lose your current moves and time.",
+  "npuzzle.modal.leave.title": "Clear progress and leave?",
+  "npuzzle.modal.leave.body":
+    "Going back to home will clear your current moves and time. The next visit will start a new game.",
   "npuzzle.modal.leave.confirm": "Leave",
   "npuzzle.modal.leave.cancel": "Keep Playing",
   "npuzzle.backHome": "Back to Home",

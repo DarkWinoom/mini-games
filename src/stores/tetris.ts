@@ -199,6 +199,16 @@ export const useTetrisStore = defineStore("tetris", () => {
     startLoop();
   }
 
+  /**
+   * v0.9.8：强制恢复（用于"取消离开"模态后自动继续游戏）
+   * 与 resume() 行为一致：paused → playing + startLoop，独立暴露是为了 view 端语义清晰
+   */
+  function resumeOnly(): void {
+    if (state.value.status !== "paused") return;
+    state.value = { ...state.value, status: "playing" };
+    startLoop();
+  }
+
   /** v0.9.4：waiting 状态下先 start 再执行 action（贪吃蛇 v0.7.2 同模式） */
   function ensureStarted(): void {
     if (state.value.status === "waiting") start();
@@ -254,6 +264,7 @@ export const useTetrisStore = defineStore("tetris", () => {
     reset,
     start,
     resume,
+    resumeOnly, // v0.9.8: 取消离开模态后自动恢复
     left,
     right,
     cw,

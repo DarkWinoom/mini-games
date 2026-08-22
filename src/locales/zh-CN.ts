@@ -78,8 +78,9 @@ export const locale: LocaleDict = {
   "tetris.controls.restart": "重开",
   "tetris.controls.resumeHint": "按任意键 / 点击下方按钮继续",
   "tetris.backHome": "返回主页",
-  "tetris.modal.leave.title": "放弃当前进度？",
-  "tetris.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局分数。",
+  "tetris.modal.leave.title": "确认清空并返回主页？",
+  "tetris.modal.leave.body":
+    "返回主页将清空当前对局的所有进度，下次进入相当于新游戏。",
   "tetris.modal.leave.confirm": "确认返回",
   "tetris.modal.leave.cancel": "继续游戏",
   "tetris.startHint": "按任意键开始",
@@ -114,12 +115,14 @@ export const locale: LocaleDict = {
   "sudoku.rules.win": "胜利：所有格子填满且无冲突、错误次数 < 3 次时自动判胜，记录用时。",
   "sudoku.failed.message": "错误次数已达上限（3 次），游戏结束。",
   "sudoku.backHome": "返回主页",
-  "sudoku.modal.leave.title": "放弃当前进度？",
-  "sudoku.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局步数与用时。",
+  "sudoku.modal.leave.title": "确认清空并返回主页？",
+  "sudoku.modal.leave.body":
+    "返回主页将清空当前对局的步数与用时，下次进入相当于新游戏。",
   "sudoku.modal.leave.confirm": "确认返回",
   "sudoku.modal.leave.cancel": "继续游戏",
 
   // 2048
+  "twenty48.title": "2048",
   "twenty48.newGame": "新游戏",
   "twenty48.undo": "撤销",
   "twenty48.score": "分数",
@@ -138,13 +141,15 @@ export const locale: LocaleDict = {
   "twenty48.modal.win.newBest": "🎉 新纪录！",
   "twenty48.modal.over.title": "无路可走",
   "twenty48.modal.over.body": "棋盘已满，无法继续移动。",
-  "twenty48.modal.leave.title": "放弃当前进度？",
-  "twenty48.modal.leave.body": "当前游戏还在进行中，返回主页将丢失当前分数与步数。",
+  "twenty48.modal.leave.title": "确认清空并返回主页？",
+  "twenty48.modal.leave.body":
+    "返回主页将清空当前对局的分数与步数，下次进入相当于新游戏。",
   "twenty48.modal.leave.confirm": "确认返回",
   "twenty48.modal.leave.cancel": "继续游戏",
   "twenty48.backHome": "返回主页",
 
   // 贪吃蛇
+  "snake.title": "贪吃蛇",
   "snake.newGame": "新游戏",
   "snake.pause": "暂停",
   "snake.resume": "继续",
@@ -160,8 +165,9 @@ export const locale: LocaleDict = {
   "snake.controls.restart": "重开",
   "snake.modal.over.title": "游戏结束",
   "snake.modal.over.body": "蛇撞墙或撞到自己了。",
-  "snake.modal.leave.title": "放弃当前进度？",
-  "snake.modal.leave.body": "当前游戏还在进行中，返回主页将丢失当前分数与长度。",
+  "snake.modal.leave.title": "确认清空并返回主页？",
+  "snake.modal.leave.body":
+    "返回主页将清空当前对局的分数与长度，下次进入相当于新游戏。",
   "snake.modal.leave.confirm": "确认返回",
   "snake.modal.leave.cancel": "继续游戏",
   "snake.backHome": "返回主页",
@@ -169,6 +175,7 @@ export const locale: LocaleDict = {
   "snake.pauseHint": "按 Space 继续",
 
   // 五子棋
+  "gomoku.title": "五子棋",
   "gomoku.newGame": "新游戏",
   "gomoku.difficulty": "AI 难度",
   "gomoku.difficulty.easy": "简单",
@@ -188,13 +195,15 @@ export const locale: LocaleDict = {
     "在 15×15 棋盘上率先让己方棋子横、竖或斜向连成 5 子即胜利。己方先手。",
   "gomoku.modal.over.title": "对局结束",
   "gomoku.modal.over.body": "本局结束，点击新游戏再来一局。",
-  "gomoku.modal.leave.title": "放弃当前进度？",
-  "gomoku.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局棋面。",
+  "gomoku.modal.leave.title": "确认清空并返回主页？",
+  "gomoku.modal.leave.body":
+    "返回主页将清空当前对局，下次进入相当于新游戏。",
   "gomoku.modal.leave.confirm": "确认返回",
   "gomoku.modal.leave.cancel": "继续对局",
   "gomoku.backHome": "返回主页",
 
   // 数字华容道
+  "npuzzle.title": "数字华容道",
   "npuzzle.newGame": "新游戏",
   "npuzzle.undo": "撤销",
   "npuzzle.difficulty": "棋盘大小",
@@ -210,8 +219,9 @@ export const locale: LocaleDict = {
   "npuzzle.modal.over.title": "解出来了！",
   "npuzzle.modal.over.body": "你成功还原了棋盘。",
   "npuzzle.modal.newBest": "🎉 新纪录！",
-  "npuzzle.modal.leave.title": "放弃当前进度？",
-  "npuzzle.modal.leave.body": "当前对局还在进行中，返回主页将丢失本局步数与用时。",
+  "npuzzle.modal.leave.title": "确认清空并返回主页？",
+  "npuzzle.modal.leave.body":
+    "返回主页将清空当前对局的步数与用时，下次进入相当于新游戏。",
   "npuzzle.modal.leave.confirm": "确认返回",
   "npuzzle.modal.leave.cancel": "继续游戏",
   "npuzzle.backHome": "返回主页",

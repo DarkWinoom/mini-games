@@ -20,7 +20,6 @@ const emit = defineEmits<{
   newGame: [];
   setSize: [s: Size];
   undo: [];
-  backHome: [];
 }>();
 
 const { t } = useI18n();
@@ -100,10 +99,5 @@ const bestTimeText = computed(() => {
         {{ t("npuzzle.undo") }}
       </BaseButton>
     </div>
-
-    <!-- 6. 返回主页 -->
-    <BaseButton variant="ghost" class="npuzzle-back-home" @click="emit('backHome')">
-      {{ t("npuzzle.backHome") }}
-    </BaseButton>
   </div>
 </template>

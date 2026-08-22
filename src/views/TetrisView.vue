@@ -4,6 +4,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GamePageHeader from "@/components/GamePageHeader.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import TetrisBoard from "@/components/TetrisBoard.vue";
@@ -117,16 +118,29 @@ function onTogglePause() {
   if (isPlaying.value || isPaused.value) tetris.pause();
 }
 
-/* === 返回主页 === */
+/* === 返回主页（v0.9.6：未操作直接清进度返回，已操作弹模态确认） === */
 function tryBackHome() {
-  if (isPlaying.value) {
-    showLeaveModal.value = true;
-  } else {
+  // v0.9.6: waiting 状态未操作 → 直接清进度返回（不弹模态）
+  if (state.value.status === "waiting") {
+    tetris.reset();
     router.push("/");
+    return;
   }
+  // playing / paused → 弹模态
+  if (isPlaying.value || isPaused.value) {
+    // v0.9.8: 弹模态前同步暂停（避免后台继续 tick 累计分数 / 触发 lock）
+    if (isPlaying.value) tetris.pause();
+    showLeaveModal.value = true;
+    return;
+  }
+  // gameover 等终态：直接返回（但仍清进度确保下次进入是新局）
+  tetris.reset();
+  router.push("/");
 }
 function confirmLeave() {
   showLeaveModal.value = false;
+  // v0.9.6: 确认时清空当前进度
+  tetris.reset();
   if (pendingLeave) {
     pendingLeave();
     pendingLeave = null;
@@ -137,11 +151,14 @@ function confirmLeave() {
 function cancelLeave() {
   showLeaveModal.value = false;
   pendingLeave = null;
+  // v0.9.8: 取消模态时若处于 paused 状态 → 自动恢复（玩家期望"取消" = 继续玩）
+  if (isPaused.value) tetris.resumeOnly();
 }
 
 /* === 路由拦截 === */
 onBeforeRouteLeave((to, _from, next) => {
-  if (isPlaying.value && to.path === "/") {
+  // v0.9.6: 仅 playing 状态弹模态，waiting 直接放行（已操作过就拦）
+  if ((isPlaying.value || isPaused.value) && to.path === "/") {
     showLeaveModal.value = true;
     pendingLeave = () => next();
   } else {
@@ -153,6 +170,8 @@ onBeforeRouteLeave((to, _from, next) => {
 <template>
   <div class="container-x min-h-screen flex flex-col">
     <Header />
+    <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
+    <GamePageHeader title-key="tetris.title" @back-home="tryBackHome" />
 
     <main class="tetris-game">
       <!-- 左侧：游戏板 + event flash + overlay 蒙版 -->
@@ -198,7 +217,6 @@ onBeforeRouteLeave((to, _from, next) => {
         :is-waiting="isWaiting"
         @new-game="onNewGame"
         @toggle-pause="onTogglePause"
-        @back-home="tryBackHome"
       />
     </main>
 
@@ -260,7 +278,7 @@ onBeforeRouteLeave((to, _from, next) => {
         {{ t("tetris.best") }}：{{ bestScore.toLocaleString() }}
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">

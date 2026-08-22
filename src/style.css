@@ -267,6 +267,25 @@
 }
 
 @layer components {
+  /* === 通用游戏页面顶部标题块（v0.9.6） ===
+     6 个游戏 view 都在 Header 下方插入本组件（游戏名 + 返回主页）。 */
+  .game-page-header {
+    @apply flex items-center justify-between gap-4 px-4 py-3 mt-4
+           rounded-2xl border border-white/60 bg-white/50;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
+  }
+  :where(:root[data-theme='dark']) .game-page-header {
+    @apply bg-white/[0.08] border-white/[0.15];
+  }
+  .game-page-title {
+    @apply text-xl font-bold m-0;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
   /* === Tetris 主网格（10×20） === */
   .tetris-board {
     display: grid;
@@ -1129,6 +1148,24 @@
   }
   :where(:root[data-theme='dark']) .game-overlay-countdown {
     background: rgba(30, 27, 75, 0.95);
+    color: #c7d2fe;
+  }
+  /* v0.9.7: 贪吃蛇暂停恢复倒计时小数字（角落，不遮场） */
+  .resume-countdown {
+    @apply absolute top-3 right-3 rounded-full flex items-center justify-center font-extrabold;
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.92);
+    color: #6366f1;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    animation: game-overlay-pulse 1s ease-in-out infinite;
+    z-index: 20;
+    pointer-events: none;
+  }
+  :where(:root[data-theme='dark']) .resume-countdown {
+    background: rgba(30, 27, 75, 0.92);
     color: #c7d2fe;
   }
   .game-overlay-hint {

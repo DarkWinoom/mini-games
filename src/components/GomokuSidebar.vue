@@ -17,7 +17,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   newGame: [];
-  backHome: [];
   setDifficulty: [d: Difficulty];
 }>();
 
@@ -103,13 +102,6 @@ const statusClass = computed(() => {
       </BaseButton>
     </div>
 
-    <!-- 5. 返回主页（防误操作：F5 / 后退会丢进度，引导走这里） -->
-    <BaseButton
-      variant="ghost"
-      class="gomoku-back-home"
-      @click="emit('backHome')"
-    >
-      {{ t("gomoku.backHome") }}
-    </BaseButton>
+    <!-- v0.9.6: 返回主页按钮已迁移到顶部标题块 -->
   </div>
 </template>

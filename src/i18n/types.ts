@@ -124,6 +124,7 @@ export interface LocaleDict {
   "sudoku.modal.leave.cancel": string;
 
   // 2048
+  "twenty48.title": string;
   "twenty48.newGame": string;
   "twenty48.undo": string;
   "twenty48.score": string;
@@ -149,6 +150,7 @@ export interface LocaleDict {
   "twenty48.backHome": string;
 
   // 贪吃蛇
+  "snake.title": string;
   "snake.newGame": string;
   "snake.pause": string;
   "snake.resume": string;
@@ -173,6 +175,7 @@ export interface LocaleDict {
   "snake.pauseHint": string;
 
   // 五子棋
+  "gomoku.title": string;
   "gomoku.newGame": string;
   "gomoku.difficulty": string;
   "gomoku.difficulty.easy": string;
@@ -198,6 +201,7 @@ export interface LocaleDict {
   "gomoku.backHome": string;
 
   // 数字华容道
+  "npuzzle.title": string;
   "npuzzle.newGame": string;
   "npuzzle.undo": string;
   "npuzzle.difficulty": string;

@@ -75,6 +75,13 @@ export const useSudokuStore = defineStore("sudoku", () => {
   const state = ref<GameState>(newGameState(readLastDifficulty()));
   const bestTimes = ref<BestTimes>(readBest());
 
+  /**
+   * v0.9.7: 玩家实际操作计数（仅 place / erase / toggleNotes 算操作，selectCell 不算）
+   * 用于"返回主页"未操作免确认判定 —— 比 time===0 更稳：1s 后 time>=1 仍可免确认
+   * newGame() / setDifficulty() 重置为 0
+   */
+  const userActionCount = ref<number>(0);
+
   let tickHandle: number | null = null;
 
   /** 冲突 cell 集合（"row,col" 形式） */
@@ -141,6 +148,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
 
   function newGame(): void {
     state.value = newGameState(state.value.difficulty);
+    userActionCount.value = 0; // v0.9.7: 重置操作计数
     // v0.5.6 fix: 之前没重启 timer,won/failed 后的新局 time 一直 0,通关 best=0
     startTimer();
   }
@@ -148,6 +156,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
   function setDifficulty(d: Difficulty): void {
     if (state.value.difficulty === d) return;
     state.value = newGameState(d);
+    userActionCount.value = 0; // v0.9.7: 重置操作计数
     writeLastDifficulty(d); // 持久化选择
     // v0.5.6 fix: 同上,won/failed 后切难度也要重启 timer
     startTimer();
@@ -159,6 +168,8 @@ export const useSudokuStore = defineStore("sudoku", () => {
 
   function toggleNotesMode(): void {
     state.value = { ...state.value, notesMode: !state.value.notesMode };
+    // v0.9.7: 切笔注算操作（改变了候选状态）
+    if (state.value.status === "playing") userActionCount.value += 1;
   }
 
   function place(n: number): void {
@@ -172,6 +183,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
       // 笔注模式：切换候选数字（不影响 board）
       const newNotes = toggleNote(notes, row, col, n);
       state.value = { ...state.value, notes: newNotes };
+      userActionCount.value += 1; // v0.9.7: 算操作
       playSfx("rotate"); // 用 rotate 音轻量反馈
       return;
     }
@@ -221,6 +233,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
       playSfx(correct ? "lock" : "gameover");
     }
 
+    userActionCount.value += 1; // v0.9.7: 算操作
     state.value = next;
   }
 
@@ -237,6 +250,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
       board: cleared.grid,
       notes: cleared.notes,
     };
+    userActionCount.value += 1; // v0.9.7: 算操作
     playSfx("move");
   }
 
@@ -253,6 +267,7 @@ export const useSudokuStore = defineStore("sudoku", () => {
     conflicts,
     selectedValue,
     errorCount,
+    userActionCount, // v0.9.7: 未操作免确认判定
     difficulties,
     newGame,
     setDifficulty,
