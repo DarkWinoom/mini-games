@@ -26,6 +26,8 @@ export interface LocaleDict {
   "header.themeLight": string;
   "header.themeDark": string;
   "header.themeSystem": string;
+  "header.soundOn": string;
+  "header.soundOff": string;
 
   // 主页
   "home.title": string;

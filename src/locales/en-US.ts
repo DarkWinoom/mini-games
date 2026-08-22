@@ -19,6 +19,8 @@ export const locale: LocaleDict = {
   "header.themeLight": "Light",
   "header.themeDark": "Dark",
   "header.themeSystem": "System",
+  "header.soundOn": "Sound on",
+  "header.soundOff": "Sound off",
 
   // Home
   "home.title": "Simple. Fun.",

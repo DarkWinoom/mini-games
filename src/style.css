@@ -70,6 +70,40 @@
     @apply bg-white/[0.12];
   }
 
+  /* === Tooltip（v0.9.3 Header 鼠标 hover 提示）===
+     group + group-hover 实现，纯 CSS 无依赖。
+     暗/亮主题共用同一气泡色（深灰 + 白字），高对比度 */
+  .tooltip-wrap {
+    @apply relative inline-flex;
+  }
+  .tooltip {
+    @apply pointer-events-none absolute top-full right-0 mt-2
+           whitespace-nowrap px-3 py-1.5 rounded-lg
+           text-xs font-medium text-white;
+    background: rgba(17, 24, 39, 0.95); /* gray-900/95 — 亮/暗主题都清晰 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 150ms ease, transform 150ms ease;
+    z-index: 50;
+  }
+  /* 气泡顶部小三角（指向按钮） */
+  .tooltip::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    right: 14px;
+    width: 8px;
+    height: 8px;
+    background: rgba(17, 24, 39, 0.95);
+    transform: rotate(45deg);
+  }
+  .tooltip-wrap:hover .tooltip,
+  .tooltip-wrap:has(:focus-visible) .tooltip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .btn-primary {
     background: linear-gradient(135deg, #6366f1, #a855f7);
     @apply text-white border-none;
@@ -206,6 +240,15 @@
   .card:hover {
     transform: translateY(-6px) scale(1.01);
     box-shadow: 0 20px 60px rgba(99, 102, 241, 0.2);
+  }
+  /* 整卡片可点击：键盘 focus 视觉（v0.9 HomeView 优化） */
+  .card:focus-visible {
+    outline: 2px solid #6366f1;
+    outline-offset: 4px;
+  }
+  .card:active {
+    transform: translateY(-2px) scale(0.99);
+    transition-duration: 80ms;
   }
   :where(:root[data-theme="dark"]) .card {
     @apply bg-white/[0.08] border-white/[0.15];
