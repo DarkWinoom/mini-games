@@ -156,22 +156,13 @@ function onCellClick(row: number, col: number) {
       </div>
     </main>
 
-    <!-- 规则与玩法（页面下方） -->
+    <!-- 规则与玩法（v0.9.5：精简为一句话） -->
     <section
       class="tetris-controls gomoku-rules-section"
       :aria-label="t('gomoku.rules.title')"
     >
       <div class="tetris-controls-title">{{ t("gomoku.rules.title") }}</div>
-      <div class="gomoku-rules-body">
-        <h4>{{ t("gomoku.rules.goalTitle") }}</h4>
-        <p>{{ t("gomoku.rules.goalBody") }}</p>
-        <h4>{{ t("gomoku.rules.playTitle") }}</h4>
-        <p>{{ t("gomoku.rules.playBody") }}</p>
-        <h4>{{ t("gomoku.rules.winTitle") }}</h4>
-        <p>{{ t("gomoku.rules.winBody") }}</p>
-        <h4>{{ t("gomoku.rules.cautionTitle") }}</h4>
-        <p>{{ t("gomoku.rules.cautionBody") }}</p>
-      </div>
+      <p class="gomoku-rule-oneliner">{{ t("gomoku.rules.oneLiner") }}</p>
     </section>
 
     <Footer :on-custom-lang-click="() => {}" />

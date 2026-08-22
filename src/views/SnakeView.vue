@@ -16,7 +16,7 @@ import type { Direction } from "@/games/snake/types";
 const router = useRouter();
 const store = useSnakeStore();
 const { t } = useI18n();
-const { grid, score, snakeLength, status, bestScore, isNewBest } = storeToRefs(store);
+const { grid, score, snakeLength, status, bestScore, isNewBest, resumeCountdown } = storeToRefs(store);
 
 const showOverModal = ref(false);
 const showLeaveModal = ref(false);
@@ -120,9 +120,8 @@ function onKeyDown(e: KeyboardEvent) {
     case "D":
       dir = "right";
       break;
-    case "p":
-    case "P":
     case " ":
+      // v0.9.5: 暂停改用 Space 键（更醒目，跟现代游戏习惯一致）
       e.preventDefault();
       store.togglePause();
       return;
@@ -196,7 +195,10 @@ function onTouchEnd(e: TouchEvent) {
           </div>
           <!-- v0.9.4: 暂停状态蒙版（替代无视觉反馈的纯 sidebar 暂停） -->
           <div v-if="isPaused" class="game-overlay">
-            <div class="game-overlay-text">{{ t('snake.paused') }}</div>
+            <div v-if="resumeCountdown > 0" class="game-overlay-countdown">
+              {{ resumeCountdown }}
+            </div>
+            <div v-else class="game-overlay-text">{{ t('snake.paused') }}</div>
             <div class="game-overlay-hint">{{ t('snake.pauseHint') }}</div>
           </div>
         </div>
@@ -215,18 +217,32 @@ function onTouchEnd(e: TouchEvent) {
       </div>
     </main>
 
-    <!-- 规则与玩法（页面下方，复用 .tetris-controls 范式） -->
-    <section class="tetris-controls snake-rules-section" :aria-label="t('snake.rules.title')">
-      <div class="tetris-controls-title">{{ t('snake.rules.title') }}</div>
-      <div class="snake-rules-body">
-        <h4>{{ t('snake.rules.goalTitle') }}</h4>
-        <p>{{ t('snake.rules.goalBody') }}</p>
-        <h4>{{ t('snake.rules.playTitle') }}</h4>
-        <p>{{ t('snake.rules.playBody') }}</p>
-        <h4>{{ t('snake.rules.dieTitle') }}</h4>
-        <p>{{ t('snake.rules.dieBody') }}</p>
-        <h4>{{ t('snake.rules.cautionTitle') }}</h4>
-        <p>{{ t('snake.rules.cautionBody') }}</p>
+    <!-- 按键说明（v0.9.5：与俄罗斯方块 / 2048 统一为键位说明样式） -->
+    <section class="tetris-controls snake-rules-section" :aria-label="t('snake.controls.title')">
+      <div class="tetris-controls-title">{{ t("snake.controls.title") }}</div>
+      <div class="tetris-controls-grid">
+        <div class="tetris-controls-item">
+          <span class="kbd-row">
+            <kbd class="kbd">←</kbd><kbd class="kbd">A</kbd><kbd class="kbd">→</kbd><kbd class="kbd">D</kbd>
+          </span>
+          <span class="kbd-label">{{ t("snake.controls.moveLR") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row"><kbd class="kbd">↑</kbd><kbd class="kbd">W</kbd></span>
+          <span class="kbd-label">{{ t("snake.controls.moveUp") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <span class="kbd-row"><kbd class="kbd">↓</kbd><kbd class="kbd">S</kbd></span>
+          <span class="kbd-label">{{ t("snake.controls.moveDown") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <kbd class="kbd">Space</kbd>
+          <span class="kbd-label">{{ t("snake.controls.pause") }}</span>
+        </div>
+        <div class="tetris-controls-item">
+          <kbd class="kbd">R</kbd>
+          <span class="kbd-label">{{ t("snake.controls.restart") }}</span>
+        </div>
       </div>
     </section>
 

@@ -176,22 +176,13 @@ function formatTime(s: number): string {
       </div>
     </main>
 
-    <!-- 规则与玩法（页面下方） -->
+    <!-- 规则与玩法（v0.9.5：精简为一句话） -->
     <section
       class="tetris-controls npuzzle-rules-section"
       :aria-label="t('npuzzle.rules.title')"
     >
       <div class="tetris-controls-title">{{ t("npuzzle.rules.title") }}</div>
-      <div class="npuzzle-rules-body">
-        <h4>{{ t("npuzzle.rules.goalTitle") }}</h4>
-        <p>{{ t("npuzzle.rules.goalBody") }}</p>
-        <h4>{{ t("npuzzle.rules.playTitle") }}</h4>
-        <p>{{ t("npuzzle.rules.playBody") }}</p>
-        <h4>{{ t("npuzzle.rules.winTitle") }}</h4>
-        <p>{{ t("npuzzle.rules.winBody") }}</p>
-        <h4>{{ t("npuzzle.rules.cautionTitle") }}</h4>
-        <p>{{ t("npuzzle.rules.cautionBody") }}</p>
-      </div>
+      <p class="npuzzle-rule-oneliner">{{ t("npuzzle.rules.oneLiner") }}</p>
     </section>
 
     <Footer :on-custom-lang-click="() => {}" />
