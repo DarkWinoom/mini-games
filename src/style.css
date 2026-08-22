@@ -1091,6 +1091,44 @@
     50% { opacity: 1; transform: scale(1.05); }
   }
 
+  /* === 通用游戏 overlay 蒙版（v0.9.4 Tetris/Sudoku/Snake 暂停 + 开始提示） ===
+     半透明白/深色背景 + 居中文字 + pulse 动画。
+     用于 board 内部覆盖，无需玩家决策的提示（暂停 / 按键开始）。 */
+  .game-overlay {
+    @apply absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(2px);
+    border-radius: var(--radius-md, 12px);
+    z-index: 20;
+  }
+  :where(:root[data-theme='dark']) .game-overlay {
+    background: rgba(30, 27, 75, 0.55);
+  }
+  .game-overlay-text {
+    @apply px-4 py-2 rounded-xl text-base font-semibold;
+    background: rgba(255, 255, 255, 0.92);
+    color: #6366f1;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
+    animation: game-overlay-pulse 1.4s ease-in-out infinite;
+  }
+  :where(:root[data-theme='dark']) .game-overlay-text {
+    background: rgba(30, 27, 75, 0.92);
+    color: #c7d2fe;
+  }
+  .game-overlay-hint {
+    @apply text-xs opacity-70;
+    background: rgba(255, 255, 255, 0.6);
+    padding: 2px 10px;
+    border-radius: 999px;
+  }
+  :where(:root[data-theme='dark']) .game-overlay-hint {
+    background: rgba(30, 27, 75, 0.6);
+  }
+  @keyframes game-overlay-pulse {
+    0%, 100% { opacity: 0.85; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.04); }
+  }
+
   /* === 贪吃蛇 sidebar === */
   .snake-sidebar {
     @apply flex flex-col gap-4;

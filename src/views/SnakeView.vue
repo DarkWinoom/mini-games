@@ -194,6 +194,11 @@ function onTouchEnd(e: TouchEvent) {
           <div v-if="isWaiting" class="snake-start-hint">
             <span class="snake-start-hint-text">{{ t('snake.startHint') }}</span>
           </div>
+          <!-- v0.9.4: 暂停状态蒙版（替代无视觉反馈的纯 sidebar 暂停） -->
+          <div v-if="isPaused" class="game-overlay">
+            <div class="game-overlay-text">{{ t('snake.paused') }}</div>
+            <div class="game-overlay-hint">{{ t('snake.pauseHint') }}</div>
+          </div>
         </div>
         <SnakeSidebar
           :score="score"

@@ -31,6 +31,7 @@ defineProps<{
   bestScore: number;
   isPaused: boolean;
   isGameOver: boolean;
+  isWaiting?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -110,7 +111,8 @@ const { t } = useI18n();
           :disabled="isGameOver"
           @click="emit('togglePause')"
         >
-          {{ isPaused ? t("tetris.resume") : t("common.pause") }}
+          <!-- v0.9.4: waiting 时显示"开始"，点击触发 start() -->
+          {{ isWaiting ? t("common.play") : (isPaused ? t("tetris.resume") : t("common.pause")) }}
         </BaseButton>
       </div>
     </div>
