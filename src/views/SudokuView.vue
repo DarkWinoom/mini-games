@@ -4,6 +4,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GamePageHeader from "@/components/GamePageHeader.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import SudokuBoard from "@/components/SudokuBoard.vue";
@@ -17,7 +18,7 @@ import type { CellPosition, Difficulty } from "@/games/sudoku/types";
 
 const router = useRouter();
 const sudoku = useSudokuStore();
-const { state, bestTimes, conflicts } = storeToRefs(sudoku);
+const { state, bestTimes, conflicts, userActionCount } = storeToRefs(sudoku);
 // 用 state.errors（累计）而非 errorCount computed（每次重算 board）
 // 后者会在用户修正错误后把 count 重置为 0，违反"错误数累计"语义
 // `difficulties` 是 const 不在 storeToRefs 返回里（storeToRefs 只包 ref/reactive）
@@ -66,16 +67,27 @@ function moveSelection(dr: number, dc: number) {
   sudoku.selectCell({ row: newRow, col: newCol });
 }
 
-/* === 返回主页（防误操作：playing 状态弹模态） === */
+/* === 返回主页（v0.9.7：用 userActionCount 判定未操作，time 判定太严） === */
 function tryBackHome() {
+  // v0.9.7: 未操作过（userActionCount === 0）→ 直接清进度返回
+  if (userActionCount.value === 0) {
+    sudoku.newGame();
+    router.push("/");
+    return;
+  }
+  // playing 状态 → 弹模态确认
   if (isPlaying.value) {
     showLeaveModal.value = true;
-  } else {
-    router.push("/");
+    return;
   }
+  // won / failed 等终态：直接清进度返回
+  sudoku.newGame();
+  router.push("/");
 }
 function confirmLeave() {
   showLeaveModal.value = false;
+  // v0.9.7: 确认时清空当前进度
+  sudoku.newGame();
   if (pendingLeave) {
     pendingLeave();
     pendingLeave = null;
@@ -88,9 +100,9 @@ function cancelLeave() {
   pendingLeave = null;
 }
 
-/* === 路由拦截（与其它游戏统一：F5 / 后退 / vue-router 跳转） === */
+/* === 路由拦截（v0.9.7：已操作才拦） === */
 onBeforeRouteLeave((to, _from, next) => {
-  if (isPlaying.value && to.path === "/") {
+  if (isPlaying.value && userActionCount.value > 0 && to.path === "/") {
     showLeaveModal.value = true;
     pendingLeave = () => next();
   } else {
@@ -166,6 +178,8 @@ onUnmounted(() => {
 <template>
   <div class="container-x min-h-screen flex flex-col">
     <Header />
+    <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
+    <GamePageHeader title-key="sudoku.title" @back-home="tryBackHome" />
 
     <main class="sudoku-game">
       <!-- 左侧：棋盘 + 输入 -->
@@ -199,7 +213,6 @@ onUnmounted(() => {
         :status="state.status"
         @set-difficulty="onSetDifficulty"
         @new-game="onNewGame"
-        @back-home="tryBackHome"
       />
     </main>
 
@@ -253,7 +266,7 @@ onUnmounted(() => {
         {{ t("sudoku.errors") }}：{{ state.errors }}
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">
@@ -274,7 +287,7 @@ onUnmounted(() => {
         {{ t("sudoku.time") }}：{{ formatTime(state.time) }}
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">

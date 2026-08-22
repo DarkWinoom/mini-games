@@ -33,7 +33,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   setDifficulty: [d: Difficulty];
   newGame: [];
-  backHome: [];
 }>();
 
 const { t } = useI18n();
@@ -134,10 +133,5 @@ onUnmounted(() => {
         {{ t("sudoku.newGame") }}
       </BaseButton>
     </div>
-
-    <!-- 5. 返回主页（防误操作：F5 / 后退会丢进度，引导走这里） -->
-    <BaseButton variant="ghost" class="sudoku-back-home" @click="emit('backHome')">
-      {{ t("sudoku.backHome") }}
-    </BaseButton>
   </div>
 </template>

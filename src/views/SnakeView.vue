@@ -4,6 +4,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GamePageHeader from "@/components/GamePageHeader.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import SnakeBoard from "@/components/SnakeBoard.vue";
@@ -44,16 +45,29 @@ function onTogglePause() {
   store.togglePause();
 }
 
-/* === 返回主页：playing 状态弹模态，其他状态直接走（v0.7.2: waiting 不算"在玩"） === */
+/* === 返回主页（v0.9.6：未操作直接清进度返回，已操作弹模态确认） === */
 function tryBackHome() {
-  if (isPlaying.value) {
-    showLeaveModal.value = true;
-  } else {
+  // v0.9.6: waiting 状态未操作 → 直接清进度返回
+  if (isWaiting.value) {
+    store.newGame();
     router.push("/");
+    return;
   }
+  // playing / paused → 弹模态确认
+  if (isPlaying.value || isPaused.value) {
+    // v0.9.8: 弹模态前同步暂停（不走倒计时，直接 paused）
+    if (isPlaying.value) store.pauseOnly();
+    showLeaveModal.value = true;
+    return;
+  }
+  // over 等终态：直接清进度返回
+  store.newGame();
+  router.push("/");
 }
 function confirmLeave() {
   showLeaveModal.value = false;
+  // v0.9.6: 确认时清空当前进度
+  store.newGame();
   if (pendingLeave) {
     pendingLeave();
     pendingLeave = null;
@@ -64,11 +78,13 @@ function confirmLeave() {
 function cancelLeave() {
   showLeaveModal.value = false;
   pendingLeave = null;
+  // v0.9.8: 取消模态时若处于 paused 状态 → 自动恢复（玩家期望"取消" = 继续玩）
+  if (isPaused.value) store.resumeOnly();
 }
 
-/* === 路由拦截：浏览器后退 / vue-router 跳转都拦（playing 状态弹模态） === */
+/* === 路由拦截（v0.9.6：已操作才拦） === */
 onBeforeRouteLeave((to, _from, next) => {
-  if (isPlaying.value && to.path === "/") {
+  if ((isPlaying.value || isPaused.value) && to.path === "/") {
     showLeaveModal.value = true;
     pendingLeave = () => next();
   } else {
@@ -184,6 +200,8 @@ function onTouchEnd(e: TouchEvent) {
 <template>
   <div class="flex flex-col min-h-screen container-x">
     <Header />
+    <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
+    <GamePageHeader title-key="snake.title" @back-home="tryBackHome" />
 
     <main class="flex-1 py-8">
       <div class="snake-game">
@@ -193,13 +211,14 @@ function onTouchEnd(e: TouchEvent) {
           <div v-if="isWaiting" class="snake-start-hint">
             <span class="snake-start-hint-text">{{ t('snake.startHint') }}</span>
           </div>
-          <!-- v0.9.4: 暂停状态蒙版（替代无视觉反馈的纯 sidebar 暂停） -->
-          <div v-if="isPaused" class="game-overlay">
-            <div v-if="resumeCountdown > 0" class="game-overlay-countdown">
-              {{ resumeCountdown }}
-            </div>
-            <div v-else class="game-overlay-text">{{ t('snake.paused') }}</div>
+          <!-- v0.9.7: 暂停状态蒙版（仅在 paused 状态且非倒计时中显示） -->
+          <div v-if="isPaused && resumeCountdown === 0" class="game-overlay">
+            <div class="game-overlay-text">{{ t('snake.paused') }}</div>
             <div class="game-overlay-hint">{{ t('snake.pauseHint') }}</div>
+          </div>
+          <!-- v0.9.7: 倒计时小数字（角落，不遮场，让玩家看见场上情况） -->
+          <div v-if="isPaused && resumeCountdown > 0" class="resume-countdown">
+            {{ resumeCountdown }}
           </div>
         </div>
         <SnakeSidebar
@@ -210,9 +229,9 @@ function onTouchEnd(e: TouchEvent) {
           :is-paused="isPaused"
           :is-over="isOver"
           :is-waiting="isWaiting"
+          :is-counting-down="resumeCountdown > 0"
           @new-game="onNewGame"
           @toggle-pause="onTogglePause"
-          @back-home="tryBackHome"
         />
       </div>
     </main>
@@ -258,7 +277,7 @@ function onTouchEnd(e: TouchEvent) {
         {{ t('snake.score') }}: <strong>{{ score }}</strong> · {{ t('snake.length') }}: <strong>{{ snakeLength }}</strong>
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t('common.back') }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">

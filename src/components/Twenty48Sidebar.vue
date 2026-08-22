@@ -15,7 +15,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   newGame: [];
   undo: [];
-  backHome: [];
 }>();
 
 const { t } = useI18n();
@@ -65,10 +64,5 @@ const formattedBest = computed(() => String(props.bestScore));
         </div>
       </div>
     </div>
-
-    <!-- 3. 返回主页（防误操作：F5 / 后退会丢进度，引导走这里） -->
-    <BaseButton variant="ghost" class="twenty48-back-home" @click="emit('backHome')">
-      {{ t('twenty48.backHome') }}
-    </BaseButton>
   </div>
 </template>

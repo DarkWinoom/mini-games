@@ -37,7 +37,6 @@ defineProps<{
 const emit = defineEmits<{
   newGame: [];
   togglePause: [];
-  backHome: [];
 }>();
 
 const { t } = useI18n();
@@ -116,10 +115,5 @@ const { t } = useI18n();
         </BaseButton>
       </div>
     </div>
-
-    <!-- 5. 返回主页（防误操作：F5 / 后退会丢进度，引导走这里） -->
-    <BaseButton variant="ghost" class="tetris-back-home" @click="emit('backHome')">
-      {{ t("tetris.backHome") }}
-    </BaseButton>
   </div>
 </template>

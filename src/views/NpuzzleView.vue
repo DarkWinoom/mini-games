@@ -4,6 +4,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GamePageHeader from "@/components/GamePageHeader.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import NpuzzleBoard from "@/components/NpuzzleBoard.vue";
@@ -61,16 +62,27 @@ function onCellClick(row: number, col: number) {
   store.moveTile(row, col);
 }
 
-/* === 返回主页 === */
+/* === 返回主页（v0.9.6：未操作直接清进度返回，已操作弹模态确认） === */
 function tryBackHome() {
+  // v0.9.6: 未操作过（movesCount === 0）→ 直接清进度返回
+  if (movesCount.value === 0) {
+    store.newGame();
+    router.push("/");
+    return;
+  }
+  // playing 状态 → 弹模态确认
   if (isPlaying.value) {
     showLeaveModal.value = true;
-  } else {
-    router.push("/");
+    return;
   }
+  // over 终态：直接清进度返回
+  store.newGame();
+  router.push("/");
 }
 function confirmLeave() {
   showLeaveModal.value = false;
+  // v0.9.6: 确认时清空当前进度
+  store.newGame();
   if (pendingLeave) {
     pendingLeave();
     pendingLeave = null;
@@ -83,9 +95,9 @@ function cancelLeave() {
   pendingLeave = null;
 }
 
-/* === 路由拦截 === */
+/* === 路由拦截（v0.9.6：已操作才拦） === */
 onBeforeRouteLeave((to, _from, next) => {
-  if (isPlaying.value && to.path === "/") {
+  if (isPlaying.value && movesCount.value > 0 && to.path === "/") {
     showLeaveModal.value = true;
     pendingLeave = () => next();
   } else {
@@ -147,6 +159,8 @@ function formatTime(s: number): string {
 <template>
   <div class="flex flex-col min-h-screen container-x">
     <Header />
+    <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
+    <GamePageHeader title-key="npuzzle.title" @back-home="tryBackHome" />
 
     <main class="flex-1 py-8">
       <div class="npuzzle-game">
@@ -171,7 +185,6 @@ function formatTime(s: number): string {
           @new-game="onNewGame"
           @set-size="onSetSize"
           @undo="onUndo"
-          @back-home="tryBackHome"
         />
       </div>
     </main>
@@ -199,7 +212,7 @@ function formatTime(s: number): string {
         · {{ t("npuzzle.time") }}: <strong>{{ formatTime(elapsed) }}</strong>
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">

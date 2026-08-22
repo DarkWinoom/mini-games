@@ -4,6 +4,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GamePageHeader from "@/components/GamePageHeader.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import GomokuBoard from "@/components/GomokuBoard.vue";
@@ -59,16 +60,27 @@ function onSetDifficulty(d: Difficulty) {
   showOverModal.value = false;
 }
 
-/* === 返回主页：playing 状态弹模态，over 直接走 === */
+/* === 返回主页（v0.9.6：未操作直接清进度返回，已操作弹模态确认） === */
 function tryBackHome() {
+  // v0.9.6: 未操作过（lastMove === null）→ 直接清进度返回
+  if (lastMove.value === null) {
+    store.newGame();
+    router.push("/");
+    return;
+  }
+  // playing 状态 → 弹模态确认
   if (isPlaying.value) {
     showLeaveModal.value = true;
-  } else {
-    router.push("/");
+    return;
   }
+  // over 终态：直接清进度返回
+  store.newGame();
+  router.push("/");
 }
 function confirmLeave() {
   showLeaveModal.value = false;
+  // v0.9.6: 确认时清空当前进度
+  store.newGame();
   if (pendingLeave) {
     pendingLeave();
     pendingLeave = null;
@@ -81,9 +93,9 @@ function cancelLeave() {
   pendingLeave = null;
 }
 
-/* === 路由拦截：浏览器后退 / vue-router 跳转都拦（playing 状态弹模态） === */
+/* === 路由拦截（v0.9.6：已操作才拦） === */
 onBeforeRouteLeave((to, _from, next) => {
-  if (isPlaying.value && to.path === "/") {
+  if (isPlaying.value && lastMove.value !== null && to.path === "/") {
     showLeaveModal.value = true;
     pendingLeave = () => next();
   } else {
@@ -128,6 +140,8 @@ function onCellClick(row: number, col: number) {
 <template>
   <div class="flex flex-col min-h-screen container-x">
     <Header />
+    <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
+    <GamePageHeader title-key="gomoku.title" @back-home="tryBackHome" />
 
     <main class="flex-1 py-8">
       <div class="gomoku-game">
@@ -151,7 +165,6 @@ function onCellClick(row: number, col: number) {
           :draws="draws"
           @new-game="onNewGame"
           @set-difficulty="onSetDifficulty"
-          @back-home="tryBackHome"
         />
       </div>
     </main>
@@ -186,7 +199,7 @@ function onCellClick(row: number, col: number) {
         · {{ t("gomoku.draw") }}: <strong>{{ draws }}</strong>
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t("common.back") }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">

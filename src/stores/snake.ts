@@ -126,42 +126,70 @@ export const useSnakeStore = defineStore("snake", () => {
   }
 
   /**
-   * 暂停/恢复（v0.9.5: 带 3 秒恢复倒计时）
+   * 暂停/恢复（v0.9.7: 倒计时途中不响应 Space 触发，避免无限重置）
    * - playing → paused (stopTick)
-   * - paused → 倒计时 3 → 2 → 1 → 0 → playing (startTick)
+   * - paused && !counting down → 启动倒计时 3 → 2 → 1 → 0 → playing
+   * - paused && counting down → 忽略（倒计时途中按 Space 不重置也不取消）
    * - over / waiting 不响应
    */
   function togglePause(): void {
     if (state.value.status === "playing") {
       state.value = { ...state.value, status: "paused" };
       stopTick();
-    } else if (state.value.status === "paused") {
-      // v0.9.5: 启动恢复倒计时（3, 2, 1, 0）
+    } else if (state.value.status === "paused" && resumeCountdown.value === 0) {
+      // v0.9.7: 只在非倒计时中才允许启动新倒计时
       startResumeCountdown();
     }
+    // paused && resumeCountdown > 0：倒计时途中，忽略输入
   }
 
   /**
-   * v0.9.5: 启动恢复倒计时（3 → 0）
-   * 倒计时期间状态保持 paused（tick 已停），蒙版显示数字
+   * v0.9.7: 启动恢复倒计时（3 → 2 → 1 → 直接 playing）
+   * v0.9.8: 归零时立即改 status=playing，不再显示 0 + 暂停蒙版闪烁
+   * 倒计时期间状态保持 paused（tick 已停），玩家看到 3, 2, 1 3 个数字后自动 playing
    */
   function startResumeCountdown(): void {
     stopResumeCountdown();
     resumeCountdown.value = 3;
     const tick = (): void => {
+      // 先 -1（这一步会显示当前数字 3 → 2 → 1）
+      resumeCountdown.value -= 1;
       if (resumeCountdown.value <= 0) {
-        stopResumeCountdown();
-        // 倒计时归零 → 真正恢复
+        // 归零 → 立即 playing（不再等待一轮，避免 0 + 暂停蒙版闪烁）
+        countdownHandle = null;
         if (state.value.status === "paused") {
           state.value = { ...state.value, status: "playing" };
           startTick();
         }
         return;
       }
-      resumeCountdown.value -= 1;
       countdownHandle = window.setTimeout(tick, 1000);
     };
     countdownHandle = window.setTimeout(tick, 1000);
+  }
+
+  /**
+   * v0.9.8: 强制暂停（不走倒计时）—— 用于"离开确认"模态同步暂停
+   * 与 togglePause 的区别：togglePause 在 paused 时会启动 3 秒倒计时，
+   * 这里只是单纯改 status=paused + stopTick，立即生效不需玩家后续操作。
+   */
+  function pauseOnly(): void {
+    if (state.value.status !== "playing") return;
+    state.value = { ...state.value, status: "paused" };
+    stopTick();
+    stopResumeCountdown();
+  }
+
+  /**
+   * v0.9.8: 强制恢复（不走倒计时）—— 用于"取消离开"模态后自动继续
+   * 与 togglePause 的区别：togglePause 在 paused 时会启动 3 秒倒计时，
+   * 这里直接 status=playing + startTick，玩家立即看到蛇继续动。
+   */
+  function resumeOnly(): void {
+    if (state.value.status !== "paused") return;
+    stopResumeCountdown(); // 清掉可能残留的倒计时
+    state.value = { ...state.value, status: "playing" };
+    startTick();
   }
 
   function stopResumeCountdown(): void {
@@ -264,6 +292,8 @@ export const useSnakeStore = defineStore("snake", () => {
     newGame,
     setDirection,
     togglePause,
+    pauseOnly, // v0.9.8: 离开模态同步暂停
+    resumeOnly, // v0.9.8: 取消模态后自动恢复
     tick,
     startTick,
     stopTick,

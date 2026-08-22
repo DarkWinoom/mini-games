@@ -11,12 +11,13 @@ const props = defineProps<{
   isPaused: boolean;
   isOver: boolean;
   isWaiting: boolean;
+  /** v0.9.7: 暂停恢复倒计时中（>0）时按钮禁用 */
+  isCountingDown?: boolean;
 }>();
 
 const emit = defineEmits<{
   newGame: [];
   togglePause: [];
-  backHome: [];
 }>();
 
 const { t } = useI18n();
@@ -37,7 +38,7 @@ const formattedLength = computed(() => String(props.snakeLength));
       <BaseButton
         variant="ghost"
         class="flex-1"
-        :disabled="props.isOver || props.isWaiting"
+        :disabled="props.isOver || props.isWaiting || props.isCountingDown"
         @click="emit('togglePause')"
       >
         {{ pauseLabel }}
@@ -65,10 +66,5 @@ const formattedLength = computed(() => String(props.snakeLength));
         </div>
       </div>
     </div>
-
-    <!-- 3. 返回主页（防误操作：F5 / 后退会丢进度，引导走这里） -->
-    <BaseButton variant="ghost" class="snake-back-home" @click="emit('backHome')">
-      {{ t('snake.backHome') }}
-    </BaseButton>
   </div>
 </template>

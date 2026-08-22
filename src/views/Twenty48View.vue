@@ -4,6 +4,7 @@ import { useRouter, onBeforeRouteLeave } from "vue-router";
 import { storeToRefs } from "pinia";
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GamePageHeader from "@/components/GamePageHeader.vue";
 import BaseModal from "@/components/BaseModal.vue";
 import BaseButton from "@/components/BaseButton.vue";
 import Twenty48Board from "@/components/Twenty48Board.vue";
@@ -53,16 +54,27 @@ function onContinue() {
   showWonModal.value = false;
 }
 
-/* === 返回主页：playing 状态弹模态，won/over 直接走 === */
+/* === 返回主页（v0.9.6：未操作直接清进度返回，已操作弹模态确认） === */
 function tryBackHome() {
+  // v0.9.6: 未操作过（moves === 0）→ 直接清进度返回
+  if (moves.value === 0) {
+    store.newGame();
+    router.push("/");
+    return;
+  }
+  // playing 状态 → 弹模态确认
   if (isPlaying.value) {
     showLeaveModal.value = true;
-  } else {
-    router.push("/");
+    return;
   }
+  // won / over 终态：直接清进度返回
+  store.newGame();
+  router.push("/");
 }
 function confirmLeave() {
   showLeaveModal.value = false;
+  // v0.9.6: 确认时清空当前进度
+  store.newGame();
   if (pendingLeave) {
     pendingLeave();
     pendingLeave = null;
@@ -75,9 +87,9 @@ function cancelLeave() {
   pendingLeave = null;
 }
 
-/* === 路由拦截：浏览器后退 / vue-router 跳转都拦（playing 状态弹模态） === */
+/* === 路由拦截（v0.9.6：已操作才拦） === */
 onBeforeRouteLeave((to, _from, next) => {
-  if (isPlaying.value && to.path === "/") {
+  if (isPlaying.value && moves.value > 0 && to.path === "/") {
     showLeaveModal.value = true;
     pendingLeave = () => next();
   } else {
@@ -188,6 +200,8 @@ function onTouchEnd(e: TouchEvent) {
 <template>
   <div class="flex flex-col min-h-screen container-x">
     <Header />
+    <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
+    <GamePageHeader title-key="twenty48.title" @back-home="tryBackHome" />
 
     <main class="flex-1 py-8">
       <div class="twenty48-game">
@@ -203,7 +217,6 @@ function onTouchEnd(e: TouchEvent) {
           :is-over="isOver"
           @new-game="onNewGame"
           @undo="onUndo"
-          @back-home="tryBackHome"
         />
       </div>
     </main>
@@ -249,7 +262,7 @@ function onTouchEnd(e: TouchEvent) {
         {{ t('twenty48.score') }}: <strong>{{ score }}</strong> · {{ t('twenty48.moves') }}: <strong>{{ moves }}</strong>
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t('common.back') }}
         </BaseButton>
         <BaseButton variant="primary" @click="onContinue">
@@ -265,7 +278,7 @@ function onTouchEnd(e: TouchEvent) {
         {{ t('twenty48.score') }}: <strong>{{ score }}</strong> · {{ t('twenty48.maxTile') }}: <strong>{{ maxTile }}</strong>
       </p>
       <template #actions>
-        <BaseButton variant="ghost" @click="tryBackHome">
+        <BaseButton variant="ghost" @click="confirmLeave">
           {{ t('common.back') }}
         </BaseButton>
         <BaseButton variant="primary" @click="onNewGame">
