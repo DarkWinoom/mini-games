@@ -19,6 +19,8 @@ export const locale: LocaleDict = {
   "header.themeLight": "浅色",
   "header.themeDark": "深色",
   "header.themeSystem": "跟随系统",
+  "header.soundOn": "声音开",
+  "header.soundOff": "声音关",
 
   // 主页
   "home.title": "简单。有趣。",
