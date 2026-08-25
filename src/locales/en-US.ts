@@ -38,6 +38,8 @@ export const locale: LocaleDict = {
   "home.gomoku.description": "Five in a row. Three AI levels.",
   "home.npuzzle.title": "N-Puzzle",
   "home.npuzzle.description": "Classic sliding puzzle. 3×3 / 4×4.",
+  "home.bubble.title": "Bubble Shooter",
+  "home.bubble.description": "Shoot bubbles. Match 3+ colors. Beat your high score.",
 
   // Footer
   "footer.copyright": "© 2026 Mini Games Collection",
@@ -228,4 +230,36 @@ export const locale: LocaleDict = {
   "npuzzle.modal.leave.confirm": "Leave",
   "npuzzle.modal.leave.cancel": "Keep Playing",
   "npuzzle.backHome": "Back to Home",
+
+  // Bubble Shooter
+  "bubble.title": "Bubble Shooter",
+  "bubble.newGame": "New Game",
+  "bubble.pause": "Pause",
+  "bubble.resume": "Resume",
+  "bubble.score": "Score",
+  "bubble.best": "Best",
+  "bubble.next": "Next",
+  "bubble.paused": "Paused",
+  "bubble.pauseHint": "Press Space to resume",
+  "bubble.controls.title": "Controls",
+  "bubble.controls.aimLR": "Aim",
+  "bubble.controls.shoot": "Shoot",
+  "bubble.controls.pause": "Pause / Resume",
+  "bubble.controls.mouse": "Mouse",
+  "bubble.controls.mouseDesc": "Move to aim / Click to shoot",
+  "bubble.controls.restart": "Restart",
+  "bubble.rules.title": "Rules & How to Play",
+  "bubble.rules.oneLiner":
+    "Aim and shoot bubbles. Match 3+ same-color bubbles to pop them. Isolated bubbles with no anchor will fall. Clear all bubbles to win; reach the top line and you lose.",
+  "bubble.modal.win.title": "You Won!",
+  "bubble.modal.win.body": "You successfully cleared all bubbles.",
+  "bubble.modal.lose.title": "Game Over",
+  "bubble.modal.lose.body": "Bubbles reached the top line.",
+  "bubble.modal.newBest": "🎉 New Best!",
+  "bubble.modal.leave.title": "Clear progress and leave?",
+  "bubble.modal.leave.body":
+    "Going back to home will clear your current score. The next visit will start a new game.",
+  "bubble.modal.leave.confirm": "Leave",
+  "bubble.modal.leave.cancel": "Keep Playing",
+  "bubble.backHome": "Back to Home",
 };

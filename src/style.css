@@ -84,12 +84,14 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     opacity: 0;
     transform: translateY(-4px);
-    transition: opacity 150ms ease, transform 150ms ease;
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
     z-index: 50;
   }
   /* 气泡顶部小三角（指向按钮） */
   .tooltip::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -4px;
     right: 14px;
@@ -275,7 +277,7 @@
     backdrop-filter: blur(15px);
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
   }
-  :where(:root[data-theme='dark']) .game-page-header {
+  :where(:root[data-theme="dark"]) .game-page-header {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .game-page-title {
@@ -298,7 +300,7 @@
     padding: 1px;
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
   }
-  :where(:root[data-theme='dark']) .tetris-board {
+  :where(:root[data-theme="dark"]) .tetris-board {
     background: rgba(0, 0, 0, 0.4);
   }
   .tetris-cell {
@@ -308,25 +310,39 @@
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 3px;
   }
-  :where(:root[data-theme='dark']) .tetris-cell {
+  :where(:root[data-theme="dark"]) .tetris-cell {
     background: rgba(255, 255, 255, 0.08);
     border-color: rgba(255, 255, 255, 0.06);
   }
   /* piece 颜色（主网格 + 预览共用同一组渐变，避免双套定义） */
   .tetris-cell.I,
-  .tetris-preview-cell.I { background: linear-gradient(135deg, #00a8ec, #0084b8); }
+  .tetris-preview-cell.I {
+    background: linear-gradient(135deg, #00a8ec, #0084b8);
+  }
   .tetris-cell.O,
-  .tetris-preview-cell.O { background: linear-gradient(135deg, #fcd000, #d8a800); }
+  .tetris-preview-cell.O {
+    background: linear-gradient(135deg, #fcd000, #d8a800);
+  }
   .tetris-cell.T,
-  .tetris-preview-cell.T { background: linear-gradient(135deg, #a020f0, #8000c0); }
+  .tetris-preview-cell.T {
+    background: linear-gradient(135deg, #a020f0, #8000c0);
+  }
   .tetris-cell.S,
-  .tetris-preview-cell.S { background: linear-gradient(135deg, #44ec00, #2cb800); }
+  .tetris-preview-cell.S {
+    background: linear-gradient(135deg, #44ec00, #2cb800);
+  }
   .tetris-cell.Z,
-  .tetris-preview-cell.Z { background: linear-gradient(135deg, #ec1c24, #c01418); }
+  .tetris-preview-cell.Z {
+    background: linear-gradient(135deg, #ec1c24, #c01418);
+  }
   .tetris-cell.J,
-  .tetris-preview-cell.J { background: linear-gradient(135deg, #4040e0, #2828b0); }
+  .tetris-preview-cell.J {
+    background: linear-gradient(135deg, #4040e0, #2828b0);
+  }
   .tetris-cell.L,
-  .tetris-preview-cell.L { background: linear-gradient(135deg, #f08000, #c06800); }
+  .tetris-preview-cell.L {
+    background: linear-gradient(135deg, #f08000, #c06800);
+  }
   .tetris-cell.ghost {
     background: transparent !important;
     box-shadow: inset 0 0 0 1px currentColor;
@@ -344,7 +360,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
   }
-  :where(:root[data-theme='dark']) .tetris-preview {
+  :where(:root[data-theme="dark"]) .tetris-preview {
     background: rgba(0, 0, 0, 0.4);
   }
   .tetris-preview-cell {
@@ -352,7 +368,7 @@
     border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 2px;
   }
-  :where(:root[data-theme='dark']) .tetris-preview-cell {
+  :where(:root[data-theme="dark"]) .tetris-preview-cell {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.06);
   }
@@ -375,7 +391,7 @@
     border: 1px solid rgba(255, 255, 255, 0.8);
     box-shadow: 0 12px 36px rgba(99, 102, 241, 0.35);
   }
-  :where(:root[data-theme='dark']) .tetris-event {
+  :where(:root[data-theme="dark"]) .tetris-event {
     background: rgba(30, 27, 75, 0.7);
     border-color: rgba(255, 255, 255, 0.2);
   }
@@ -385,10 +401,20 @@
     letter-spacing: 0.05em;
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
-  .tetris-event.event-tspin .tetris-event-main { color: #a020f0; }
-  .tetris-event.event-tspin-mini .tetris-event-main { color: #8000c0; opacity: 0.85; }
-  .tetris-event.event-tetris .tetris-event-main { color: #fcd000; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); }
-  .tetris-event.event-clear .tetris-event-main { color: #44ec00; }
+  .tetris-event.event-tspin .tetris-event-main {
+    color: #a020f0;
+  }
+  .tetris-event.event-tspin-mini .tetris-event-main {
+    color: #8000c0;
+    opacity: 0.85;
+  }
+  .tetris-event.event-tetris .tetris-event-main {
+    color: #fcd000;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+  .tetris-event.event-clear .tetris-event-main {
+    color: #44ec00;
+  }
 
   .tetris-event-tag {
     font-size: 11px;
@@ -414,13 +440,28 @@
     animation: event-flash-out 0.12s ease-in forwards;
   }
   @keyframes event-flash-in {
-    0% { transform: scale(0.6); opacity: 0; }
-    60% { transform: scale(1.15); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+      transform: scale(0.6);
+      opacity: 0;
+    }
+    60% {
+      transform: scale(1.15);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
   @keyframes event-flash-out {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(1.3); opacity: 0; }
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.3);
+      opacity: 0;
+    }
   }
 
   /* === Tetris v2: HUD Badges（B2B / Combo 指示器） === */
@@ -455,10 +496,10 @@
   .icon-btn:active {
     transform: translateY(0);
   }
-  :where(:root[data-theme='dark']) .icon-btn {
+  :where(:root[data-theme="dark"]) .icon-btn {
     @apply bg-white/[0.08] border-white/[0.15];
   }
-  :where(:root[data-theme='dark']) .icon-btn:hover {
+  :where(:root[data-theme="dark"]) .icon-btn:hover {
     @apply bg-white/[0.12];
   }
 
@@ -492,7 +533,7 @@
     backdrop-filter: blur(15px);
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
   }
-  :where(:root[data-theme='dark']) .tetris-section {
+  :where(:root[data-theme="dark"]) .tetris-section {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .tetris-section-label {
@@ -558,7 +599,7 @@
     @apply mt-4 mb-2 px-6 py-4 rounded-3xl border border-white/60 bg-white/50 backdrop-blur-[20px];
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.12);
   }
-  :where(:root[data-theme='dark']) .tetris-controls {
+  :where(:root[data-theme="dark"]) .tetris-controls {
     @apply bg-white/[0.06] border-white/[0.15];
   }
   .tetris-controls-title {
@@ -579,7 +620,7 @@
     font-weight: 700;
     line-height: 1;
   }
-  :where(:root[data-theme='dark']) .kbd {
+  :where(:root[data-theme="dark"]) .kbd {
     @apply bg-white/10 border-white/20 text-white;
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
   }
@@ -607,7 +648,7 @@
     border: 2px solid rgba(99, 102, 241, 0.85); /* 外框（与 box 边同款 2px） */
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.2);
   }
-  :where(:root[data-theme='dark']) .sudoku-board {
+  :where(:root[data-theme="dark"]) .sudoku-board {
     background: rgba(30, 27, 75, 0.95);
     border-color: rgba(168, 85, 247, 0.85);
   }
@@ -623,7 +664,7 @@
     border-right: 1px solid rgba(99, 102, 241, 0.15);
     border-bottom: 1px solid rgba(99, 102, 241, 0.15);
   }
-  :where(:root[data-theme='dark']) .sudoku-cell {
+  :where(:root[data-theme="dark"]) .sudoku-cell {
     border-right-color: rgba(168, 85, 247, 0.2);
     border-bottom-color: rgba(168, 85, 247, 0.2);
   }
@@ -631,14 +672,14 @@
   .sudoku-cell.box-right {
     border-right: 2px solid rgba(99, 102, 241, 0.75);
   }
-  :where(:root[data-theme='dark']) .sudoku-cell.box-right {
+  :where(:root[data-theme="dark"]) .sudoku-cell.box-right {
     border-right-color: rgba(168, 85, 247, 0.85);
   }
   /* 3×3 box 底部边：2px 实色紫 */
   .sudoku-row > .sudoku-cell.box-bottom {
     border-bottom: 2px solid rgba(99, 102, 241, 0.75);
   }
-  :where(:root[data-theme='dark']) .sudoku-row > .sudoku-cell.box-bottom {
+  :where(:root[data-theme="dark"]) .sudoku-row > .sudoku-cell.box-bottom {
     border-bottom-color: rgba(168, 85, 247, 0.85);
   }
   /* 最右列 / 最下行：让出位置给 board 外框 */
@@ -668,14 +709,14 @@
     line-height: 1;
     color: #4338ca;
   }
-  :where(:root[data-theme='dark']) .sudoku-cell-value {
+  :where(:root[data-theme="dark"]) .sudoku-cell-value {
     color: #a5b4fc;
   }
   .sudoku-cell.is-given .sudoku-cell-value {
     color: #1f2937;
     font-weight: 800;
   }
-  :where(:root[data-theme='dark']) .sudoku-cell.is-given .sudoku-cell-value {
+  :where(:root[data-theme="dark"]) .sudoku-cell.is-given .sudoku-cell-value {
     color: #f3f4f6;
   }
   .sudoku-cell.is-conflict .sudoku-cell-value {
@@ -692,14 +733,14 @@
     color: #6b7280;
     line-height: 1;
   }
-  :where(:root[data-theme='dark']) .sudoku-notes-cell {
+  :where(:root[data-theme="dark"]) .sudoku-notes-cell {
     color: #9ca3af;
   }
   .sudoku-notes-cell.has {
     color: #6366f1;
     font-weight: 600;
   }
-  :where(:root[data-theme='dark']) .sudoku-notes-cell.has {
+  :where(:root[data-theme="dark"]) .sudoku-notes-cell.has {
     color: #c4b5fd;
   }
 
@@ -728,10 +769,10 @@
   .sudoku-pad-btn:active {
     transform: translateY(0);
   }
-  :where(:root[data-theme='dark']) .sudoku-pad-btn {
+  :where(:root[data-theme="dark"]) .sudoku-pad-btn {
     @apply bg-white/[0.08] border-white/[0.15] text-white;
   }
-  :where(:root[data-theme='dark']) .sudoku-pad-btn:hover {
+  :where(:root[data-theme="dark"]) .sudoku-pad-btn:hover {
     @apply bg-white/[0.15];
   }
   .sudoku-pad-erase {
@@ -753,7 +794,7 @@
   .sudoku-pad-toggle.is-disabled {
     @apply opacity-40 cursor-not-allowed;
   }
-  :where(:root[data-theme='dark']) .sudoku-pad-toggle {
+  :where(:root[data-theme="dark"]) .sudoku-pad-toggle {
     @apply bg-white/[0.08] border-white/[0.15] text-white;
   }
 
@@ -777,21 +818,40 @@
   }
   /* v0.5.4 错误反馈：shake + flash（500ms 后由 .is-shaking 类移除） */
   .sudoku-stat-value.is-shaking {
-    animation: error-shake 0.4s ease-in-out,
-               error-flash 0.5s ease-out;
+    animation:
+      error-shake 0.4s ease-in-out,
+      error-flash 0.5s ease-out;
   }
   @keyframes error-shake {
     /* v0.5.5 加强：shake + scale 弹跳，三通道反馈（运动 + 大小 + 颜色） */
-    0%, 100% { transform: translateX(0) scale(1); }
-    20% { transform: translateX(-6px) scale(1.15); }
-    40% { transform: translateX(6px) scale(1.25); }
-    60% { transform: translateX(-4px) scale(1.15); }
-    80% { transform: translateX(4px) scale(1.05); }
+    0%,
+    100% {
+      transform: translateX(0) scale(1);
+    }
+    20% {
+      transform: translateX(-6px) scale(1.15);
+    }
+    40% {
+      transform: translateX(6px) scale(1.25);
+    }
+    60% {
+      transform: translateX(-4px) scale(1.15);
+    }
+    80% {
+      transform: translateX(4px) scale(1.05);
+    }
   }
   @keyframes error-flash {
-    0% { background-color: transparent; }
-    25% { background-color: rgba(239, 68, 68, 0.45); border-radius: 8px; }
-    100% { background-color: transparent; }
+    0% {
+      background-color: transparent;
+    }
+    25% {
+      background-color: rgba(239, 68, 68, 0.45);
+      border-radius: 8px;
+    }
+    100% {
+      background-color: transparent;
+    }
   }
   /* v0.5.5 错误反馈加强：刚出错的 cell 短暂红框脉冲 + 轻微 scale（区别于持续红底 is-conflict） */
   .sudoku-cell.is-conflict.is-pulse {
@@ -829,10 +889,10 @@
     background: linear-gradient(135deg, #6366f1, #a855f7);
     @apply text-white border-none shadow-md;
   }
-  :where(:root[data-theme='dark']) .sudoku-diff-btn {
+  :where(:root[data-theme="dark"]) .sudoku-diff-btn {
     @apply bg-white/[0.08] border-white/[0.15] text-white;
   }
-  :where(:root[data-theme='dark']) .sudoku-diff-btn:hover {
+  :where(:root[data-theme="dark"]) .sudoku-diff-btn:hover {
     @apply bg-white/[0.15];
   }
 
@@ -853,7 +913,7 @@
     backdrop-filter: blur(15px);
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
   }
-  :where(:root[data-theme='dark']) .sudoku-stats {
+  :where(:root[data-theme="dark"]) .sudoku-stats {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .sudoku-stat-label {
@@ -899,7 +959,7 @@
     backdrop-filter: blur(20px);
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
   }
-  :where(:root[data-theme='dark']) .twenty48-board-wrap {
+  :where(:root[data-theme="dark"]) .twenty48-board-wrap {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .twenty48-board {
@@ -917,7 +977,7 @@
     backdrop-filter: blur(10px);
     @apply flex items-center justify-center;
   }
-  :where(:root[data-theme='dark']) .twenty48-cell {
+  :where(:root[data-theme="dark"]) .twenty48-cell {
     @apply bg-white/[0.05] border-white/[0.1];
   }
 
@@ -928,16 +988,52 @@
     line-height: 1;
     transition: transform 80ms ease-out;
   }
-  .twenty48-tile-2 { background: #ede9fe; color: #6366f1; }
-  .twenty48-tile-4 { background: #ddd6fe; color: #5b21b6; }
-  .twenty48-tile-8 { background: #c4b5fd; color: #4c1d95; }
-  .twenty48-tile-16 { background: #a78bfa; color: #ffffff; }
-  .twenty48-tile-32 { background: #8b5cf6; color: #ffffff; }
-  .twenty48-tile-64 { background: #7c3aed; color: #ffffff; }
-  .twenty48-tile-128 { background: #6d28d9; color: #ffffff; font-size: 24px; }
-  .twenty48-tile-256 { background: #5b21b6; color: #ffffff; font-size: 24px; }
-  .twenty48-tile-512 { background: #4c1d95; color: #ffffff; font-size: 24px; box-shadow: 0 0 24px rgba(168, 85, 247, 0.4); }
-  .twenty48-tile-1024 { background: #312e81; color: #fde047; font-size: 20px; box-shadow: 0 0 24px rgba(99, 102, 241, 0.5); }
+  .twenty48-tile-2 {
+    background: #ede9fe;
+    color: #6366f1;
+  }
+  .twenty48-tile-4 {
+    background: #ddd6fe;
+    color: #5b21b6;
+  }
+  .twenty48-tile-8 {
+    background: #c4b5fd;
+    color: #4c1d95;
+  }
+  .twenty48-tile-16 {
+    background: #a78bfa;
+    color: #ffffff;
+  }
+  .twenty48-tile-32 {
+    background: #8b5cf6;
+    color: #ffffff;
+  }
+  .twenty48-tile-64 {
+    background: #7c3aed;
+    color: #ffffff;
+  }
+  .twenty48-tile-128 {
+    background: #6d28d9;
+    color: #ffffff;
+    font-size: 24px;
+  }
+  .twenty48-tile-256 {
+    background: #5b21b6;
+    color: #ffffff;
+    font-size: 24px;
+  }
+  .twenty48-tile-512 {
+    background: #4c1d95;
+    color: #ffffff;
+    font-size: 24px;
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.4);
+  }
+  .twenty48-tile-1024 {
+    background: #312e81;
+    color: #fde047;
+    font-size: 20px;
+    box-shadow: 0 0 24px rgba(99, 102, 241, 0.5);
+  }
   .twenty48-tile-2048 {
     background: linear-gradient(135deg, #6366f1, #a855f7);
     color: #ffffff;
@@ -951,25 +1047,53 @@
     box-shadow: 0 0 40px rgba(236, 72, 153, 0.7);
   }
   /* 暗色：把 2/4 浅色背景改为半透明深紫，保持对比度 */
-  :where(:root[data-theme='dark']) .twenty48-tile-2 { background: rgba(99, 102, 241, 0.25); color: #c7d2fe; }
-  :where(:root[data-theme='dark']) .twenty48-tile-4 { background: rgba(99, 102, 241, 0.35); color: #c7d2fe; }
-  :where(:root[data-theme='dark']) .twenty48-tile-8 { background: rgba(124, 58, 237, 0.55); color: #ede9fe; }
-  :where(:root[data-theme='dark']) .twenty48-tile-16 { background: rgba(124, 58, 237, 0.7); color: #ffffff; }
-  :where(:root[data-theme='dark']) .twenty48-tile-32 { background: rgba(109, 40, 217, 0.8); color: #ffffff; }
-  :where(:root[data-theme='dark']) .twenty48-tile-64 { background: rgba(91, 33, 182, 0.9); color: #ffffff; }
+  :where(:root[data-theme="dark"]) .twenty48-tile-2 {
+    background: rgba(99, 102, 241, 0.25);
+    color: #c7d2fe;
+  }
+  :where(:root[data-theme="dark"]) .twenty48-tile-4 {
+    background: rgba(99, 102, 241, 0.35);
+    color: #c7d2fe;
+  }
+  :where(:root[data-theme="dark"]) .twenty48-tile-8 {
+    background: rgba(124, 58, 237, 0.55);
+    color: #ede9fe;
+  }
+  :where(:root[data-theme="dark"]) .twenty48-tile-16 {
+    background: rgba(124, 58, 237, 0.7);
+    color: #ffffff;
+  }
+  :where(:root[data-theme="dark"]) .twenty48-tile-32 {
+    background: rgba(109, 40, 217, 0.8);
+    color: #ffffff;
+  }
+  :where(:root[data-theme="dark"]) .twenty48-tile-64 {
+    background: rgba(91, 33, 182, 0.9);
+    color: #ffffff;
+  }
 
   /* === tile 出现/合并动画 === */
   @keyframes twenty48-pop-in {
-    0% { transform: scale(0); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
   .twenty48-cell.is-new .twenty48-tile {
     animation: twenty48-pop-in 120ms ease-out;
   }
   @keyframes twenty48-merge {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.18); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.18);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
   .twenty48-cell.is-merged .twenty48-tile {
     animation: twenty48-merge 200ms ease-out;
@@ -990,7 +1114,7 @@
     @apply rounded-2xl border border-white/60 bg-white/60 p-4;
     backdrop-filter: blur(20px);
   }
-  :where(:root[data-theme='dark']) .twenty48-stat-card {
+  :where(:root[data-theme="dark"]) .twenty48-stat-card {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .twenty48-stat-card-full {
@@ -1000,7 +1124,7 @@
     @apply text-xs font-semibold uppercase tracking-wider;
     color: #6b7280;
   }
-  :where(:root[data-theme='dark']) .twenty48-stat-label {
+  :where(:root[data-theme="dark"]) .twenty48-stat-label {
     color: #9ca3af;
   }
   .twenty48-stat-value {
@@ -1009,7 +1133,7 @@
     line-height: 1.2;
     margin-top: 4px;
   }
-  :where(:root[data-theme='dark']) .twenty48-stat-value {
+  :where(:root[data-theme="dark"]) .twenty48-stat-value {
     @apply text-white;
   }
   .twenty48-stat-value-small {
@@ -1024,7 +1148,7 @@
   .twenty48-stat-meta {
     @apply mt-2 text-sm text-gray-500;
   }
-  :where(:root[data-theme='dark']) .twenty48-stat-meta {
+  :where(:root[data-theme="dark"]) .twenty48-stat-meta {
     @apply text-white/60;
   }
 
@@ -1042,7 +1166,7 @@
     backdrop-filter: blur(20px);
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
   }
-  :where(:root[data-theme='dark']) .snake-board-wrap {
+  :where(:root[data-theme="dark"]) .snake-board-wrap {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .snake-board {
@@ -1060,7 +1184,7 @@
     backdrop-filter: blur(4px);
     transition: background 80ms ease-out;
   }
-  :where(:root[data-theme='dark']) .snake-cell {
+  :where(:root[data-theme="dark"]) .snake-cell {
     @apply bg-white/[0.04] border-white/[0.08];
   }
   /* 蛇头：紫蓝渐变 + 加白边 + 微阴影 */
@@ -1069,14 +1193,14 @@
     border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
   }
-  :where(:root[data-theme='dark']) .snake-cell.is-snake-head {
+  :where(:root[data-theme="dark"]) .snake-cell.is-snake-head {
     border-color: rgba(255, 255, 255, 0.4);
   }
   /* 蛇身：浅紫渐变 */
   .snake-cell.is-snake-body {
     background: linear-gradient(135deg, #c4b5fd, #a78bfa);
   }
-  :where(:root[data-theme='dark']) .snake-cell.is-snake-body {
+  :where(:root[data-theme="dark"]) .snake-cell.is-snake-body {
     background: linear-gradient(135deg, #6d28d9, #5b21b6);
   }
   /* 食物：暖色对比（玫红/金黄）吸引注意 */
@@ -1086,8 +1210,13 @@
     animation: snake-food-pulse 1.2s ease-in-out infinite;
   }
   @keyframes snake-food-pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.15);
+    }
   }
 
   /* v0.7.2: waiting 状态开始提示（棋盘中央 overlay，闪烁） */
@@ -1101,13 +1230,20 @@
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
     animation: snake-start-hint-pulse 1.4s ease-in-out infinite;
   }
-  :where(:root[data-theme='dark']) .snake-start-hint-text {
+  :where(:root[data-theme="dark"]) .snake-start-hint-text {
     background: rgba(30, 27, 75, 0.85);
     color: #c7d2fe;
   }
   @keyframes snake-start-hint-pulse {
-    0%, 100% { opacity: 0.7; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
+    0%,
+    100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
   }
 
   /* === 通用游戏 overlay 蒙版（v0.9.4 Tetris/Sudoku/Snake 暂停 + 开始提示） ===
@@ -1120,7 +1256,7 @@
     border-radius: var(--radius-md, 12px);
     z-index: 20;
   }
-  :where(:root[data-theme='dark']) .game-overlay {
+  :where(:root[data-theme="dark"]) .game-overlay {
     background: rgba(30, 27, 75, 0.55);
   }
   .game-overlay-text {
@@ -1130,7 +1266,7 @@
     box-shadow: 0 4px 16px rgba(99, 102, 241, 0.25);
     animation: game-overlay-pulse 1.4s ease-in-out infinite;
   }
-  :where(:root[data-theme='dark']) .game-overlay-text {
+  :where(:root[data-theme="dark"]) .game-overlay-text {
     background: rgba(30, 27, 75, 0.92);
     color: #c7d2fe;
   }
@@ -1146,7 +1282,7 @@
     box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
     animation: game-overlay-pulse 1s ease-in-out infinite;
   }
-  :where(:root[data-theme='dark']) .game-overlay-countdown {
+  :where(:root[data-theme="dark"]) .game-overlay-countdown {
     background: rgba(30, 27, 75, 0.95);
     color: #c7d2fe;
   }
@@ -1164,7 +1300,7 @@
     z-index: 20;
     pointer-events: none;
   }
-  :where(:root[data-theme='dark']) .resume-countdown {
+  :where(:root[data-theme="dark"]) .resume-countdown {
     background: rgba(30, 27, 75, 0.92);
     color: #c7d2fe;
   }
@@ -1174,12 +1310,19 @@
     padding: 2px 10px;
     border-radius: 999px;
   }
-  :where(:root[data-theme='dark']) .game-overlay-hint {
+  :where(:root[data-theme="dark"]) .game-overlay-hint {
     background: rgba(30, 27, 75, 0.6);
   }
   @keyframes game-overlay-pulse {
-    0%, 100% { opacity: 0.85; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.04); }
+    0%,
+    100% {
+      opacity: 0.85;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.04);
+    }
   }
 
   /* === 贪吃蛇 sidebar === */
@@ -1197,14 +1340,14 @@
     @apply rounded-2xl border border-white/60 bg-white/60 p-4;
     backdrop-filter: blur(20px);
   }
-  :where(:root[data-theme='dark']) .snake-stat-card {
+  :where(:root[data-theme="dark"]) .snake-stat-card {
     @apply bg-white/[0.08] border-white/[0.15];
   }
   .snake-stat-label {
     @apply text-xs font-semibold uppercase tracking-wider;
     color: #6b7280;
   }
-  :where(:root[data-theme='dark']) .snake-stat-label {
+  :where(:root[data-theme="dark"]) .snake-stat-label {
     color: #9ca3af;
   }
   .snake-stat-value {
@@ -1213,7 +1356,7 @@
     line-height: 1.2;
     margin-top: 4px;
   }
-  :where(:root[data-theme='dark']) .snake-stat-value {
+  :where(:root[data-theme="dark"]) .snake-stat-value {
     @apply text-white;
   }
   .snake-stat-value-primary {
@@ -1271,7 +1414,7 @@
   .twenty48-modal-meta {
     @apply mt-3 text-sm text-gray-500;
   }
-  :where(:root[data-theme='dark']) .twenty48-modal-meta {
+  :where(:root[data-theme="dark"]) .twenty48-modal-meta {
     @apply text-white/60;
   }
   .twenty48-newbest-msg {
@@ -1292,7 +1435,7 @@
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
 }
-:where(:root[data-theme='dark']) .gomoku-board-wrap {
+:where(:root[data-theme="dark"]) .gomoku-board-wrap {
   @apply bg-white/[0.08] border-white/[0.15];
 }
 .gomoku-board {
@@ -1306,7 +1449,7 @@
   width: calc(var(--cell-size) * 15 + var(--grid-padding) * 2);
   height: calc(var(--cell-size) * 15 + var(--grid-padding) * 2);
 }
-:where(:root[data-theme='dark']) .gomoku-board {
+:where(:root[data-theme="dark"]) .gomoku-board {
   background: linear-gradient(135deg, #8b6f3e 0%, #6b5530 100%);
 }
 .gomoku-grid {
@@ -1358,16 +1501,16 @@
   stroke: rgba(0, 0, 0, 0.75);
   stroke-width: 2;
 }
-:where(:root[data-theme='dark']) .gomoku-grid-line {
+:where(:root[data-theme="dark"]) .gomoku-grid-line {
   stroke: rgba(255, 255, 255, 0.45);
 }
-:where(:root[data-theme='dark']) .gomoku-grid-line.is-bold {
+:where(:root[data-theme="dark"]) .gomoku-grid-line.is-bold {
   stroke: rgba(255, 255, 255, 0.8);
 }
 .gomoku-star-point {
   fill: rgba(0, 0, 0, 0.7);
 }
-:where(:root[data-theme='dark']) .gomoku-star-point {
+:where(:root[data-theme="dark"]) .gomoku-star-point {
   fill: rgba(255, 255, 255, 0.85);
 }
 /* 15x15 cell 网格（点击区，铺在 SVG 之上） */
@@ -1393,13 +1536,23 @@
   transform: scale(1.1);
 }
 .gomoku-stone-black {
-  background: radial-gradient(circle at 35% 35%, #4a4a4a 0%, #1a1a1a 70%, #000 100%);
+  background: radial-gradient(
+    circle at 35% 35%,
+    #4a4a4a 0%,
+    #1a1a1a 70%,
+    #000 100%
+  );
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.4),
     inset 0 1px 2px rgba(255, 255, 255, 0.15);
 }
 .gomoku-stone-white {
-  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f0f0f0 70%, #d8d8d8 100%);
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffffff 0%,
+    #f0f0f0 70%,
+    #d8d8d8 100%
+  );
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.25),
     inset 0 1px 2px rgba(255, 255, 255, 0.6);
@@ -1419,8 +1572,15 @@
   animation: gomoku-marker-pulse 1.5s ease-in-out infinite;
 }
 @keyframes gomoku-marker-pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.3); opacity: 0.7; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
 }
 
 /* 5 连线高亮 cell */
@@ -1429,14 +1589,24 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  box-shadow: 0 0 0 3px #fbbf24, 0 0 12px rgba(251, 191, 36, 0.7);
+  box-shadow:
+    0 0 0 3px #fbbf24,
+    0 0 12px rgba(251, 191, 36, 0.7);
   pointer-events: none;
   z-index: 3;
   animation: gomoku-win-glow 1s ease-in-out infinite alternate;
 }
 @keyframes gomoku-win-glow {
-  from { box-shadow: 0 0 0 3px #fbbf24, 0 0 8px rgba(251, 191, 36, 0.5); }
-  to { box-shadow: 0 0 0 4px #fde047, 0 0 16px rgba(253, 224, 71, 0.8); }
+  from {
+    box-shadow:
+      0 0 0 3px #fbbf24,
+      0 0 8px rgba(251, 191, 36, 0.5);
+  }
+  to {
+    box-shadow:
+      0 0 0 4px #fde047,
+      0 0 16px rgba(253, 224, 71, 0.8);
+  }
 }
 
 /* === 五子棋 Sidebar === */
@@ -1448,7 +1618,7 @@
   backdrop-filter: blur(15px);
   box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1);
 }
-:where(:root[data-theme='dark']) .gomoku-status {
+:where(:root[data-theme="dark"]) .gomoku-status {
   @apply bg-white/[0.08] border-white/[0.15];
 }
 .gomoku-status-label {
@@ -1457,16 +1627,27 @@
 .gomoku-status-text {
   @apply text-xl font-bold;
 }
-.gomoku-status.is-win .gomoku-status-text { color: #10b981; }
-.gomoku-status.is-lose .gomoku-status-text { color: #ef4444; }
-.gomoku-status.is-draw .gomoku-status-text { color: #6b7280; }
+.gomoku-status.is-win .gomoku-status-text {
+  color: #10b981;
+}
+.gomoku-status.is-lose .gomoku-status-text {
+  color: #ef4444;
+}
+.gomoku-status.is-draw .gomoku-status-text {
+  color: #6b7280;
+}
 .gomoku-status.is-thinking .gomoku-status-text {
   color: #6366f1;
   animation: gomoku-thinking-pulse 1.2s ease-in-out infinite;
 }
 @keyframes gomoku-thinking-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .gomoku-section {
@@ -1491,10 +1672,10 @@
   border-color: transparent;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
 }
-:where(:root[data-theme='dark']) .gomoku-diff-btn {
+:where(:root[data-theme="dark"]) .gomoku-diff-btn {
   @apply bg-white/[0.08] border-white/[0.15];
 }
-:where(:root[data-theme='dark']) .gomoku-diff-btn:hover {
+:where(:root[data-theme="dark"]) .gomoku-diff-btn:hover {
   @apply bg-white/[0.15];
 }
 
@@ -1508,7 +1689,7 @@
 .gomoku-record-card-full {
   @apply col-span-2;
 }
-:where(:root[data-theme='dark']) .gomoku-record-card {
+:where(:root[data-theme="dark"]) .gomoku-record-card {
   @apply bg-white/[0.06] border-white/[0.12];
 }
 .gomoku-record-label {
@@ -1517,9 +1698,15 @@
 .gomoku-record-value {
   @apply text-2xl font-bold;
 }
-.gomoku-record-value-win { color: #10b981; }
-.gomoku-record-value-lose { color: #ef4444; }
-.gomoku-record-value-draw { color: #6b7280; }
+.gomoku-record-value-win {
+  color: #10b981;
+}
+.gomoku-record-value-lose {
+  color: #ef4444;
+}
+.gomoku-record-value-draw {
+  color: #6b7280;
+}
 
 .gomoku-actions {
   @apply flex;
@@ -1551,7 +1738,7 @@
   backdrop-filter: blur(20px);
   box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
 }
-:where(:root[data-theme='dark']) .npuzzle-board-wrap {
+:where(:root[data-theme="dark"]) .npuzzle-board-wrap {
   @apply bg-white/[0.08] border-white/[0.15];
 }
 .npuzzle-board {
@@ -1561,7 +1748,7 @@
   background: linear-gradient(135deg, #f4d49c 0%, #e8b878 100%);
   border-radius: 12px;
 }
-:where(:root[data-theme='dark']) .npuzzle-board {
+:where(:root[data-theme="dark"]) .npuzzle-board {
   background: linear-gradient(135deg, #8b6f3e 0%, #6b5530 100%);
 }
 .npuzzle-board.is-size-3 {
@@ -1585,17 +1772,20 @@
   border-radius: 8px;
   font-weight: 700;
   font-size: 28px;
-  transition: transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition:
+    transform 150ms cubic-bezier(0.34, 1.56, 0.64, 1),
     box-shadow 150ms ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15),
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 .npuzzle-cell:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4),
+  box-shadow:
+    0 4px 12px rgba(99, 102, 241, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 .npuzzle-cell:disabled {
@@ -1618,10 +1808,14 @@
 }
 @keyframes npuzzle-win-pulse {
   from {
-    box-shadow: 0 0 0 2px #fbbf24, 0 4px 12px rgba(251, 191, 36, 0.6);
+    box-shadow:
+      0 0 0 2px #fbbf24,
+      0 4px 12px rgba(251, 191, 36, 0.6);
   }
   to {
-    box-shadow: 0 0 0 4px #fde047, 0 4px 16px rgba(253, 224, 71, 0.8);
+    box-shadow:
+      0 0 0 4px #fde047,
+      0 4px 16px rgba(253, 224, 71, 0.8);
   }
 }
 
@@ -1652,10 +1846,10 @@
   border-color: transparent;
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
 }
-:where(:root[data-theme='dark']) .npuzzle-diff-btn {
+:where(:root[data-theme="dark"]) .npuzzle-diff-btn {
   @apply bg-white/[0.08] border-white/[0.15];
 }
-:where(:root[data-theme='dark']) .npuzzle-diff-btn:hover {
+:where(:root[data-theme="dark"]) .npuzzle-diff-btn:hover {
   @apply bg-white/[0.15];
 }
 .npuzzle-stats {
@@ -1665,7 +1859,7 @@
   @apply p-3 rounded-xl border border-white/40 bg-white/30 text-center;
   backdrop-filter: blur(10px);
 }
-:where(:root[data-theme='dark']) .npuzzle-stat-card {
+:where(:root[data-theme="dark"]) .npuzzle-stat-card {
   @apply bg-white/[0.06] border-white/[0.12];
 }
 .npuzzle-stat-label {
@@ -1684,7 +1878,7 @@
   @apply p-3 rounded-xl border border-white/40 bg-white/30 text-center;
   backdrop-filter: blur(10px);
 }
-:where(:root[data-theme='dark']) .npuzzle-best-card {
+:where(:root[data-theme="dark"]) .npuzzle-best-card {
   @apply bg-white/[0.06] border-white/[0.12];
 }
 .npuzzle-best-label {
@@ -1708,5 +1902,281 @@
   @apply text-sm leading-relaxed opacity-80 m-0 text-center;
 }
 .npuzzle-modal-meta {
+  @apply mt-2 text-sm opacity-70;
+}
+
+/* === 泡泡龙 (Bubble Shooter) 棋盘 + cell + sidebar === */
+.bubble-game {
+  @apply flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:justify-center;
+}
+.bubble-board-area {
+  @apply relative;
+}
+.bubble-board-wrap {
+  @apply inline-block p-3 rounded-2xl border border-white/60 bg-white/40;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+:where(:root[data-theme="dark"]) .bubble-board-wrap {
+  @apply bg-white/[0.08] border-white/[0.15];
+}
+.bubble-board {
+  @apply relative overflow-hidden rounded-lg;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  cursor: crosshair;
+}
+:where(:root[data-theme="dark"]) .bubble-board {
+  background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+}
+.bubble-board.is-paused {
+  cursor: default;
+}
+.bubble-board.is-lost {
+  background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
+  animation: bubble-lost-flash 0.5s ease-in-out 3;
+}
+.bubble-board.is-won {
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  animation: bubble-won-glow 1s ease-in-out infinite;
+}
+@keyframes bubble-lost-flash {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
+}
+@keyframes bubble-won-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+/* 单个泡泡 cell：六边形 clip-path + 球面高光 + 外部光晕（v1.0.2） */
+.bubble-cell {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.15),
+    0 0 6px rgba(255, 255, 255, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms ease;
+}
+.bubble-cell:hover {
+  transform: scale(1.05);
+}
+.bubble-cell.bubble-flying {
+  z-index: 10;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+  pointer-events: none;
+}
+.bubble-cell.is-snap {
+  animation: bubble-snap 240ms ease-out;
+}
+.bubble-highlight {
+  position: absolute;
+  top: 12%;
+  left: 22%;
+  width: 35%;
+  height: 30%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.7) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+@keyframes bubble-snap {
+  0% {
+    transform: scale(1.25);
+    filter: brightness(1.4);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+/* 暗色模式加重发光 */
+:where(:root[data-theme="dark"]) .bubble-cell {
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(255, 255, 255, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* 消除粒子（v1.0.2） */
+.bubble-particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 8;
+  animation: bubble-particle 480ms ease-out forwards;
+}
+@keyframes bubble-particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: var(--fly-to) scale(0.2);
+    opacity: 0;
+  }
+}
+
+/* 飞行尾迹（v1.0.2） */
+.bubble-trail {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* 发射器：底部居中 */
+.bubble-shooter {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.4),
+    0 2px 8px rgba(99, 102, 241, 0.4);
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* 瞄准线：虚线 + 落点指示（v1.0.2） */
+.bubble-aim-line {
+  position: absolute;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6) 0px,
+    rgba(255, 255, 255, 0.6) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  transform-origin: left center;
+  pointer-events: none;
+  z-index: 4;
+}
+.bubble-aim-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  z-index: 4;
+  animation: bubble-aim-pulse 1.4s ease-in-out infinite;
+}
+@keyframes bubble-aim-pulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+/* === 泡泡龙 Sidebar === */
+.bubble-sidebar {
+  @apply flex flex-col gap-4 w-full max-w-xs;
+}
+.bubble-section {
+  @apply flex flex-col gap-2;
+}
+.bubble-section-label {
+  @apply text-xs uppercase tracking-wider opacity-60;
+}
+.bubble-stat-card {
+  @apply p-4 rounded-xl border border-white/40 bg-white/30 text-center;
+  backdrop-filter: blur(10px);
+}
+:where(:root[data-theme="dark"]) .bubble-stat-card {
+  @apply bg-white/[0.06] border-white/[0.12];
+}
+.bubble-stat-value {
+  @apply text-3xl font-bold tabular-nums;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.bubble-score-card .bubble-stat-value {
+  @apply text-4xl;
+}
+.bubble-next-row {
+  @apply flex items-center justify-center gap-3 p-4 rounded-xl border border-white/40 bg-white/30;
+  backdrop-filter: blur(10px);
+}
+:where(:root[data-theme="dark"]) .bubble-next-row {
+  @apply bg-white/[0.06] border-white/[0.12];
+}
+.bubble-mini-bubble {
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  position: relative;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.bubble-mini-highlight {
+  position: absolute;
+  top: 15%;
+  left: 25%;
+  width: 30%;
+  height: 25%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.6) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+.bubble-next-arrow {
+  @apply text-2xl opacity-50;
+}
+.bubble-actions {
+  @apply flex gap-2;
+}
+
+/* 规则区 */
+.bubble-rules-section {
+  max-width: 720px;
+  margin: 2rem auto 0;
+}
+.bubble-rule-oneliner {
+  @apply text-sm leading-relaxed opacity-80 m-0;
+}
+.bubble-modal-meta {
   @apply mt-2 text-sm opacity-70;
 }

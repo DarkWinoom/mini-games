@@ -52,6 +52,7 @@ Output goes to `dist/` and can be deployed to any static host
 | Snake | ✅ Done | 20×20 classic direction control, eat food to grow, 180° reverse prevention |
 | Gomoku | ✅ Done | 15×15 board, 3 AI difficulties (Random / Heuristic / Minimax), AI thinking highlights candidate points |
 | N-Puzzle | ✅ Done | Classic sliding puzzle, 3×3 (8-puzzle) / 4×4 (15-puzzle) sizes, single-step undo, per-size best records |
+| Bubble Shooter | ✅ Done | 12-row brick-layout board, 6 colors, 3+ match to pop, isolated bubbles fall, keyboard + mouse aim, focus auto-pause |
 
 ## Custom Language Packs
 

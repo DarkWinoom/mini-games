@@ -37,6 +37,8 @@ export const locale: LocaleDict = {
   "home.gomoku.description": "经典五子连珠，三档 AI 难度。",
   "home.npuzzle.title": "数字华容道",
   "home.npuzzle.description": "经典滑块拼图，3×3 / 4×4 两档。",
+  "home.bubble.title": "泡泡龙",
+  "home.bubble.description": "发射泡泡，3+ 同色消除，挑战高分。",
 
   // Footer
   "footer.copyright": "© 2026 小游戏合集",
@@ -225,4 +227,36 @@ export const locale: LocaleDict = {
   "npuzzle.modal.leave.confirm": "确认返回",
   "npuzzle.modal.leave.cancel": "继续游戏",
   "npuzzle.backHome": "返回主页",
+
+  // 泡泡龙
+  "bubble.title": "泡泡龙",
+  "bubble.newGame": "新游戏",
+  "bubble.pause": "暂停",
+  "bubble.resume": "继续",
+  "bubble.score": "分数",
+  "bubble.best": "最高分",
+  "bubble.next": "下一发",
+  "bubble.paused": "已暂停",
+  "bubble.pauseHint": "按 Space 继续",
+  "bubble.controls.title": "按键说明",
+  "bubble.controls.aimLR": "瞄准",
+  "bubble.controls.shoot": "发射",
+  "bubble.controls.pause": "暂停 / 继续",
+  "bubble.controls.mouse": "鼠标",
+  "bubble.controls.mouseDesc": "移动瞄准 / 点击发射",
+  "bubble.controls.restart": "重开",
+  "bubble.rules.title": "规则与玩法",
+  "bubble.rules.oneLiner":
+    "瞄准并发射泡泡，3 个或以上同色连成一片即消除，消除后无支撑的孤立泡泡会掉落。清除所有泡泡即胜利，触到顶部危险线则失败。",
+  "bubble.modal.win.title": "胜利！",
+  "bubble.modal.win.body": "你成功清除了所有泡泡。",
+  "bubble.modal.lose.title": "游戏结束",
+  "bubble.modal.lose.body": "泡泡触到了顶部危险线。",
+  "bubble.modal.newBest": "🎉 新纪录！",
+  "bubble.modal.leave.title": "确认清空并返回主页？",
+  "bubble.modal.leave.body":
+    "返回主页将清空当前对局的分数，下次进入相当于新游戏。",
+  "bubble.modal.leave.confirm": "确认返回",
+  "bubble.modal.leave.cancel": "继续游戏",
+  "bubble.backHome": "返回主页",
 };
