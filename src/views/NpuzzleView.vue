@@ -157,7 +157,7 @@ function formatTime(s: number): string {
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen container-x">
+  <div class="flex flex-col min-h-screen container-x has-fixed-header">
     <Header />
     <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
     <GamePageHeader title-key="npuzzle.title" @back-home="tryBackHome" />

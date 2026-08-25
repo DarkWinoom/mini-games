@@ -168,7 +168,7 @@ onBeforeRouteLeave((to, _from, next) => {
 </script>
 
 <template>
-  <div class="container-x min-h-screen flex flex-col">
+  <div class="container-x min-h-screen flex flex-col has-fixed-header">
     <Header />
     <!-- v0.9.6: 顶部标题块（游戏名 + 返回主页） -->
     <GamePageHeader title-key="tetris.title" @back-home="tryBackHome" />

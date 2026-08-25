@@ -7,6 +7,10 @@
   html {
     font-size: 16px;
   }
+  /* 锁源：site header 固定高度，供 view 模板用 padding-top 占位 */
+  :root {
+    --header-h: 72px;
+  }
   body {
     font-family:
       "Inter",
@@ -126,6 +130,53 @@
   }
   :where(:root[data-theme="dark"]) .btn-ghost:hover {
     @apply bg-white/[0.08];
+  }
+
+  /* === Site Header（v1.x：滚动时毛玻璃 + 阴影，fixed top 0，全宽延伸） === */
+  .site-header {
+    @apply z-50;
+    /* fixed 脱离文档流，width 100% = viewport（含 scrollbar）天然全宽无溢出 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    /* 锁死高度，避免 is-scrolled padding 变化导致 sticky 抖动 */
+    height: var(--header-h);
+    background: transparent;
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+    border-bottom: 1px solid transparent;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    transition:
+      background-color 250ms ease,
+      backdrop-filter 250ms ease,
+      -webkit-backdrop-filter 250ms ease,
+      box-shadow 250ms ease,
+      border-color 250ms ease;
+  }
+  /* inner 容器：内容仍 1200px 居中（max-w-1200px mx-auto px-8） */
+  .site-header-inner {
+    max-width: 1200px;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 2rem; /* 左右 padding-8 */
+  }
+  .site-header.is-scrolled {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  }
+  :where(:root[data-theme="dark"]) .site-header.is-scrolled {
+    background: rgba(15, 23, 42, 0.75);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+  /* 给所有 view 模板用：fixed header 占位，避免内容跑到 header 后 */
+  .has-fixed-header {
+    padding-top: var(--header-h);
   }
 
   /* === 自写 Select / Dropdown（不依赖 <select>） === */
