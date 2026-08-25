@@ -284,6 +284,9 @@ function inspectLine(
 /**
  * 返回 (r, c) 处 player 的最强棋型
  * 4 方向中取分值最高
+ *
+ * v0.x 修复：FOUR (冲四) 1 端是墙 或 1 端是对手子 = 死四 = 0 分（不能成 5 连）
+ * OPEN_FOUR (活四) 不变（2 端空 = 必胜）
  */
 export function bestPatternAt(
   board: Board,
@@ -296,7 +299,11 @@ export function bestPatternAt(
   let bestScore = PATTERN_SCORES.ONE;
   for (const { dr, dc } of DIRECTIONS) {
     const { count, openEnds } = inspectLine(board, r, c, dr, dc, player);
-    const p = classifyPattern(count, openEnds);
+    let p = classifyPattern(count, openEnds);
+    // 死四过滤：FOUR 但 1 端堵（墙或对手子）= 实际不能 5 连
+    if (p === "FOUR" && !isLiveFour(board, r, c, dr, dc, player)) {
+      p = "ONE"; // 死四降为 1 子（避免误评估为高分）
+    }
     const s = PATTERN_SCORES[p];
     if (s > bestScore) {
       best = p;
@@ -304,6 +311,58 @@ export function bestPatternAt(
     }
   }
   return best;
+}
+
+/**
+ * 死四检测：FOUR 但 1 端是墙 = 不能 5 连 = 死四
+ * - 1 端空 + 1 端是墙 (越界) → 死四（永远凑不成 5 连）
+ * - 1 端空 + 1 端是对手子 → 活冲四（落另 1 端 = 5 连胜，对手必堵）
+ * - OPEN_FOUR (2 端空) 永远算活
+ * - 2 端都是对手子 → 死四（对手已全堵, 不能 5 连）
+ */
+function isLiveFour(
+  board: Board,
+  r: number,
+  c: number,
+  dr: number,
+  dc: number,
+  player: Player,
+): boolean {
+  if (board[r][c] !== player) return false;
+  // 数连续 + 两端开闭
+  let count = 1;
+  let nr = r + dr;
+  let nc = c + dc;
+  while (isInBounds(nr, nc) && board[nr][nc] === player) {
+    count++;
+    nr += dr;
+    nc += dc;
+  }
+  // 端点 (nr, nc) = count 连续段之后的 1 格
+  const endInBounds = isInBounds(nr, nc);
+  const endIsOpen = endInBounds && board[nr][nc] === 0;
+  // 反方向
+  nr = r - dr;
+  nc = c - dc;
+  while (isInBounds(nr, nc) && board[nr][nc] === player) {
+    count++;
+    nr -= dr;
+    nc -= dc;
+  }
+  const startInBounds = isInBounds(nr, nc);
+  const startIsOpen = startInBounds && board[nr][nc] === 0;
+  // OPEN_FOUR = 2 端都空 → 活
+  if (count === 4 && endIsOpen && startIsOpen) return true;
+  // FOUR 1 端空 + 1 端是墙（越界）= 死四
+  if (count === 4 && endIsOpen && !startInBounds) return false;
+  if (count === 4 && !endInBounds && startIsOpen) return false;
+  // FOUR 1 端空 + 1 端是对手子 → 活冲四（落另 1 端 = 5 连胜）
+  // 这种情况不降级, 仍算 FOUR
+  // FOUR 2 端都是对手子 = 死四
+  if (count === 4 && !endIsOpen && !startIsOpen) {
+    return endIsOpen || startIsOpen; // false = 死
+  }
+  return true;
 }
 
 /* ============================================================================
@@ -380,19 +439,32 @@ function getBestMoveEasy(board: Board, player: Player): Move | null {
  * Medium：Easy 基础 + 1 步 lookahead
  * 评分 = 自己下在该点 + 对手下一步最佳应对的反向分
  * 必胜 / 必阻挡：先扫一遍（业界标准：AI 永远不漏绝杀 / 不漏必败）
+ * v0.x：必胜/必败检查升级到 OPEN_FOUR
  */
 function getBestMoveMedium(board: Board, player: Player): Move | null {
   const candidates = getCandidateMoves(board, 1);
   if (candidates.length === 0) return null;
   const opponent: Player = player === 1 ? 2 : 1;
 
-  // 1. 必胜：自己能成 5 的点
+  // 1. 必胜：自己能凑 OPEN_FOUR（2 端空 = 必胜）
+  for (const m of candidates) {
+    if (scoreMoveFor(board, m.row, m.col, player) >= PATTERN_SCORES.OPEN_FOUR) {
+      return m;
+    }
+  }
+  // 2. 必阻挡：对手能凑 OPEN_FOUR
+  for (const m of candidates) {
+    if (scoreMoveFor(board, m.row, m.col, opponent) >= PATTERN_SCORES.OPEN_FOUR) {
+      return m;
+    }
+  }
+  // 3. 必胜：自己能成 5
   for (const m of candidates) {
     if (scoreMoveFor(board, m.row, m.col, player) >= PATTERN_SCORES.FIVE) {
       return m;
     }
   }
-  // 2. 必阻挡：对手能成 5 的点（无论难度都不能漏）
+  // 4. 必阻挡：对手能成 5
   for (const m of candidates) {
     if (scoreMoveFor(board, m.row, m.col, opponent) >= PATTERN_SCORES.FIVE) {
       return m;
@@ -481,19 +553,32 @@ function minimax(
 
 /**
  * Hard：minimax 深度 2 + alpha-beta + 必胜/必败优先
+ * v0.x：必胜/必败检查升级到 OPEN_FOUR（2 端空 = 必胜, 对手必败）
  */
 function getBestMoveHard(board: Board, player: Player): Move | null {
   const candidates = getCandidateMoves(board, 2);
   if (candidates.length === 0) return null;
   const opponent: Player = player === 1 ? 2 : 1;
 
-  // 1. 检查必胜：自己能 5 连的点
+  // 1. 检查必胜：自己能凑 OPEN_FOUR（2 端空 = 必胜，对手只能堵 1 端）
+  for (const m of candidates) {
+    if (scoreMoveFor(board, m.row, m.col, player) >= PATTERN_SCORES.OPEN_FOUR) {
+      return m;
+    }
+  }
+  // 2. 检查必阻挡：对手能凑 OPEN_FOUR
+  for (const m of candidates) {
+    if (scoreMoveFor(board, m.row, m.col, opponent) >= PATTERN_SCORES.OPEN_FOUR) {
+      return m;
+    }
+  }
+  // 3. 检查必胜：自己能 5 连
   for (const m of candidates) {
     if (scoreMoveFor(board, m.row, m.col, player) >= PATTERN_SCORES.FIVE) {
       return m;
     }
   }
-  // 2. 检查必阻挡：对手能 5 连的点
+  // 4. 检查必阻挡：对手能 5 连
   for (const m of candidates) {
     if (scoreMoveFor(board, m.row, m.col, opponent) >= PATTERN_SCORES.FIVE) {
       return m;
@@ -784,6 +869,41 @@ if (import.meta.env?.DEV) {
   console.assert(
     e26Ok,
     `[engine] getBestMove Hard 必阻挡, got (${e26Best?.row}, ${e26Best?.col})`,
+  );
+
+  // v0.x fix: AI 3 连靠边界时，必须选 OPEN_FOUR（必胜），不是死四（边界堵）
+  // 场景：白（AI）3 连 (7,11)(7,12)(7,13)，下 (7,10) = OPEN_FOUR（必胜），下 (7,14) = 死四（边界）
+  const e27board = createEmptyBoard();
+  e27board[7][11] = 2; e27board[7][12] = 2; e27board[7][13] = 2; // 白 3 连
+  // 模拟落子 (7, 10) → 白应凑 4 连 (7,10-13) 2 端空 = OPEN_FOUR
+  e27board[7][10] = 2; // 模拟白走 (7, 10)
+  console.assert(
+    bestPatternAt(e27board, 7, 11, 2) === "OPEN_FOUR",
+    `[engine] 边界 3 连 + (7,10) 凑 OPEN_FOUR, got ${bestPatternAt(e27board, 7, 11, 2)}`,
+  );
+  // 模拟落子 (7, 14) → 白应凑 4 连 (7,11-14) 1 端空 (7,10) + 1 端堵边界 = FOUR（死四，不能 5 连）
+  e27board[7][10] = 0; // 清掉
+  e27board[7][14] = 2;
+  console.assert(
+    bestPatternAt(e27board, 7, 12, 2) === "FOUR",
+    `[engine] 边界 3 连 + (7,14) 凑 FOUR (死四), got ${bestPatternAt(e27board, 7, 12, 2)}`,
+  );
+  // 期望 Hard 选 (7, 10) — OPEN_FOUR 必胜，不是 (7, 14) 死四
+  e27board[7][14] = 0; // 清掉，让 AI 决定
+  const e27Best = getBestMove(e27board, 2, "hard");
+  const e27Ok =
+    e27Best !== null && e27Best.row === 7 && e27Best.col === 10;
+  console.assert(
+    e27Ok,
+    `[engine] getBestMove Hard 边界 3 连应选 (7,10) OPEN_FOUR, got (${e27Best?.row}, ${e27Best?.col})`,
+  );
+  // Medium 同样期望
+  const e28Best = getBestMove(e27board, 2, "medium");
+  const e28Ok =
+    e28Best !== null && e28Best.row === 7 && e28Best.col === 10;
+  console.assert(
+    e28Ok,
+    `[engine] getBestMove Medium 边界 3 连应选 (7,10) OPEN_FOUR, got (${e28Best?.row}, ${e28Best?.col})`,
   );
 
   // newGameState
