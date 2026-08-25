@@ -44,6 +44,8 @@ export interface LocaleDict {
   "home.gomoku.description": string;
   "home.npuzzle.title": string;
   "home.npuzzle.description": string;
+  "home.bubble.title": string;
+  "home.bubble.description": string;
 
   // Footer
   "footer.copyright": string;
@@ -221,6 +223,36 @@ export interface LocaleDict {
   "npuzzle.modal.leave.confirm": string;
   "npuzzle.modal.leave.cancel": string;
   "npuzzle.backHome": string;
+
+  // 泡泡龙 (Bubble Shooter)
+  "bubble.title": string;
+  "bubble.newGame": string;
+  "bubble.pause": string;
+  "bubble.resume": string;
+  "bubble.score": string;
+  "bubble.best": string;
+  "bubble.next": string;
+  "bubble.paused": string;
+  "bubble.pauseHint": string;
+  "bubble.controls.title": string;
+  "bubble.controls.aimLR": string;
+  "bubble.controls.shoot": string;
+  "bubble.controls.pause": string;
+  "bubble.controls.mouse": string;
+  "bubble.controls.mouseDesc": string;
+  "bubble.controls.restart": string;
+  "bubble.rules.title": string;
+  "bubble.rules.oneLiner": string;
+  "bubble.modal.win.title": string;
+  "bubble.modal.win.body": string;
+  "bubble.modal.lose.title": string;
+  "bubble.modal.lose.body": string;
+  "bubble.modal.newBest": string;
+  "bubble.modal.leave.title": string;
+  "bubble.modal.leave.body": string;
+  "bubble.modal.leave.confirm": string;
+  "bubble.modal.leave.cancel": string;
+  "bubble.backHome": string;
 }
 
 export interface LocaleInfo {

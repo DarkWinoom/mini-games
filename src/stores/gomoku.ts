@@ -9,7 +9,7 @@ import {
   newGameState,
 } from "@/games/gomoku/engine";
 import { playSfx } from "@/composables/useSFX";
-import type { Difficulty, GameState, Move, Player } from "@/games/gomoku/types";
+import type { Difficulty, GameState, Move } from "@/games/gomoku/types";
 
 /** localStorage key：玩家胜利累计 */
 const BEST_WINS_KEY = "mini-games.gomoku.bestWins";

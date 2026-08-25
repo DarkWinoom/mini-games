@@ -142,7 +142,10 @@ export type SfxName =
   | "tspin-mini"
   | "combo"
   | "gameover"
-  | "pause";
+  | "pause"
+  | "bubble-shoot"
+  | "bubble-pop"
+  | "bubble-fall";
 
 export function playSfx(name: SfxName): void {
   switch (name) {
@@ -198,6 +201,18 @@ export function playSfx(name: SfxName): void {
       break;
     case "pause":
       tone(300, 0.06, 0.06, "sine");
+      break;
+    case "bubble-shoot":
+      // 泡泡龙发射：220Hz triangle + 0.05s + 0.07（轻快"啵"声）
+      tone(220, 0.05, 0.07, "triangle");
+      break;
+    case "bubble-pop":
+      // 泡泡龙消除 3+ 个：600Hz sine + 0.08s + 0.08（清脆"啵啵啵"）
+      tone(600, 0.08, 0.08, "sine");
+      break;
+    case "bubble-fall":
+      // 泡泡龙掉落孤立泡泡：sweep 500→150 / 0.2s / 0.08（落体"嗖"）
+      sweep(500, 150, 0.2, 0.08, "sine");
       break;
   }
 }

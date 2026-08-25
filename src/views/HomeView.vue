@@ -74,6 +74,8 @@ function importLang() {
           @play="router.push('/gomoku')" />
         <GameCard icon="🧩" :title="t('home.npuzzle.title')" :description="t('home.npuzzle.description')"
           @play="router.push('/npuzzle')" />
+        <GameCard icon="🫧" :title="t('home.bubble.title')" :description="t('home.bubble.description')"
+          @play="router.push('/bubble')" />
       </div>
     </main>
 
