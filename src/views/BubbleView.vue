@@ -180,7 +180,7 @@ const pauseHint = computed(() => t("bubble.pauseHint"));
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen container-x">
+  <div class="flex flex-col min-h-screen container-x has-fixed-header">
     <Header />
     <GamePageHeader title-key="bubble.title" @back-home="tryBackHome" />
 

@@ -50,7 +50,7 @@ function importLang() {
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen container-x">
+  <div class="flex flex-col min-h-screen container-x has-fixed-header">
     <Header />
 
     <main class="flex flex-col items-center flex-1 py-20 text-center">
