@@ -1,0 +1,467 @@
+.tetris-cell.I,
+.tetris-preview-cell.I {
+  background: linear-gradient(135deg, #00a8ec, #0084b8);
+}
+.tetris-cell.O,
+.tetris-preview-cell.O {
+  background: linear-gradient(135deg, #fcd000, #d8a800);
+}
+.tetris-cell.T,
+.tetris-preview-cell.T {
+  background: linear-gradient(135deg, #a020f0, #8000c0);
+}
+.tetris-cell.S,
+.tetris-preview-cell.S {
+  background: linear-gradient(135deg, #44ec00, #2cb800);
+}
+.tetris-cell.Z,
+.tetris-preview-cell.Z {
+  background: linear-gradient(135deg, #ec1c24, #c01418);
+}
+.tetris-cell.J,
+.tetris-preview-cell.J {
+  background: linear-gradient(135deg, #4040e0, #2828b0);
+}
+.tetris-cell.L,
+.tetris-preview-cell.L {
+  background: linear-gradient(135deg, #f08000, #c06800);
+}
+.tetris-cell.ghost {
+  background: transparent !important;
+  box-shadow: inset 0 0 0 1px currentColor;
+  opacity: 0.4;
+}
+.tetris-preview {
+  display: grid;
+  grid-template-columns: repeat(4, 14px);
+  grid-template-rows: repeat(2, 14px);
+  gap: 1px;
+  padding: 1px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+:where(:root[data-theme="dark"]) .tetris-preview {
+  background: rgba(0, 0, 0, 0.4);
+}
+.tetris-preview-cell {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 2px;
+}
+:where(:root[data-theme="dark"]) .tetris-preview-cell {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+@keyframes event-flash-in {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes event-flash-out {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+@keyframes error-shake {
+  0%,
+  100% {
+    transform: translateX(0) scale(1);
+  }
+  20% {
+    transform: translateX(-6px) scale(1.15);
+  }
+  40% {
+    transform: translateX(6px) scale(1.25);
+  }
+  60% {
+    transform: translateX(-4px) scale(1.15);
+  }
+  80% {
+    transform: translateX(4px) scale(1.05);
+  }
+}
+@keyframes error-flash {
+  0% {
+    background-color: transparent;
+  }
+  25% {
+    background-color: rgba(239, 68, 68, 0.45);
+    border-radius: 8px;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+.sudoku-cell.is-conflict.is-pulse {
+  animation: conflict-pulse 0.6s ease-out;
+}
+@keyframes conflict-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+  30% {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.6);
+    transform: scale(1.08);
+  }
+  60% {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4);
+    transform: scale(1.04);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+    transform: scale(1);
+  }
+}
+@keyframes twenty48-pop-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.twenty48-cell.is-new .twenty48-tile {
+  animation: twenty48-pop-in 120ms ease-out;
+}
+@keyframes twenty48-merge {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.twenty48-cell.is-merged .twenty48-tile {
+  animation: twenty48-merge 200ms ease-out;
+}
+@keyframes snake-food-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+@keyframes snake-start-hint-pulse {
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+@keyframes game-overlay-pulse {
+  0%,
+  100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+.gomoku-stone {
+  position: absolute;
+  width: calc(var(--cell-size) * 0.82);
+  height: calc(var(--cell-size) * 0.82);
+  border-radius: 50%;
+  z-index: 1;
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: none;
+}
+.gomoku-cell:not(:disabled):hover .gomoku-stone {
+  transform: scale(1.1);
+}
+.gomoku-stone-black {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #4a4a4a 0%,
+    #1a1a1a 70%,
+    #000 100%
+  );
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
+}
+.gomoku-stone-white {
+  background: radial-gradient(
+    circle at 35% 35%,
+    #ffffff 0%,
+    #f0f0f0 70%,
+    #d8d8d8 100%
+  );
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  border: 1px solid #b0b0b0;
+}
+.gomoku-last-marker {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  z-index: 2;
+  pointer-events: none;
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  animation: gomoku-marker-pulse 1.5s ease-in-out infinite;
+}
+@keyframes gomoku-marker-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+}
+.gomoku-cell.is-winning::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3px #fbbf24,
+    0 0 12px rgba(251, 191, 36, 0.7);
+  pointer-events: none;
+  z-index: 3;
+  animation: gomoku-win-glow 1s ease-in-out infinite alternate;
+}
+@keyframes gomoku-win-glow {
+  from {
+    box-shadow:
+      0 0 0 3px #fbbf24,
+      0 0 8px rgba(251, 191, 36, 0.5);
+  }
+  to {
+    box-shadow:
+      0 0 0 4px #fde047,
+      0 0 16px rgba(253, 224, 71, 0.8);
+  }
+}
+@keyframes gomoku-thinking-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+@keyframes npuzzle-win-pulse {
+  from {
+    box-shadow:
+      0 0 0 2px #fbbf24,
+      0 4px 12px rgba(251, 191, 36, 0.6);
+  }
+  to {
+    box-shadow:
+      0 0 0 4px #fde047,
+      0 4px 16px rgba(253, 224, 71, 0.8);
+  }
+}
+.bubble-board-area {
+}
+.bubble-board-wrap {
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(99, 102, 241, 0.15);
+}
+:where(:root[data-theme="dark"]) .bubble-board-wrap {
+}
+.bubble-board {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  cursor: crosshair;
+}
+:where(:root[data-theme="dark"]) .bubble-board {
+  background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+}
+.bubble-board.is-paused {
+  cursor: default;
+}
+.bubble-board.is-lost {
+  background: linear-gradient(180deg, #7f1d1d 0%, #450a0a 100%);
+  animation: bubble-lost-flash 0.5s ease-in-out 3;
+}
+.bubble-board.is-won {
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 100%);
+  animation: bubble-won-glow 1s ease-in-out infinite;
+}
+@keyframes bubble-lost-flash {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.5);
+  }
+}
+@keyframes bubble-won-glow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+.bubble-cell {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.15),
+    0 0 6px rgba(255, 255, 255, 0.25),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 200ms ease;
+}
+.bubble-cell:hover {
+  transform: scale(1.05);
+}
+.bubble-cell.bubble-flying {
+  z-index: 10;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+  pointer-events: none;
+}
+.bubble-cell.is-snap {
+  animation: bubble-snap 240ms ease-out;
+}
+.bubble-highlight {
+  position: absolute;
+  top: 12%;
+  left: 22%;
+  width: 35%;
+  height: 30%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 255, 255, 0.7) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+@keyframes bubble-snap {
+  0% {
+    transform: scale(1.25);
+    filter: brightness(1.4);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+:where(:root[data-theme="dark"]) .bubble-cell {
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.35),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.25),
+    0 0 10px rgba(255, 255, 255, 0.2),
+    0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.bubble-particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 8;
+  animation: bubble-particle 480ms ease-out forwards;
+}
+@keyframes bubble-particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.9;
+  }
+  100% {
+    transform: var(--fly-to) scale(0.2);
+    opacity: 0;
+  }
+}
+.bubble-trail {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  pointer-events: none;
+  z-index: 6;
+}
+.bubble-shooter {
+  position: absolute;
+  width: 32px;
+  height: 28px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.4),
+    0 2px 8px rgba(99, 102, 241, 0.4);
+  z-index: 5;
+  pointer-events: none;
+}
+.bubble-aim-line {
+  position: absolute;
+  height: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.6) 0px,
+    rgba(255, 255, 255, 0.6) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  transform-origin: left center;
+  pointer-events: none;
+  z-index: 4;
+}
+.bubble-aim-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  margin-top: -8px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  z-index: 4;
+  animation: bubble-aim-pulse 1.4s ease-in-out infinite;
+}
+@keyframes bubble-aim-pulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}

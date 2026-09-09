@@ -1,6 +1,4 @@
-import type { LocaleDict } from "@/i18n/types";
-
-export const locale: LocaleDict = {
+export const locale = {
   // Common
   "common.appName": "Mini Games Collection",
   "common.play": "Play",
@@ -39,7 +37,8 @@ export const locale: LocaleDict = {
   "home.npuzzle.title": "N-Puzzle",
   "home.npuzzle.description": "Classic sliding puzzle. 3×3 / 4×4.",
   "home.bubble.title": "Bubble Shooter",
-  "home.bubble.description": "Shoot bubbles. Match 3+ colors. Beat your high score.",
+  "home.bubble.description":
+    "Shoot bubbles. Match 3+ colors. Beat your high score.",
 
   // Footer
   "footer.copyright": "© 2026 Mini Games Collection",
@@ -141,11 +140,13 @@ export const locale: LocaleDict = {
   "twenty48.controls.undo": "Undo",
   "twenty48.controls.restart": "Restart",
   "twenty48.modal.win.title": "You reached 2048!",
-  "twenty48.modal.win.body": "Congrats on hitting 2048! Want to keep going for higher?",
+  "twenty48.modal.win.body":
+    "Congrats on hitting 2048! Want to keep going for higher?",
   "twenty48.modal.win.continue": "Keep Going",
   "twenty48.modal.win.newBest": "🎉 New Best!",
   "twenty48.modal.over.title": "Game Over",
-  "twenty48.modal.over.body": "The board is full and no more moves are possible.",
+  "twenty48.modal.over.body":
+    "The board is full and no more moves are possible.",
   "twenty48.modal.leave.title": "Clear progress and leave?",
   "twenty48.modal.leave.body":
     "Going back to home will clear your current score and moves. The next visit will start a new game.",
@@ -250,11 +251,11 @@ export const locale: LocaleDict = {
   "bubble.controls.restart": "Restart",
   "bubble.rules.title": "Rules & How to Play",
   "bubble.rules.oneLiner":
-    "Aim and shoot bubbles. Match 3+ same-color bubbles to pop them. Isolated bubbles with no anchor will fall. Clear all bubbles to win; reach the top line and you lose.",
+    "Aim and shoot bubbles. Match 3+ same-color bubbles to pop them. Isolated bubbles with no anchor will fall. Clear all bubbles to win; reach the bottom line and you lose.",
   "bubble.modal.win.title": "You Won!",
   "bubble.modal.win.body": "You successfully cleared all bubbles.",
   "bubble.modal.lose.title": "Game Over",
-  "bubble.modal.lose.body": "Bubbles reached the top line.",
+  "bubble.modal.lose.body": "Bubbles reached the bottom line.",
   "bubble.modal.newBest": "🎉 New Best!",
   "bubble.modal.leave.title": "Clear progress and leave?",
   "bubble.modal.leave.body":
@@ -262,4 +263,62 @@ export const locale: LocaleDict = {
   "bubble.modal.leave.confirm": "Leave",
   "bubble.modal.leave.cancel": "Keep Playing",
   "bubble.backHome": "Back to Home",
+  "arcade.eyebrow": "YOUR POCKET-SIZED ARCADE",
+  "arcade.heading": "Old-school games.",
+  "arcade.headingAccent": "New favorite breaks.",
+  "arcade.pick": "PICK YOUR GAME",
+  "arcade.count": "{count} games",
+  "arcade.free": "NO COINS. JUST GOOD TIMES.",
+  "arcade.favorite": "Favorite",
+  "arcade.unfavorite": "Unfavorite",
+  "arcade.back": "Back to game room",
+  "arcade.newGame": "New game",
+  "arcade.controls": "Controls",
+  "arcade.ready": "Ready to play",
+  "arcade.running": "Playing",
+  "arcade.paused": "Paused",
+  "arcade.won": "You won",
+  "arcade.lost": "Game over",
+  "arcade.draw": "Draw",
+  "arcade.newBest": "New best",
+  "arcade.startHint": "Use the controls to start",
+  "arcade.pauseHint": "Use Resume to continue",
+  "arcade.start": "Start",
+  "arcade.leaveTitle": "Leave this game?",
+  "arcade.leaveBody": "This run will end. Your best records will be kept.",
+  "arcade.leave": "Leave game",
+  "arcade.left": "Left",
+  "arcade.right": "Right",
+  "arcade.up": "Up",
+  "arcade.down": "Down",
+  "arcade.rotate": "Rotate",
+  "arcade.rotateBack": "Rotate left",
+  "arcade.soft": "Soft drop",
+  "arcade.hard": "Hard drop",
+  "arcade.hold": "Hold",
+  "arcade.undo": "Undo",
+  "arcade.tetrisRule":
+    "Fill horizontal lines to clear them. The game ends when the stack reaches the top.",
+  "arcade.snakeRule": "Eat to grow. Avoid the walls and your own body.",
+  "arcade.twenty48Rule":
+    "Slide to merge equal tiles. Reach 2048 and keep going.",
+  "arcade.sudokuRule":
+    "Fill each row, column and box with 1–9. Three mistakes end the game.",
+  "arcade.notes": "Notes",
+  "arcade.erase": "Erase",
+  "arcade.enterNumber": "Enter a number",
+  "arcade.selectCell": "Select cell",
+  "arcade.settings": "Settings",
+  "arcade.importName": "Language name / code",
+  "arcade.importBody":
+    "Paste a JSON language pack. Missing entries use English.",
+  "arcade.importError": "Provide a language name and valid text entries.",
+  "arcade.selectGame": "SELECT YOUR GAME",
+  "arcade.solo": "CLASSIC · SOLO",
+  "arcade.loading": "Loading game…",
+  "arcade.retry": "Retry",
+  "arcade.loadError": "The game could not load. Please try again.",
+  "arcade.cell": "Row {row}, column {col}",
+  "arcade.current": "Current",
+  "arcade.next": "Next",
 };

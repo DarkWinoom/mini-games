@@ -1,92 +1,77 @@
-# Mini Games Collection
+# Mini Games
 
-A small collection of casual browser games.
-No backend, no tracking, no install — just static files.
+Seven classic games in a little retro arcade. Open your browser, pick a game, and take a break.
 
-[Play Now](https://dw-mini-games.netlify.app/)
+**[Play now](https://dw-mini-games.netlify.app/)** · English | [简体中文](./README.zh-CN.md)
 
-English | [中文](./README.zh-CN.md)
+![The Mini Games arcade](./docs/home-en-US.png)
 
-![Mini Games Collection](./docs/home-en-US.jpg)
+## Pick your game
 
-## Quick Start
+| Game           | How to play                                                                                         |
+| -------------- | --------------------------------------------------------------------------------------------------- |
+| Tetris         | Rotate falling blocks and fill horizontal lines. Save a piece for later and see what's coming next. |
+| Sudoku         | Fill each row, column and box with 1–9. Three difficulties, pencil notes and a three-mistake limit. |
+| 2048           | Slide matching numbers together. Reach 2048, then keep going. Undo your last move when needed.      |
+| Snake          | Eat to grow. Keep clear of the walls and your own tail.                                             |
+| Gomoku         | Connect five stones before the computer does. Choose from three AI difficulties.                    |
+| N-Puzzle       | Slide the numbers into order on a 3×3 or 4×4 board. Undo moves and improve your time.               |
+| Bubble Shooter | Aim and shoot matching colors. Groups of three or more pop, and unsupported bubbles fall.           |
 
-Requires [Node.js](https://nodejs.org/) 20+ and [pnpm](https://pnpm.io/) 11+.
+The game room scrolls as the collection grows. Click a star to pin a favorite to the front; click it again to remove the favorite.
 
-```bash
+## At the controls
+
+Every game shows its controls below the screen. Action buttons display the same shortcut keys and names.
+
+| Game              | Main controls                                                                                                                       |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Tetris            | ←/→ or A/D to move; ↑/W to rotate; Z to rotate left; ↓/S to soft drop; Space to drop; C/Shift to hold; P to start, pause or resume. |
+| Sudoku            | Click a cell and use 1–9 or the number pad. N toggles notes; Delete/Backspace clears a cell.                                        |
+| 2048 / Snake      | Arrow keys, WASD or swipe. U undoes a move in 2048; Space starts, pauses or resumes Snake.                                          |
+| Gomoku / N-Puzzle | Click or tap the board. U undoes a move in N-Puzzle.                                                                                |
+| Bubble Shooter    | Move the pointer to aim and click to shoot, or aim and tap on a touchscreen. Space pauses or resumes.                               |
+
+**R** starts a new game. **Esc** returns to the game room. Leaving an unfinished run asks for confirmation. Smaller screens also show touch controls for the directional games.
+
+![Tetris running inside the arcade cabinet](./docs/arcade-tetris.png)
+
+## Make yourself at home
+
+- **Language:** Chinese and English are included. Your first visit uses your browser language; your choice is then remembered. Click the language name to switch.
+- **Favorites:** Starred games stay at the front after you refresh.
+- **Appearance:** Choose a light room, a dark room, or follow your system theme.
+- **Sound:** The header switch controls game sound effects.
+- **Records:** Best scores and records are saved in this browser. A current run ends when you leave or reload; records do not sync between devices. Clearing browser data removes them.
+
+Settings also accepts custom JSON language packs. Missing entries fall back to English, so a pack can be extended over time.
+
+In Sudoku notes mode on small screens, a dot marks a cell with notes. Select the cell to read its notes in the panel.
+
+The games run entirely in your browser. No account or backend is required.
+
+## Run locally
+
+Use a recent Node.js release (22+ recommended) and pnpm 11.
+
+```sh
 pnpm install
 pnpm dev
 ```
 
-Open `http://localhost:5173` in your browser.
+Open the local address printed in the terminal, usually `http://localhost:5173`.
 
-### Common Scripts
-
-```bash
-pnpm dev         # start the dev server
-pnpm build       # type-check and bundle to dist/
-pnpm preview     # preview the production build locally
-pnpm typecheck   # type-check only (vue-tsc)
+```sh
+pnpm test       # behavior regression tests
+pnpm typecheck  # TypeScript checks
+pnpm build      # create the static site in dist/
+pnpm preview    # preview the production build
 ```
 
-Output goes to `dist/` and can be deployed to any static host
-(GitHub Pages, Cloudflare Pages, Vercel, etc.).
+The `dist/` folder can be hosted on a static web host. Games use hash routes, so opening or refreshing a game does not require server-side routing rules.
 
-## Tech Stack
+## About
 
-- **Framework**: [Vue 3](https://vuejs.org/) 3.5
-- **Routing**: [vue-router](https://router.vuejs.org/) 4
-- **State**: [Pinia](https://pinia.vuejs.org/) 2
-- **Styling**: [Tailwindcss](https://tailwindcss.com/) 3
-- **Build**: [Vite](https://vitejs.dev/) 5
-- **Types**: [TypeScript](https://www.typescriptlang.org/) 5
-- **Package Manager**: [pnpm](https://pnpm.io/) 11
+Made by [DarkWinoom](https://github.com/DarkWinoom). Found a problem or have a game idea? [Open an issue](https://github.com/DarkWinoom/mini-games/issues).
 
-## Games
-
-| Game | Status | Description |
-| ---- | ------ | ----------- |
-| Tetris | ✅ Done | Classic 10×20 grid, SRS rotation, 7-bag randomizer, Hold / Next 3, T-Spin / Back-to-Back / Combo / SFX |
-| Sudoku | ✅ Done | 9×9 grid, 3 difficulty levels, 3-error fail, notes mode, per-difficulty best times |
-| 2048 | ✅ Done | 4×4 sliding merge, 1-step undo, challenge 2048 / 4096+ |
-| Snake | ✅ Done | 20×20 classic direction control, eat food to grow, 180° reverse prevention |
-| Gomoku | ✅ Done | 15×15 board, 3 AI difficulties (Random / Heuristic / Minimax), AI thinking highlights candidate points |
-| N-Puzzle | ✅ Done | Classic sliding puzzle, 3×3 (8-puzzle) / 4×4 (15-puzzle) sizes, single-step undo, per-size best records |
-| Bubble Shooter | ✅ Done | 12-row brick-layout board, 6 colors, 3+ match to pop, isolated bubbles fall, keyboard + mouse aim, focus auto-pause |
-
-## Custom Language Packs
-
-Built-in languages: Chinese (zh-CN) and English (en-US). Browser language is
-auto-detected; the header has a manual switcher.
-
-To add a custom language pack:
-
-1. Click "Custom Language" in the footer
-2. Paste a JSON blob (same structure as the built-in packs)
-3. Save — it takes effect immediately and shows up in the language list
-
-## Theme
-
-Three modes:
-
-- Light (default)
-- Dark
-- System (follow OS)
-
-Click the theme icon in the header to cycle (☀️ / 🌙 / 🌗).
-Your choice is persisted in the browser.
-
-## Sound
-
-A global mute toggle in the header controls SFX for all games.
-Click the speaker icon (🔊 / 🔇) to silence or restore; the choice is
-persisted in the browser. Hover any header button for a tooltip.
-
-## Contributing
-
-Issues, pull requests, and new game ideas are welcome.
-Please keep game rules consistent with the classic versions.
-
-## License
-
-[MIT](./LICENSE)
+Released under the [MIT License](./LICENSE).

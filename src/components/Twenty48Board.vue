@@ -29,7 +29,7 @@ let prevGrid: Grid | null = null;
 
 watch(
   () => props.grid,
-  (newGrid) => {
+  (newGrid, _oldGrid, onCleanup) => {
     const next = ensureStateMatrix();
     if (prevGrid !== null) {
       for (let r = 0; r < BOARD_SIZE; r++) {
@@ -49,10 +49,11 @@ watch(
 
     // 200ms 后清掉 new / merged（保留视觉效果一次）
     if (prevGrid !== null) {
-      window.setTimeout(() => {
+      const timer = window.setTimeout(() => {
         const cleared = ensureStateMatrix();
         cellStates.value = cleared;
       }, 200);
+      onCleanup(() => window.clearTimeout(timer));
     }
   },
   { deep: true },
@@ -68,11 +69,7 @@ function stateClass(r: number, c: number): string {
 
 <template>
   <div class="twenty48-board">
-    <div
-      v-for="(_, r) in BOARD_SIZE"
-      :key="`row-${r}`"
-      class="twenty48-row"
-    >
+    <div v-for="(_, r) in BOARD_SIZE" :key="`row-${r}`" class="twenty48-row">
       <div
         v-for="(_, c) in BOARD_SIZE"
         :key="`cell-${r}-${c}`"

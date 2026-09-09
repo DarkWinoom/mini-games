@@ -1,60 +1,19 @@
-import {
-  createRouter,
-  createWebHashHistory,
-  type RouteRecordRaw,
-} from "vue-router";
-
-const routes: RouteRecordRaw[] = [
-  {
-    path: "/",
-    name: "home",
-    component: () => import("@/views/HomeView.vue"),
-  },
-  {
-    path: "/tetris",
-    name: "tetris",
-    component: () => import("@/views/TetrisView.vue"),
-  },
-  {
-    path: "/sudoku",
-    name: "sudoku",
-    component: () => import("@/views/SudokuView.vue"),
-  },
-  {
-    path: "/twenty48",
-    name: "twenty48",
-    component: () => import("@/views/Twenty48View.vue"),
-  },
-  {
-    path: "/snake",
-    name: "snake",
-    component: () => import("@/views/SnakeView.vue"),
-  },
-  {
-    path: "/gomoku",
-    name: "gomoku",
-    component: () => import("@/views/GomokuView.vue"),
-  },
-  {
-    path: "/npuzzle",
-    name: "npuzzle",
-    component: () => import("@/views/NpuzzleView.vue"),
-  },
-  {
-    path: "/bubble",
-    name: "bubble",
-    component: () => import("@/views/BubbleView.vue"),
-  },
-  {
-    path: "/:pathMatch(.*)*",
-    redirect: "/",
-  },
-];
-
+import { createRouter, createWebHashHistory } from "vue-router";
+import { games } from "@/games/registry";
 export const router = createRouter({
   history: createWebHashHistory(),
-  routes,
-  scrollBehavior() {
-    return { top: 0 };
-  },
+  routes: [
+    {
+      path: "/",
+      name: "home",
+      component: () => import("@/views/HomeView.vue"),
+    },
+    ...games.map((game) => ({
+      path: game.path,
+      name: game.id,
+      component: game.load,
+    })),
+    { path: "/:pathMatch(.*)*", redirect: "/" },
+  ],
+  scrollBehavior: () => ({ top: 0 }),
 });

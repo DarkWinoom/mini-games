@@ -1,14 +1,15 @@
 {
   "name": "mini-games",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "A web collection of small games (Tetris, Sudoku, N-Puzzle). Vue 3 + Vite + TypeScript.",
+  "description": "A retro browser arcade with seven classic games, favorites, and multilingual controls.",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
-    "typecheck": "vue-tsc -b --noEmit"
+    "typecheck": "vue-tsc -b --noEmit",
+    "test": "node scripts/test.mjs"
   },
   "dependencies": {
     "pinia": "^2.2.6",
@@ -20,6 +21,7 @@
     "@types/node": "^20.10.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "autoprefixer": "^10.4.20",
+    "esbuild": "0.21.5",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
     "typescript": "^5.9.3",

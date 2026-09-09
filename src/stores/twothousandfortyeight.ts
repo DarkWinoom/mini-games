@@ -9,7 +9,11 @@ import {
   addRandomTile,
 } from "@/games/twothousandfortyeight/engine";
 import { playSfx } from "@/composables/useSFX";
-import type { Grid, Direction, UndoSnapshot } from "@/games/twothousandfortyeight/types";
+import type {
+  Grid,
+  Direction,
+  UndoSnapshot,
+} from "@/games/twothousandfortyeight/types";
 
 /** localStorage key：最高分 */
 const BEST_KEY = "mini-games.twenty48.best";
@@ -57,6 +61,7 @@ export const useTwenty48Store = defineStore("twenty48", () => {
   const bestScore = ref<number>(readBest());
   /** 本局是否破纪录（won 时计算，newGame 清空） */
   const isNewBest = ref<boolean>(false);
+  let continued = false;
 
   /* === Computed === */
   const score = computed(() => state.value.score);
@@ -73,6 +78,7 @@ export const useTwenty48Store = defineStore("twenty48", () => {
 
   /** 新游戏（清空所有状态） */
   function newGame(): void {
+    continued = false;
     state.value = newGameState();
     isNewBest.value = false;
   }
@@ -85,10 +91,11 @@ export const useTwenty48Store = defineStore("twenty48", () => {
   function move(dir: Direction): void {
     if (state.value.status !== "playing") return;
 
-    const { grid: newGrid, moved, score: gained } = engineMove(
-      state.value.grid,
-      dir,
-    );
+    const {
+      grid: newGrid,
+      moved,
+      score: gained,
+    } = engineMove(state.value.grid, dir);
     if (!moved) return;
 
     // 写 prev（用于 undo）
@@ -102,7 +109,11 @@ export const useTwenty48Store = defineStore("twenty48", () => {
     let nextStatus: GameState["status"] = "playing";
 
     // 判定 won
-    if (engineHasWon(newGrid) && state.value.status === "playing") {
+    if (
+      !continued &&
+      engineHasWon(newGrid) &&
+      state.value.status === "playing"
+    ) {
       nextStatus = "won";
       // 破纪录检测
       if (nextScore > bestScore.value) {
@@ -166,6 +177,7 @@ export const useTwenty48Store = defineStore("twenty48", () => {
    */
   function continueGame(): void {
     if (state.value.status !== "won") return;
+    continued = true;
     state.value = {
       ...state.value,
       status: "playing",

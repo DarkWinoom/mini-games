@@ -6,7 +6,13 @@ import {
   isOpposite,
 } from "@/games/snake/engine";
 import { playSfx } from "@/composables/useSFX";
-import type { Grid, Point, Direction, Status, Snake } from "@/games/snake/types";
+import type {
+  Grid,
+  Point,
+  Direction,
+  Status,
+  Snake,
+} from "@/games/snake/types";
 import { TICK_MS } from "@/games/snake/types";
 
 /** localStorage key：最高分 */
@@ -174,6 +180,10 @@ export const useSnakeStore = defineStore("snake", () => {
    * 这里只是单纯改 status=paused + stopTick，立即生效不需玩家后续操作。
    */
   function pauseOnly(): void {
+    if (state.value.status === "paused") {
+      stopResumeCountdown();
+      return;
+    }
     if (state.value.status !== "playing") return;
     state.value = { ...state.value, status: "paused" };
     stopTick();
@@ -277,7 +287,7 @@ export const useSnakeStore = defineStore("snake", () => {
     state,
     bestScore,
     isNewBest,
-    resumeCountdown,  // v0.9.5: 恢复倒计时
+    resumeCountdown, // v0.9.5: 恢复倒计时
     // computed
     score,
     snakeLength,

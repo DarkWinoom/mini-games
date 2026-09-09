@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { useI18n } from "@/composables/useI18n";
+const { t } = useI18n();
 import { BOARD_SIZE, type Cell } from "@/games/gomoku/types";
 
 /**
@@ -136,13 +138,8 @@ function isBold(idx: number): boolean {
     </svg>
 
     <!-- 15x15 cell 网格（点击区） -->
-    <div class="gomoku-grid" role="grid" aria-label="Gomoku board">
-      <div
-        v-for="r in indices"
-        :key="`row-${r}`"
-        class="gomoku-row"
-        role="row"
-      >
+    <div class="gomoku-grid" role="grid" :aria-label="t('gomoku.title')">
+      <div v-for="r in indices" :key="`row-${r}`" class="gomoku-row" role="row">
         <button
           v-for="c in indices"
           :key="`cell-${r}-${c}`"
@@ -153,7 +150,7 @@ function isBold(idx: number): boolean {
             'is-winning': isWinning(r, c),
           }"
           :disabled="props.disabled || cellAt(r, c) !== 0"
-          :aria-label="`cell ${r} ${c}`"
+          :aria-label="t('arcade.cell', { row: r + 1, col: c + 1 })"
           @click="onCellClick(r, c)"
         >
           <div

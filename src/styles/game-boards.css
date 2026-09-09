@@ -1,0 +1,502 @@
+.swipe-board {
+  touch-action: none;
+}
+.gomoku-row {
+  display: contents;
+}
+.gomoku-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.gomoku-grid {
+  display: grid;
+  position: relative;
+  z-index: 1;
+}
+.gomoku-grid-svg {
+  position: absolute;
+  pointer-events: none;
+}
+.gomoku-grid-line {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1;
+}
+.tetris-preview {
+  display: grid;
+}
+.tetris-preview-cell {
+  border-radius: 1px;
+  background: #34463c;
+}
+.sudoku-cell.is-pulse {
+  animation: sudoku-error-pulse 0.6s ease-in-out;
+}
+.tetris-board {
+  display: grid;
+  width: min(100%, 260px);
+  aspect-ratio: 1/2;
+  margin: auto;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  grid-template-rows: repeat(20, minmax(0, 1fr));
+  gap: 1px;
+  background: #0d1916;
+  border: 1px solid #57705b;
+  border-radius: 4px;
+  padding: 2px;
+  box-shadow: none;
+}
+.tetris-cell {
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  background: #192c24;
+  border-radius: 1px;
+  border: 0;
+}
+.tetris-preview {
+  width: max-content;
+  grid-template-columns: repeat(4, 18px);
+  grid-template-rows: repeat(2, 18px);
+  box-shadow: none;
+}
+.tetris-cell.I,
+.tetris-preview-cell.I {
+  background: #9ebdc0;
+}
+.tetris-cell.O,
+.tetris-preview-cell.O {
+  background: #e6b858;
+}
+.tetris-cell.T,
+.tetris-preview-cell.T {
+  background: #ca9ba6;
+}
+.tetris-cell.S,
+.tetris-preview-cell.S {
+  background: #b4d0b7;
+}
+.tetris-cell.Z,
+.tetris-preview-cell.Z {
+  background: #c86452;
+}
+.tetris-cell.J,
+.tetris-preview-cell.J {
+  background: #a6b9cd;
+}
+.tetris-cell.L,
+.tetris-preview-cell.L {
+  background: #cf7955;
+}
+.sudoku-board {
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  background: #eee6d2;
+  border: 2px solid #6d6350;
+  box-shadow: none;
+  color: #302e29;
+}
+.sudoku-row {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+.sudoku-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: auto;
+  height: auto;
+  aspect-ratio: 1;
+  background: transparent;
+  border-right: 1px solid #b3a88e;
+  border-bottom: 1px solid #b3a88e;
+  cursor: pointer;
+}
+.sudoku-cell.box-right {
+  border-right: 2px solid #6d6350;
+}
+.sudoku-row > .sudoku-cell.box-bottom {
+  border-bottom: 2px solid #6d6350;
+}
+.sudoku-cell.col-last {
+  border-right: 0;
+}
+.sudoku-cell.row-last {
+  border-bottom: 0;
+}
+.sudoku-cell-value {
+  font-size: clamp(18px, 2vw, 25px);
+  font-weight: 500;
+  color: #ac4932;
+}
+.sudoku-cell.is-given .sudoku-cell-value {
+  color: #34392f;
+  font-weight: bold;
+}
+.sudoku-cell.is-same-box {
+  background: #ded6be;
+}
+.sudoku-cell.is-same-number {
+  background: #d6d1ad;
+}
+.sudoku-cell.is-selected {
+  background: #eac47f;
+  box-shadow: inset 0 0 0 2px #a76a28;
+}
+.sudoku-cell.is-conflict {
+  background: #ecc0ac;
+}
+.sudoku-notes-grid {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  height: 100%;
+}
+.sudoku-notes-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.sudoku-notes-cell {
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  line-height: 1;
+  color: #4c5445;
+}
+.candidate-notes {
+  font-size: 14px;
+  color: #b4d0b7;
+}
+.twenty48-board {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 1;
+  margin: auto;
+  padding: 8px;
+  gap: 8px;
+  background: #736f59;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: none;
+}
+.twenty48-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.twenty48-cell {
+  position: relative;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  aspect-ratio: 1;
+  background: #aaa48b;
+  border-radius: 4px;
+}
+.twenty48-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+  font:
+    700 clamp(20px, 3vw, 36px) "Courier New",
+    monospace;
+  border-radius: 4px;
+  background: #efbf5b;
+  color: #3d3020;
+  box-shadow: inset 0 2px #fff3;
+}
+.twenty48-tile-2 {
+  background: #e8dfc9;
+  color: #4a4537;
+}
+.twenty48-tile-4 {
+  background: #e8ce9d;
+  color: #4a4537;
+}
+.twenty48-tile-8 {
+  background: #dba368;
+  color: #33291d;
+}
+.twenty48-tile-16 {
+  background: #c9774b;
+  color: #fff8e7;
+}
+.twenty48-tile-32 {
+  background: #b95437;
+  color: #fff8e7;
+}
+.twenty48-tile-64 {
+  background: #8d3c2c;
+  color: #fff8e7;
+}
+.twenty48-tile-128,
+.twenty48-tile-256,
+.twenty48-tile-512,
+.twenty48-tile-1024,
+.twenty48-tile-2048 {
+  background: #efbf5b;
+  color: #3d3020;
+  box-shadow: inset 0 2px #fff3;
+  font-size: clamp(18px, 2.4vw, 28px);
+}
+.snake-board {
+  display: grid;
+  width: 100%;
+  max-width: 450px;
+  aspect-ratio: 1;
+  margin: auto;
+  grid-template-rows: repeat(20, minmax(0, 1fr));
+  gap: 1px;
+  padding: 3px;
+  background: #0d1916;
+  border: 1px solid #57705b;
+  border-radius: 4px;
+}
+.snake-row {
+  display: grid;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  gap: 1px;
+}
+.snake-cell {
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 1px;
+  background: #192c24;
+}
+.snake-cell.is-snake-body {
+  background: #759c78;
+}
+.snake-cell.is-snake-head {
+  background: #c6d8a3;
+}
+.snake-cell.is-food {
+  background: #c76d4b;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #e1a65a55;
+}
+.gomoku-board {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 10px solid #c1a477;
+  border-radius: 7px;
+  background: #dbc18d;
+  margin: auto;
+  box-shadow: none;
+}
+.gomoku-grid {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  grid-template-columns: repeat(15, minmax(0, 1fr));
+  grid-template-rows: repeat(15, minmax(0, 1fr));
+}
+.gomoku-cell {
+  width: auto;
+  height: auto;
+  aspect-ratio: 1;
+  min-width: 0;
+  min-height: 0;
+  opacity: 1 !important;
+}
+.gomoku-grid-svg {
+  left: calc(100% / 30);
+  top: calc(100% / 30);
+  width: calc(100% * 14 / 15);
+  height: calc(100% * 14 / 15);
+}
+.gomoku-stone {
+  width: 82%;
+  height: 82%;
+}
+.gomoku-grid-line {
+  stroke: #655638;
+}
+.gomoku-grid-line.is-bold {
+  stroke: #655638;
+  stroke-width: 1.3px;
+}
+.gomoku-star-point {
+  fill: #655638;
+}
+.gomoku-cell.is-last .gomoku-stone:after {
+  content: "";
+  position: absolute;
+  left: 43%;
+  top: 43%;
+  width: 14%;
+  height: 14%;
+  background: #c86a36;
+  border-radius: 50%;
+}
+.npuzzle-board {
+  display: grid;
+  width: 100%;
+  max-width: 430px;
+  aspect-ratio: 1;
+  height: auto;
+  margin: auto;
+  padding: 8px;
+  gap: 8px;
+  background: #827454;
+  box-shadow: none;
+  border-radius: 6px;
+}
+.npuzzle-board.is-size-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+}
+.npuzzle-board.is-size-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+}
+.npuzzle-row {
+  display: contents;
+}
+.npuzzle-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  min-width: 0;
+  border: 0;
+  border-radius: 4px;
+  background: #ddc794 !important;
+  color: #403821 !important;
+  font:
+    700 clamp(22px, 3vw, 36px) "Courier New",
+    monospace;
+  box-shadow:
+    inset 0 2px #fff4,
+    0 3px #4a3c2866;
+}
+.npuzzle-cell.is-empty {
+  background: #a99d7d !important;
+  box-shadow: none;
+}
+.bubble-board-wrap {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  touch-action: none;
+  width: 480px;
+  height: 394px;
+  background: #12251e;
+}
+.bubble-board {
+  background: #12251e;
+  border: 0;
+  overflow: visible;
+}
+.bubble-queue {
+  display: flex;
+  gap: 12px;
+}
+.bubble-token {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: block;
+  box-shadow: inset -3px -3px #0003;
+}
+.bubble-token.red {
+  background: #ef7184;
+}
+.bubble-token.blue {
+  background: #60a5fa;
+}
+.bubble-token.green {
+  background: #34d399;
+}
+.bubble-token.yellow {
+  background: #fcd34d;
+}
+.bubble-token.purple {
+  background: #c084fc;
+}
+.bubble-token.orange {
+  background: #fb923c;
+}
+:root[data-theme="dark"] .sudoku-board {
+  background: #eee6d2;
+  border-color: #6d6350;
+}
+:root[data-theme="dark"] .sudoku-cell {
+  border-color: #b3a88e;
+}
+:root[data-theme="dark"] .sudoku-cell-value {
+  color: #ac4932;
+}
+:root[data-theme="dark"] .sudoku-cell.is-given .sudoku-cell-value {
+  color: #34392f;
+}
+:root[data-theme="dark"] .sudoku-notes-cell {
+  color: #4c5445;
+}
+:root[data-theme="dark"] .sudoku-cell.is-selected {
+  background: #eac47f;
+}
+:root[data-theme="dark"] .gomoku-board {
+  background: #dbc18d;
+}
+:root[data-theme="dark"] .gomoku-grid-line,
+:root[data-theme="dark"] .gomoku-grid-line.is-bold {
+  stroke: #655638;
+}
+:root[data-theme="dark"] .gomoku-star-point {
+  fill: #655638;
+}
+@media (max-width: 1000px) {
+  .sudoku-notes-row {
+    display: none;
+  }
+  .sudoku-notes-grid {
+    display: grid;
+    place-items: center;
+  }
+  .sudoku-notes-grid:after {
+    content: "•";
+    font-size: 14px;
+  }
+}
+@media (max-width: 700px) {
+  .tetris-board {
+    max-width: 220px;
+  }
+  .twenty48-board,
+  .npuzzle-board {
+    gap: 5px;
+    padding: 6px;
+  }
+  .twenty48-row {
+    gap: 5px;
+  }
+  .twenty48-tile {
+    font-size: 24px;
+  }
+  .twenty48-tile-1024,
+  .twenty48-tile-2048 {
+    font-size: 18px;
+  }
+}

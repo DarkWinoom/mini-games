@@ -1,108 +1,96 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
-import type { LocaleCode, LocaleDict, LocaleInfo } from "@/i18n/types";
-import { detectBrowserLocale } from "@/i18n/detect";
-import { locale as zhCN } from "@/locales/zh-CN";
-import { locale as enUS } from "@/locales/en-US";
-
-const STORAGE_KEY_LANG = "ui.lang";
-const STORAGE_KEY_CUSTOM = "ui.customLocale";
-
-// 内置 + 自定义都用同一个 Map 存，t() 都从这里查
-const registry = new Map<LocaleCode, LocaleDict>([
-  ["zh-CN", zhCN],
-  ["en-US", enUS],
-]);
-const builtinSet = new Set<LocaleCode>(["zh-CN", "en-US"]);
+import { computed, reactive, shallowRef } from "vue";
+import type { LocaleCode, LocaleDict } from "@/i18n/types";
+import { locale as en } from "@/locales/en-US";
+import { locale as zh } from "@/locales/zh-CN";
+import { readStorage, writeStorage } from "@/utils/storage";
 
 export const useI18nStore = defineStore("i18n", () => {
-  const currentLocale = ref<LocaleCode>("en-US");
-
-  const locales = computed<LocaleInfo[]>(() => {
-    const out: LocaleInfo[] = [];
-    registry.forEach((_, code) => {
-      out.push({
-        code,
-        name: code === "zh-CN" ? "中文" : code === "en-US" ? "English" : code,
-        isBuiltin: builtinSet.has(code),
-      });
-    });
-    return out;
-  });
-
-  function init(): void {
-    // 恢复自定义语言包
-    const customRaw = localStorage.getItem(STORAGE_KEY_CUSTOM);
-    if (customRaw) {
-      try {
-        const parsed = JSON.parse(customRaw) as {
-          code: string;
-          dict: LocaleDict;
-        };
-        registerLocale(parsed.code, parsed.dict);
-      } catch {
-        localStorage.removeItem(STORAGE_KEY_CUSTOM);
-      }
-    }
-
-    // 决定当前语言
-    const saved = localStorage.getItem(STORAGE_KEY_LANG);
-    if (saved && registry.has(saved)) {
-      currentLocale.value = saved;
-    } else {
-      currentLocale.value = detectBrowserLocale();
-    }
-  }
-
+  const registry = reactive(
+    new Map<string, Partial<LocaleDict>>([
+      ["zh-CN", zh],
+      ["en-US", en],
+    ]),
+  );
+  const currentLocale = shallowRef<LocaleCode>("en-US");
+  const locales = computed(() =>
+    [...registry.keys()].map((code) => ({
+      code,
+      name: code === "zh-CN" ? "简体中文" : code === "en-US" ? "English" : code,
+      isBuiltin: code === "zh-CN" || code === "en-US",
+    })),
+  );
   function t(
     key: keyof LocaleDict,
     params?: Record<string, string | number>,
   ): string {
-    const dict = registry.get(currentLocale.value) || registry.get("en-US")!;
-    const en = registry.get("en-US")!;
-    let value = dict[key] || en[key] || (key as string);
-    if (params) {
-      for (const [k, v] of Object.entries(params)) {
-        value = value.replace(new RegExp(`\\{${k}\\}`, "g"), String(v));
-      }
-    }
+    let value = registry.get(currentLocale.value)?.[key] || en[key] || key;
+    for (const [name, replacement] of Object.entries(params ?? {}))
+      value = value.split(`{${name}}`).join(String(replacement));
     return value;
   }
-
-  function setLang(code: LocaleCode): void {
-    if (!registry.has(code)) {
-      console.warn(`[i18n] unknown locale: ${code}`);
-      return;
-    }
+  function setLang(code: string) {
+    if (!registry.has(code)) return;
     currentLocale.value = code;
-    localStorage.setItem(STORAGE_KEY_LANG, code);
+    writeStorage("ui.lang", code);
+    document.documentElement.lang = code;
   }
-
-  function registerLocale(code: LocaleCode, dict: LocaleDict): void {
-    registry.set(code, dict);
+  function validateDict(value: unknown): { ok: boolean; missing: string[] } {
+    const ok =
+      !!value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      Object.keys(value).length > 0 &&
+      Object.values(value).every((item) => typeof item === "string");
+    return {
+      ok,
+      missing: ok
+        ? Object.keys(en).filter((key) => !(key in (value as object)))
+        : [],
+    };
   }
-
-  function saveCustomLocale(code: LocaleCode, dict: LocaleDict): void {
+  function registerLocale(code: string, dict: Partial<LocaleDict>) {
+    if (code !== "zh-CN" && code !== "en-US" && validateDict(dict).ok)
+      registry.set(code, dict);
+  }
+  function saveCustomLocale(code: string, dict: Partial<LocaleDict>) {
     registerLocale(code, dict);
-    localStorage.setItem(STORAGE_KEY_CUSTOM, JSON.stringify({ code, dict }));
+    writeStorage("ui.customLocale", JSON.stringify({ code, dict }));
     setLang(code);
   }
-
-  function validateDict(dict: Partial<LocaleDict>): {
-    ok: boolean;
-    missing: string[];
-  } {
-    const ref = registry.get("en-US")!;
-    const required = Object.keys(ref) as (keyof LocaleDict)[];
-    const missing = required.filter((k) => !(k in dict));
-    return { ok: missing.length === 0, missing };
+  function init() {
+    try {
+      const custom = JSON.parse(readStorage("ui.customLocale") || "null");
+      if (custom && typeof custom.code === "string")
+        registerLocale(custom.code, custom.dict);
+    } catch {
+      /* Ignore invalid imported JSON. */
+    }
+    const saved = readStorage("ui.lang");
+    if (saved && registry.has(saved)) {
+      setLang(saved);
+      return;
+    }
+    for (const browserLocale of navigator.languages || [navigator.language]) {
+      const found =
+        [...registry.keys()].find(
+          (code) => code.toLowerCase() === browserLocale.toLowerCase(),
+        ) ||
+        [...registry.keys()].find(
+          (code) => code.split("-")[0] === browserLocale.split("-")[0],
+        );
+      if (found) {
+        setLang(found);
+        return;
+      }
+    }
+    setLang("en-US");
   }
-
   return {
     currentLocale,
     locales,
-    init,
     t,
+    init,
     setLang,
     registerLocale,
     saveCustomLocale,

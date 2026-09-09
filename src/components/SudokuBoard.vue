@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, onUnmounted } from "vue";
+import { useI18n } from "@/composables/useI18n";
+const { t } = useI18n();
 import { BOARD_SIZE, BOX_SIZE } from "@/games/sudoku/types";
 import { isGivenCell } from "@/games/sudoku/engine";
 import type { Grid, CellPosition } from "@/games/sudoku/types";
@@ -146,12 +148,9 @@ function notesAsGrid(notesSet: Set<number>): boolean[][] {
 
 <template>
   <div class="sudoku-board">
-    <div
-      v-for="(_, row) in BOARD_SIZE"
-      :key="`row-${row}`"
-      class="sudoku-row"
-    >
-      <div
+    <div v-for="(_, row) in BOARD_SIZE" :key="`row-${row}`" class="sudoku-row">
+      <button
+        type="button"
         v-for="(_, col) in BOARD_SIZE"
         :key="`cell-${row}-${col}`"
         :class="[
@@ -169,13 +168,13 @@ function notesAsGrid(notesSet: Set<number>): boolean[][] {
             'is-given': isGiven(row, col),
           },
         ]"
+        :aria-label="t('arcade.cell', { row: row + 1, col: col + 1 })"
         @click="onCellClick(row, col)"
       >
         <!-- 有值（用户填的或 given） -->
-        <span
-          v-if="board[row][col] !== null"
-          class="sudoku-cell-value"
-        >{{ board[row][col] }}</span>
+        <span v-if="board[row][col] !== null" class="sudoku-cell-value">{{
+          board[row][col]
+        }}</span>
         <!-- 笔注：notes mode + 空 cell + 有 notes -->
         <div
           v-else-if="notesMode && notes[row][col].size > 0"
@@ -189,11 +188,12 @@ function notesAsGrid(notesSet: Set<number>): boolean[][] {
             <span
               v-for="(has, nc) in cellNotes"
               :key="`nc-${nc}`"
-              :class="['sudoku-notes-cell', { 'has': has }]"
-            >{{ has ? nr * 3 + nc + 1 : '' }}</span>
+              :class="['sudoku-notes-cell', { has: has }]"
+              >{{ has ? nr * 3 + nc + 1 : "" }}</span
+            >
           </span>
         </div>
-      </div>
+      </button>
     </div>
   </div>
 </template>

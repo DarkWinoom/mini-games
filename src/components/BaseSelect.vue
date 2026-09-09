@@ -1,75 +1,112 @@
 <script setup lang="ts">
-import { ref, onUnmounted, computed } from 'vue';
-
-interface Option {
-  value: string;
-  label: string;
-}
-
+import {
+  computed,
+  nextTick,
+  onMounted,
+  onUnmounted,
+  shallowRef,
+  useId,
+  useTemplateRef,
+} from "vue";
 const props = defineProps<{
   value: string;
-  options: Option[];
+  options: { value: string; label: string }[];
   ariaLabel?: string;
 }>();
-
-const emit = defineEmits<{
-  change: [value: string];
-}>();
-
-const isOpen = ref(false);
-const wrapRef = ref<HTMLElement | null>(null);
-
-const currentLabel = computed(
-  () => props.options.find((o) => o.value === props.value)?.label ?? '',
+const emit = defineEmits<{ change: [value: string] }>();
+const open = shallowRef(false);
+const wrap = useTemplateRef<HTMLElement>("wrap"),
+  trigger = useTemplateRef<HTMLButtonElement>("trigger");
+const id = useId();
+const label = computed(
+  () =>
+    props.options.find((option) => option.value === props.value)?.label ??
+    props.value,
 );
-
-function toggle() {
-  isOpen.value = !isOpen.value;
-  if (isOpen.value) {
-    setTimeout(() => {
-      document.addEventListener('click', onDocClick, true);
-      document.addEventListener('keydown', onEsc, true);
-    }, 0);
-  } else {
-    close();
-  }
+function close(restore = false) {
+  open.value = false;
+  if (restore) trigger.value?.focus();
 }
-
-function close() {
-  isOpen.value = false;
-  document.removeEventListener('click', onDocClick, true);
-  document.removeEventListener('keydown', onEsc, true);
+async function toggle() {
+  if (open.value) return close(true);
+  open.value = true;
+  await nextTick();
+  wrap.value?.querySelector<HTMLElement>("[aria-checked=true]")?.focus();
 }
-
-function onDocClick(e: MouseEvent) {
-  if (wrapRef.value && !wrapRef.value.contains(e.target as Node)) {
-    close();
-  }
-}
-
-function onEsc(e: KeyboardEvent) {
-  if (e.key === 'Escape') close();
-}
-
 function select(value: string) {
-  if (value !== props.value) emit('change', value);
-  close();
+  emit("change", value);
+  close(true);
 }
-
-onUnmounted(close);
+function outside(event: Event) {
+  if (!wrap.value?.contains(event.target as Node)) close();
+}
+function keydown(event: KeyboardEvent) {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    event.stopPropagation();
+    close(true);
+  }
+  if (!["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) return;
+  event.preventDefault();
+  if (!open.value) {
+    void toggle();
+    return;
+  }
+  const items = [
+    ...wrap.value!.querySelectorAll<HTMLButtonElement>("[role=menuitemradio]"),
+  ];
+  let index = items.indexOf(document.activeElement as HTMLButtonElement);
+  index =
+    event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? items.length - 1
+        : (index + (event.key === "ArrowDown" ? 1 : -1) + items.length) %
+          items.length;
+  items[index]?.focus();
+}
+onMounted(() => {
+  document.addEventListener("pointerdown", outside);
+  document.addEventListener("focusin", outside);
+});
+onUnmounted(() => {
+  document.removeEventListener("pointerdown", outside);
+  document.removeEventListener("focusin", outside);
+});
 </script>
-
 <template>
-  <div ref="wrapRef" class="select">
-    <button type="button" :class="['btn', 'btn-ghost', 'select-trigger', isOpen && 'open']" :aria-label="ariaLabel"
-      @click.stop="toggle">
-      {{ currentLabel }}
+  <div ref="wrap" class="select-wrap" @keydown="keydown">
+    <button
+      ref="trigger"
+      class="btn select-trigger"
+      type="button"
+      :aria-label="ariaLabel"
+      :aria-expanded="open"
+      :aria-controls="id"
+      aria-haspopup="menu"
+      @click="toggle"
+    >
+      {{ label }} <span aria-hidden="true">▾</span>
     </button>
-    <div v-if="isOpen" class="select-panel">
-      <div v-for="opt in options" :key="opt.value" :class="['select-item', opt.value === value && 'active']"
-        @click="select(opt.value)">
-        {{ opt.label }}
-      </div>
+    <div
+      v-if="open"
+      :id="id"
+      class="select-menu"
+      role="menu"
+      :aria-label="ariaLabel"
+      data-input-blocker
+    >
+      <button
+        v-for="option in options"
+        :key="option.value"
+        type="button"
+        role="menuitemradio"
+        :aria-checked="value === option.value"
+        @click="select(option.value)"
+      >
+        <span>{{ option.label }}</span
+        ><span v-if="value === option.value" aria-hidden="true">✓</span>
+      </button>
     </div>
   </div>
 </template>

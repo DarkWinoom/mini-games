@@ -1,5 +1,17 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch, onUnmounted } from "vue";
+
+const animationTimers = new Set<number>();
+function afterAnimation(callback: () => void, delay: number) {
+  const timer = window.setTimeout(() => {
+    animationTimers.delete(timer);
+    callback();
+  }, delay);
+  animationTimers.add(timer);
+}
+onUnmounted(() =>
+  animationTimers.forEach((timer) => window.clearTimeout(timer)),
+);
 import {
   BOARD_W,
   BOARD_H,
@@ -51,10 +63,14 @@ const boardEl = ref<HTMLElement | null>(null);
 const BUBBLE_COLORS_CSS: Record<BubbleColor, string> = {
   red: "radial-gradient(circle at 30% 28%, #fda4af 0%, #fb7185 35%, #ef4444 100%)",
   blue: "radial-gradient(circle at 30% 28%, #93c5fd 0%, #60a5fa 35%, #3b82f6 100%)",
-  green: "radial-gradient(circle at 30% 28%, #6ee7b7 0%, #34d399 35%, #10b981 100%)",
-  yellow: "radial-gradient(circle at 30% 28%, #fde68a 0%, #fcd34d 35%, #fbbf24 100%)",
-  purple: "radial-gradient(circle at 30% 28%, #d8b4fe 0%, #c084fc 35%, #a855f7 100%)",
-  orange: "radial-gradient(circle at 30% 28%, #fdba74 0%, #fb923c 35%, #f97316 100%)",
+  green:
+    "radial-gradient(circle at 30% 28%, #6ee7b7 0%, #34d399 35%, #10b981 100%)",
+  yellow:
+    "radial-gradient(circle at 30% 28%, #fde68a 0%, #fcd34d 35%, #fbbf24 100%)",
+  purple:
+    "radial-gradient(circle at 30% 28%, #d8b4fe 0%, #c084fc 35%, #a855f7 100%)",
+  orange:
+    "radial-gradient(circle at 30% 28%, #fdba74 0%, #fb923c 35%, #f97316 100%)",
 };
 
 /* === 飞行泡泡 style === */
@@ -145,7 +161,7 @@ const snappingCells = ref<Set<string>>(new Set());
 function triggerSnap(row: number, col: number): void {
   const key = `${row},${col}`;
   snappingCells.value.add(key);
-  setTimeout(() => {
+  afterAnimation(() => {
     snappingCells.value.delete(key);
     // 触发响应式（Set mutation 不自动）
     snappingCells.value = new Set(snappingCells.value);
@@ -182,7 +198,10 @@ watch(
       return;
     }
     // 推入当前帧（保留最近 2 帧）
-    const newTrail = [...trailBubbles.value, { x: b.x, y: b.y, color: b.color, opacity: 1 }];
+    const newTrail = [
+      ...trailBubbles.value,
+      { x: b.x, y: b.y, color: b.color, opacity: 1 },
+    ];
     if (newTrail.length > 2) newTrail.shift();
     // 渐变 opacity：最新 1.0, 之前 0.5
     trailBubbles.value = newTrail.map((t, i) => ({
@@ -204,8 +223,14 @@ watch(
       const newCells = newLines[r]?.split("|") ?? [];
       const oldCells = oldLines[r]?.split("|") ?? [];
       for (let c = 0; c < Math.max(newCells.length, oldCells.length); c++) {
-        const oldColor = oldCells[c] && oldCells[c] !== "null" ? (oldCells[c] as BubbleColor) : null;
-        const newColor = newCells[c] && newCells[c] !== "null" ? (newCells[c] as BubbleColor) : null;
+        const oldColor =
+          oldCells[c] && oldCells[c] !== "null"
+            ? (oldCells[c] as BubbleColor)
+            : null;
+        const newColor =
+          newCells[c] && newCells[c] !== "null"
+            ? (newCells[c] as BubbleColor)
+            : null;
         // 从有变空 → 消除 → spawn 粒子
         if (oldColor && !newColor) {
           const isShort = r % 2 === 1;
@@ -234,9 +259,11 @@ watch(
     if (newParticles.length > 0) {
       particles.value = [...particles.value, ...newParticles];
       // 480ms 后清掉（match CSS animation duration）
-      setTimeout(() => {
+      afterAnimation(() => {
         const minId = particleIdCounter - newParticles.length + 1;
-        particles.value = particles.value.filter((p) => p.id >= minId + newParticles.length);
+        particles.value = particles.value.filter(
+          (p) => p.id >= minId + newParticles.length,
+        );
       }, 500);
     }
   },
@@ -247,19 +274,10 @@ function onMouseMove(e: MouseEvent) {
   if (!props.isAiming || props.isPaused) return;
   const el = boardEl.value;
   if (!el) return;
-  const rect = el.getBoundingClientRect();
-  // boardEl 是 wrap（带 12px padding），board 实际渲染区域 = wrap 内部减去 padding
-  // 从 getComputedStyle 读 padding，避免 hardcode
-  const style = window.getComputedStyle(el);
-  const padX = parseFloat(style.paddingLeft) || 0;
-  const padY = parseFloat(style.paddingTop) || 0;
-  const innerW = rect.width - 2 * padX;
-  const innerH = rect.height - 2 * padY;
-  if (innerW <= 0 || innerH <= 0) return;
-  const scaleX = BOARD_W / innerW;
-  const scaleY = BOARD_H / innerH;
-  const mouseX = (e.clientX - rect.left - padX) * scaleX;
-  const mouseY = (e.clientY - rect.top - padY) * scaleY;
+  const rect = el.querySelector(".bubble-board")!.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const mouseX = ((e.clientX - rect.left) / rect.width) * BOARD_W;
+  const mouseY = ((e.clientY - rect.top) / rect.height) * BOARD_H;
   // 角度：发射器 (SHOOTER_X, SHOOTER_Y) → 鼠标
   // 屏幕 y 向下为正，需要翻转
   const dx = mouseX - SHOOTER_X;
@@ -271,13 +289,14 @@ function onMouseMove(e: MouseEvent) {
   emit("setAngle", angle);
 }
 
-function onClick() {
+function onClick(event: MouseEvent) {
   // 暂停状态：点击 = 继续（不发射）
   if (props.isPaused) {
     emit("resume");
     return;
   }
   if (!props.isAiming) return;
+  onMouseMove(event);
   emit("shoot");
 }
 
@@ -296,18 +315,25 @@ function particleStyle(p: Particle): Record<string, string> {
   <div
     ref="boardEl"
     class="bubble-board-wrap"
-    @mousemove="onMouseMove"
+    @pointermove="onMouseMove"
     @click="onClick"
   >
     <div
-      :class="['bubble-board', { 'is-lost': isLost, 'is-won': isWon, 'is-paused': isPaused }]"
+      :class="[
+        'bubble-board',
+        { 'is-lost': isLost, 'is-won': isWon, 'is-paused': isPaused },
+      ]"
       :style="{ width: `${BOARD_W}px`, height: `${BOARD_H}px` }"
     >
       <!-- 棋盘 cell -->
       <div
         v-for="cell in allCells"
         :key="`${cell.row}-${cell.col}`"
-        :class="['bubble-cell', `is-${cell.color}`, { 'is-snap': snappingCells.has(`${cell.row},${cell.col}`) }]"
+        :class="[
+          'bubble-cell',
+          `is-${cell.color}`,
+          { 'is-snap': snappingCells.has(`${cell.row},${cell.col}`) },
+        ]"
         :style="cell.style"
         :aria-label="`bubble ${cell.row} ${cell.col} ${cell.color}`"
       >

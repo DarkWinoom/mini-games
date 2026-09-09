@@ -34,6 +34,7 @@ function writeBestWins(v: number): void {
 }
 
 export const useGomokuStore = defineStore("gomoku", () => {
+  let aiTimer: ReturnType<typeof setTimeout> | undefined;
   const state = ref<GameState>(newGameState("medium"));
   const bestWins = ref<number>(readBestWins());
   /** 本局是否破纪录（玩家胜时计算，newGame 清空） */
@@ -67,6 +68,7 @@ export const useGomokuStore = defineStore("gomoku", () => {
    * 新游戏（清空状态，保留难度）
    */
   function newGame(): void {
+    clearTimeout(aiTimer);
     const diff = state.value.difficulty;
     state.value = newGameState(diff);
     isNewBest.value = false;
@@ -80,6 +82,7 @@ export const useGomokuStore = defineStore("gomoku", () => {
    */
   function setDifficulty(d: Difficulty): void {
     if (state.value.difficulty === d) return;
+    clearTimeout(aiTimer);
     state.value = newGameState(d);
     isNewBest.value = false;
     isAIThinking.value = false;
@@ -161,7 +164,7 @@ export const useGomokuStore = defineStore("gomoku", () => {
     if (state.value.currentPlayer !== 2) return;
     isAIThinking.value = true;
     // setTimeout 0 让 UI 先显示 loading
-    setTimeout(() => {
+    aiTimer = setTimeout(() => {
       // 再次检查状态（玩家可能在等 AI 时切到了 newGame）
       if (state.value.status !== "playing" || state.value.currentPlayer !== 2) {
         isAIThinking.value = false;

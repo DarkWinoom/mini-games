@@ -112,7 +112,15 @@ export const useTetrisStore = defineStore("tetris", () => {
   }
 
   function clearToLines(t: ClearType): number {
-    return t === "single" ? 1 : t === "double" ? 2 : t === "triple" ? 3 : t === "tetris" ? 4 : 0;
+    return t === "single"
+      ? 1
+      : t === "double"
+        ? 2
+        : t === "triple"
+          ? 3
+          : t === "tetris"
+            ? 4
+            : 0;
   }
 
   /** 检测 gameover 转换并更新 best score */
@@ -170,6 +178,7 @@ export const useTetrisStore = defineStore("tetris", () => {
   }
 
   function reset(): void {
+    stopLoop();
     state.value = newGame();
     isNewBest.value = false;
     if (lastEventTimer !== null) {
@@ -248,6 +257,8 @@ export const useTetrisStore = defineStore("tetris", () => {
     const next = togglePause(prev);
     if (next !== prev) {
       state.value = next;
+      if (next.status === "paused") stopLoop();
+      else if (next.status === "playing") startLoop();
       playSfx("pause");
     }
   }
