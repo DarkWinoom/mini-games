@@ -16,7 +16,5 @@ export function useI18n() {
     locale: currentLocale, // ref<string>，template auto-unwrap
     locales, // ref<LocaleInfo[]>，template auto-unwrap
     setLang: store.setLang,
-    saveCustomLocale: store.saveCustomLocale,
-    validateDict: store.validateDict,
   };
 }

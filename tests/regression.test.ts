@@ -75,7 +75,10 @@ test("all seven games read records saved by the previous version", () => {
   storage.set("mini-games.snake.best", "21");
   storage.set("mini-games.gomoku.bestWins", "5");
   storage.set("mini-games.sudoku.best", JSON.stringify({ easy: 42 }));
-  storage.set("mini-games.npuzzle.best.4x4", JSON.stringify({ moves: 99, time: 80, date: "2026-08-21" }));
+  storage.set(
+    "mini-games.npuzzle.best.4x4",
+    JSON.stringify({ moves: 99, time: 80, date: "2026-08-21" }),
+  );
   storage.set("mini-games.bubble.best", "700");
   assert.equal(useTetrisStore().bestScore, 1234);
   assert.equal(useTwenty48Store().bestScore, 2048);
@@ -176,15 +179,34 @@ test("first language detection is saved and later browser preferences do not ove
 test("language registration updates the menu and partial packs fall back to English", () => {
   const locale = useI18nStore();
   assert.equal(locale.locales.length, 2);
-  locale.saveCustomLocale("Français", { "arcade.newGame": "Nouvelle partie" });
+  locale.registerLocale("Français", { "arcade.newGame": "Nouvelle partie" });
+  locale.setLang("Français");
   assert.equal(locale.locales.length, 3);
   assert.equal(locale.t("arcade.newGame"), "Nouvelle partie");
   assert.equal(locale.t("common.close"), en["common.close"]);
-  assert.equal(locale.validateDict({ title: 42 }).ok, false);
-  assert.equal(locale.validateDict(null).ok, false);
   for (let i = 0; i < 28; i++)
     locale.registerLocale(`test-${i}`, { "common.close": `Close ${i}` });
   assert.equal(locale.locales.length, 31);
+});
+
+test("saved custom language imports are no longer loaded", () => {
+  storage.set("ui.lang", "custom");
+  storage.set(
+    "ui.customLocale",
+    JSON.stringify({
+      code: "custom",
+      dict: { "arcade.newGame": "Imported text" },
+    }),
+  );
+  const locale = useI18nStore();
+  locale.init();
+  assert.deepEqual(
+    locale.locales.map((item) => item.code),
+    ["zh-CN", "en-US"],
+  );
+  assert.equal(locale.currentLocale, "zh-CN");
+  assert.equal(locale.t("arcade.newGame"), zh["arcade.newGame"]);
+  assert.equal(storage.get("ui.lang"), "zh-CN");
 });
 test("built-in translations have the same keys and interpolate literal replacements", () => {
   assert.deepEqual(Object.keys(en).sort(), Object.keys(zh).sort());

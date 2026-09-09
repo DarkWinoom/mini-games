@@ -5,7 +5,6 @@ import { sfxMuted, toggleMute } from "@/composables/useSFX";
 import BaseSelect from "./BaseSelect.vue";
 const { t, locales, locale, setLang } = useI18n();
 const theme = useThemeStore();
-defineEmits<{ settings: [] }>();
 </script>
 <template>
   <header class="topbar">
@@ -39,9 +38,6 @@ defineEmits<{ settings: [] }>();
       </button>
       <button class="btn" :aria-pressed="sfxMuted" @click="toggleMute">
         {{ t(sfxMuted ? "header.soundOff" : "header.soundOn") }}
-      </button>
-      <button class="btn" @click="$emit('settings')">
-        {{ t("arcade.settings") }}
       </button>
     </nav>
   </header>

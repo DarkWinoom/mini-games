@@ -43,18 +43,9 @@ export const locale: LocaleDict = {
   // Footer
   "footer.copyright": "© 2026 小游戏合集",
   "footer.github": "GitHub",
-  "footer.customLanguage": "自定义语言",
   "footer.license": "MIT",
 
   // 自定义语言包 modal
-  "customLang.title": "自定义语言包",
-  "customLang.description":
-    "粘贴 JSON（结构与内置语言包一致），保存后立即生效。",
-  "customLang.placeholder": '{ "common.appName": "小游戏合集", ... }',
-  "customLang.import": "导入",
-  "customLang.invalidJson": "JSON 格式错误",
-  "customLang.missingKeys": "缺少必要 key",
-  "customLang.success": "自定义语言包已加载",
 
   // 俄罗斯方块
   "tetris.title": "俄罗斯方块",
@@ -303,9 +294,6 @@ export const locale: LocaleDict = {
   "arcade.enterNumber": "填入数字",
   "arcade.selectCell": "选择格子",
   "arcade.settings": "设置",
-  "arcade.importName": "语言名称 / 代码",
-  "arcade.importBody": "粘贴语言包 JSON；缺失的词条将使用英文。",
-  "arcade.importError": "请提供语言名称和有效的文本词条。",
   "arcade.selectGame": "选择你的游戏",
   "arcade.solo": "经典 · 单人",
   "arcade.loading": "正在加载游戏…",

@@ -1,9 +1,8 @@
-import { onMounted, onUnmounted, shallowRef, watch } from "vue";
+import { onMounted, onUnmounted, shallowRef } from "vue";
 import { onBeforeRouteLeave } from "vue-router";
 import type { GameSession } from "@/games/contracts";
 import { inputIsBlocked, matchesAction } from "@/games/actions";
 import { createLeaveGuard } from "@/games/leaveGuard";
-import { settingsOpen } from "@/stores/overlays";
 export function useGameSession(session: GameSession) {
   const leaving = shallowRef(false);
   const guard = createLeaveGuard({
@@ -16,9 +15,6 @@ export function useGameSession(session: GameSession) {
     },
   });
   onBeforeRouteLeave(guard.request);
-  watch(settingsOpen, (open) => {
-    if (open) session.pause?.();
-  });
   function onKey(event: KeyboardEvent) {
     if (event.defaultPrevented || leaving.value || inputIsBlocked(event.target))
       return;

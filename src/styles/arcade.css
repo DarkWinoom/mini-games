@@ -832,26 +832,10 @@ small {
   gap: 12px;
   margin-top: 22px;
 }
-.text-field {
-  display: grid;
-  gap: 8px;
-  margin: 14px 0;
-  font-size: 16px;
-}
-.text-field input,
-.text-field textarea {
-  appearance: none;
-  width: 100%;
-  padding: 12px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--page);
-  color: var(--ink);
-  font-size: 16px;
-}
-.text-field :focus {
-  outline: 2px solid #b98539;
-  outline-offset: 2px;
+.game-entry {
+  display: block;
+  cursor: pointer;
+  border-radius: 17px 17px 8px 8px;
 }
 .special-panel {
   display: grid;

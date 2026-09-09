@@ -20,6 +20,8 @@ Seven classic games in a little retro arcade. Open your browser, pick a game, an
 
 The game room scrolls as the collection grows. Click a star to pin a favorite to the front; click it again to remove the favorite.
 
+Select a game in the grid, then click anywhere on its arcade preview to play. You can also focus the preview and press Enter.
+
 ## At the controls
 
 Every game shows its controls below the screen. Action buttons display the same shortcut keys and names.
@@ -43,8 +45,6 @@ Every game shows its controls below the screen. Action buttons display the same 
 - **Appearance:** Choose a light room, a dark room, or follow your system theme.
 - **Sound:** The header switch controls game sound effects.
 - **Records:** Best scores and records are saved in this browser. A current run ends when you leave or reload; records do not sync between devices. Clearing browser data removes them.
-
-Settings also accepts custom JSON language packs. Missing entries fall back to English, so a pack can be extended over time.
 
 In Sudoku notes mode on small screens, a dot marks a cell with notes. Select the cell to read its notes in the panel.
 

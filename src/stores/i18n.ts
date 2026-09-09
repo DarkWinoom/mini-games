@@ -35,37 +35,10 @@ export const useI18nStore = defineStore("i18n", () => {
     writeStorage("ui.lang", code);
     document.documentElement.lang = code;
   }
-  function validateDict(value: unknown): { ok: boolean; missing: string[] } {
-    const ok =
-      !!value &&
-      typeof value === "object" &&
-      !Array.isArray(value) &&
-      Object.keys(value).length > 0 &&
-      Object.values(value).every((item) => typeof item === "string");
-    return {
-      ok,
-      missing: ok
-        ? Object.keys(en).filter((key) => !(key in (value as object)))
-        : [],
-    };
-  }
   function registerLocale(code: string, dict: Partial<LocaleDict>) {
-    if (code !== "zh-CN" && code !== "en-US" && validateDict(dict).ok)
-      registry.set(code, dict);
-  }
-  function saveCustomLocale(code: string, dict: Partial<LocaleDict>) {
-    registerLocale(code, dict);
-    writeStorage("ui.customLocale", JSON.stringify({ code, dict }));
-    setLang(code);
+    if (code !== "zh-CN" && code !== "en-US") registry.set(code, dict);
   }
   function init() {
-    try {
-      const custom = JSON.parse(readStorage("ui.customLocale") || "null");
-      if (custom && typeof custom.code === "string")
-        registerLocale(custom.code, custom.dict);
-    } catch {
-      /* Ignore invalid imported JSON. */
-    }
     const saved = readStorage("ui.lang");
     if (saved && registry.has(saved)) {
       setLang(saved);
@@ -93,7 +66,5 @@ export const useI18nStore = defineStore("i18n", () => {
     init,
     setLang,
     registerLocale,
-    saveCustomLocale,
-    validateDict,
   };
 });

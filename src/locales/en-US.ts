@@ -43,19 +43,9 @@ export const locale = {
   // Footer
   "footer.copyright": "© 2026 Mini Games Collection",
   "footer.github": "GitHub",
-  "footer.customLanguage": "Custom Language",
   "footer.license": "MIT",
 
   // Custom language modal
-  "customLang.title": "Custom Language Pack",
-  "customLang.description":
-    "Paste a JSON blob (same structure as built-in packs). Saves and takes effect immediately.",
-  "customLang.placeholder":
-    '{ "common.appName": "Mini Games Collection", ... }',
-  "customLang.import": "Import",
-  "customLang.invalidJson": "Invalid JSON",
-  "customLang.missingKeys": "Missing required keys",
-  "customLang.success": "Custom language pack loaded",
 
   // Tetris
   "tetris.title": "Tetris",
@@ -309,10 +299,6 @@ export const locale = {
   "arcade.enterNumber": "Enter a number",
   "arcade.selectCell": "Select cell",
   "arcade.settings": "Settings",
-  "arcade.importName": "Language name / code",
-  "arcade.importBody":
-    "Paste a JSON language pack. Missing entries use English.",
-  "arcade.importError": "Provide a language name and valid text entries.",
   "arcade.selectGame": "SELECT YOUR GAME",
   "arcade.solo": "CLASSIC · SOLO",
   "arcade.loading": "Loading game…",

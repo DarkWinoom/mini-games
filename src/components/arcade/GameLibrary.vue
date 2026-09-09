@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from "vue";
-import { useRouter } from "vue-router";
 import { games } from "@/games/registry";
 import { orderFavorites } from "@/games/library";
 import { useI18n } from "@/composables/useI18n";
 import { readStorage, writeStorage } from "@/utils/storage";
 import GameArt from "./GameArt.vue";
 import ArcadeCabinet from "./ArcadeCabinet.vue";
-import BaseButton from "../BaseButton.vue";
-const { t } = useI18n(),
-  router = useRouter();
+const { t } = useI18n();
 const selected = shallowRef(games[0]);
 const favorites = ref<string[]>([]);
 try {
@@ -69,7 +66,11 @@ function favorite(id: string) {
         </article>
       </div>
     </section>
-    <section class="machine-area">
+    <RouterLink
+      class="machine-area game-entry"
+      :to="selected.path"
+      :aria-label="`${t('common.play')} ${t(selected.title)}`"
+    >
       <ArcadeCabinet
         ><div class="screen-head">
           <span>{{ t("arcade.selectGame") }}</span
@@ -88,11 +89,11 @@ function favorite(id: string) {
           ><span>{{ t("arcade.solo") }}</span>
         </div>
         <template #controls
-          ><BaseButton variant="primary" @click="router.push(selected.path)"
-            >▶ {{ t("common.play") }}</BaseButton
+          ><span class="btn btn-primary"
+            >▶ {{ t("common.play") }}</span
           ></template
         ></ArcadeCabinet
       >
-    </section>
+    </RouterLink>
   </div>
 </template>
